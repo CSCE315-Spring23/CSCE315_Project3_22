@@ -1,0 +1,57 @@
+/* GRID LAYOUT */
+.main-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 150px 100px 400px 400px;
+
+    border-style: solid;
+}
+
+.main-header-container {
+    grid-column: 1 / span 2;
+}
+
+.order-items-container, .menu-item-container {
+    grid-row: 3 / span 2;
+}
+
+/* sub panel layouts */
+.order-items-container {
+    display: grid;
+    grid-template-rows: 4fr 1fr;
+}
+
+.menu-item-container {
+    display: grid;
+    grid-template-rows: 1fr 5fr;
+}
+
+.lower-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+/* CLASS STYLING */
+.grid-item, .sub-grid-item {
+    border-style: solid;
+    margin: 10px;
+}
+
+.sub-heading-container h1 {
+    text-align: center;
+}
+
+/* ID STYLING */
+#total-label {
+    text-align: center;
+    align-self: center;
+}
+
+#buttons-container {
+    text-align: center;
+    align-self: center;
+}
+
+#category-box {
+    text-align: center;
+}
