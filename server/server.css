@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins');
 
+body {
+    /* add background image */
+    background-color: #f7f7f7;
+}
+
 /* GRID LAYOUT */
 .main-grid-container {
     display: grid;
@@ -45,12 +50,13 @@
 .sub-heading-container h1 {
     text-align: center;
     font-family: 'Poppins', sans-serif;
-    letter-spacing: 5px;
+    letter-spacing: 2px;
 }
 
 .lower-panel, .order-item-list {
     border-style: solid;
     margin: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .menu-item-list {
@@ -85,7 +91,26 @@
     background-color: transparent;
 }
 
-#category-container button:hover {
+#category-container button:hover, #buttons-container button:hover {
     transition: transform 0.3s ease;
     transform: translateY(-5px);
+}
+
+#total-label {
+    font-family: 'Poppins', sans-serif;
+}
+
+#buttons-container button {
+    border: solid;
+    border-radius: 5px;
+    font-size: 20px;
+    margin: 5px;
+    padding: 15px;
+    background-color: transparent;
+}
+
+#sign-out-button {
+    display: none;
+    float: right;
+    margin-right: 40px;
 }
