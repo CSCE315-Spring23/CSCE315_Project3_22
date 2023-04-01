@@ -16,7 +16,8 @@ client.connect(function (err) {
             html += '<tr><td>' + results[i].menu_item_id + '</td><td>' + results[i].category + '</td><td>' + results[i].price + '</td></tr>';
         }
         html += '</table>';
-        
+        const outputDiv = document.getElementById('output');
+        outputDiv.innerHTML = html;
         //console.log(results) //display menu
 
         
