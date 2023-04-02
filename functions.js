@@ -1,4 +1,4 @@
-import { Client } from 'pg';
+import { Client } from "./node_modules/pg.js";
 const express = require('express');
 
 const client = new Client({
@@ -7,7 +7,7 @@ const client = new Client({
     host: "csce-315-db.engr.tamu.edu",
     database: "csce315331_team_22"
 })
-const outputDiv = document.getElementById('output');
+// const outputDiv = document.getElementById('output');
 
 const app = express();
 
