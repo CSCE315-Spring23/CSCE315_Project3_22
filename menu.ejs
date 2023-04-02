@@ -1,0 +1,19 @@
+<table>
+    <thead>
+      <tr>
+        <th>Menu Item</th>
+        <th>Category</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% menu.forEach(menu => { %>
+        <tr>
+          <td><%= menu.menu_item_id %></td>
+          <td><%= menu.category %></td>
+          <td><%= menu.price %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  
