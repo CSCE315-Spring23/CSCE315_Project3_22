@@ -22,8 +22,8 @@ client.connect(function (err) {
         
         
         //console.log(results) //display menu
+        outputDiv.innerHTML = html;
 
-        
+    
     })
-    outputDiv.innerHTML = html;
-})
+    })
