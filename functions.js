@@ -1,17 +1,28 @@
 import { Client } from "./node_modules/pg.js";
 const express = require('express');
-
-const client = new Client({
-    user: "csce315331_team_22_master",
-    password: "0000",
-    host: "csce-315-db.engr.tamu.edu",
-    database: "csce315331_team_22"
-})
-// const outputDiv = document.getElementById('output');
+const dotenv = require('dotenv').config();
 
 const app = express();
+const port = 3000;
 
-app.get('/menu', (req, res) => {
+const client = new Client({
+    user: process.env.PSQL_USER,
+    password: process.env.PSQL_PASSWORD,
+    host: process.env.PSQL_HOST,
+    database: process.env.PSQL_DATABASE,
+    port: process.env.PSQL_PORT,
+    sql: {rejectUnauthorized: false}
+});
+
+process.on('SIGINT', function() {
+    client.end;
+    console.log("Application Successfully Shutdown");
+    process.exit(0);
+});
+
+app.set("view engine", "ejs");
+
+app.get('/', (req, res) => {
   client.query('SELECT * FROM menu', (error, results) => {
     if (error) {
       throw error;
@@ -19,6 +30,13 @@ app.get('/menu', (req, res) => {
     res.render('menu', { menu: results });
   });
 });
+
+app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`);
+});
+
+
+
 
 
 // client.connect(function (err) {
