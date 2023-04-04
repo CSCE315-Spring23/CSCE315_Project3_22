@@ -4,6 +4,11 @@
 # env file
 *.env
 
+# node
+/node_modules
+package-lock.json
+package.json
+
 # Log file
 *.log
 
