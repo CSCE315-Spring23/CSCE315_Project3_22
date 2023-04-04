@@ -72,6 +72,15 @@ router.get('/menu_board', (req, res) => {
     }
 });
 
+router.get('/manager', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.render('manager');
+    }
+    else {
+        res.redirect('/');
+    }
+});
+
 router.post('/logout', function(req, res, next){
     req.logout(function(err) {
       if (err) { return next(err); }

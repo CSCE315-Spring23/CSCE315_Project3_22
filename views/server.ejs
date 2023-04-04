@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../server/server.css">
+        <link rel="icon" href="images/favicon.png" type="image/png">
+        <title>Smoothie King Menu</title>
+    </head>
+    <body>
+        <h1>Smoothie King Menu</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let i = 0; i < data.length; i++) { %>
+                    <tr>
+                        <td><%= data[i].menu_item_id %></td>
+                        <td><%= data[i].category %></td>
+                        <td><%= data[i].price %></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </body>
+</html>
