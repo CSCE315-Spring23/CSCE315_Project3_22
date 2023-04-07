@@ -103,16 +103,21 @@ const client = new Client({
 });
 
 router.get('/', function(req, res) {
-    client.connect(function(err) {
-        if (err) throw err;
-        
-        const query = "SELECT * FROM menu;";
-        client.query(query, function(err, results) {
+    if (req.isAuthenticated()) {
+        client.connect(function(err) {
             if (err) throw err;
-
-            res.render('server', { data: results.rows });
+            
+            const query = "SELECT * FROM menu;";
+            client.query(query, function(err, results) {
+                if (err) throw err;
+    
+                res.render('server', { data: results.rows });
+            });
         });
-    });
+    }
+    else {
+        res.redirect('/');
+    }
 });
 
 

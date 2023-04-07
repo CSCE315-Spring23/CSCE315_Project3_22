@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/styles/menu_board.css" rel="stylesheet">
     <title>Menu Board</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <a class="weatherwidget-io" href="https://forecast7.com/en/30d63n96d33/college-station/?unit=us" data-label_1="COLLEGE STATION" data-label_2="WEATHER" data-days="3" data-theme="pure" >COLLEGE STATION WEATHER</a>
-    <script>
-    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
-    </script>
-    <!-- <script src="https://apps.elfsight.com/p/platform.js" defer></script>
-    <div class="elfsight-app-d3020a7c-7128-438f-b270-893730d08ca8"></div> -->
-    <button onclick="location.href='user.html'">New Order</button>
-    <form action="/logout" method="post">
-        <input type="submit" name="logout" value="Test Logout"/>
-    </form>
+    <div class="container">
+        <a class="weatherwidget-io" href="https://forecast7.com/en/30d63n96d33/college-station/?unit=us" data-label_1="COLLEGE STATION" data-label_2="WEATHER" data-days="3" data-theme="pure" >COLLEGE STATION WEATHER</a>
+        <script>
+            !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+        </script>
+        <!-- <script src="https://apps.elfsight.com/p/platform.js" defer></script>
+        <div class="elfsight-app-d3020a7c-7128-438f-b270-893730d08ca8"></div> -->
+        <button class="btn btn-lg btn-primary btn-block" onclick="location.href='/user'">New Order</button>
+    </div>
 </body>
 </html>

@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Login Screen</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/styles/login.css" rel="stylesheet">
+    <title>Login</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <h1>Login Screen</h1>
-    <form action="/login" method="GET">
-        <button type="submit" >Sign in With Google</button>
-    </form>
-    </script>
+    <div class="container">
+      <form action="/login" method="GET" class="login_button">
+        <h1 class="login_header">Login</h1>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" >Sign in With Google</button>
+      </form>
+    </div>
   </body>
 </html>

@@ -22,12 +22,17 @@ const pool = new Pool({
 });
 
 router.get('/', function(req, res) {
-    const query = "SELECT * FROM menu;";
-    pool.query(query, function(err, results) {
-        if (err) throw err;
-
-        res.render('menu', { menu: results.rows });
-    });
+    if (req.isAuthenticated()) {
+        const query = "SELECT * FROM menu;";
+        pool.query(query, function(err, results) {
+            if (err) throw err;
+    
+            res.render('menu', { menu: results.rows });
+        });
+    }
+    else {
+        res.redirect('/');
+    }
 });
 
 module.exports = router

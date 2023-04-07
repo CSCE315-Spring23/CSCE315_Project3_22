@@ -1,0 +1,22 @@
+body {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f7f7f7;
+}
+
+.login_button {
+    max-width: 330px;
+    padding: 15px;
+    position: relative;
+    top: 200px;
+    margin: 0 auto;
+}
+
+.btn {
+    background-color: #d12a2a;
+}
+
+.btn:hover {
+    background-color: white;
+    color: black;
+}

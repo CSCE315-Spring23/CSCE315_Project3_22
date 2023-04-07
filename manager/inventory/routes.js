@@ -22,19 +22,24 @@ const pool = new Pool({
 });
 
 router.get('/', (req, res) => {
-    const query = {
-        text: 'SELECT * FROM inventory;'
-    };
-    pool.query(query)
-        .then(query_res => {
-            const data = {teammembers: query_res.rows};
-            console.log(query_res.rows);
-            res.render('Inventory', data);
-        })
-        .catch(err => {
-            console.error('Error executing query', err.stack);
-            res.send('Error');
-        });
+    if (req.isAuthenticated()) {
+        const query = {
+            text: 'SELECT * FROM inventory;'
+        };
+        pool.query(query)
+            .then(query_res => {
+                const data = {teammembers: query_res.rows};
+                console.log(query_res.rows);
+                res.render('Inventory', data);
+            })
+            .catch(err => {
+                console.error('Error executing query', err.stack);
+                res.send('Error');
+            });
+    }
+    else {
+        res.redirect('/');
+    }
 });
 
 module.exports = router

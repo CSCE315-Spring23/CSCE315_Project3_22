@@ -9,8 +9,8 @@ const path = require('path');
 const router = express.Router();
 
 const body_parser = require('body-parser');
-router.use(passport.initialize());
 router.use(body_parser.urlencoded({extended: false}));
+router.use(passport.initialize());
 router.use(session({
     genid: function(req) {
         return uuidv4();
@@ -20,7 +20,7 @@ router.use(session({
     saveUninitialized: true,
     cookie : {maxAge: 60 * 60 * 1000}
 }));
-router.use(passport.authenticate('session'));
+router.use(passport.authenticate('session', {session: true}));
 
 var GoogleStrategy = require('passport-google-oauth20');
 
@@ -32,11 +32,11 @@ passport.use(new GoogleStrategy({
     state: true
   },
     function verify(accessToken, refreshToken, profile, cb) {
-        return cb(null, {name: profile.displayName});
+        return cb(null, {email: profile._json.email});
     }
 ));
 
-router.get('/login', passport.authenticate('google'));
+router.get('/login', passport.authenticate('google', {scope : ['email']}));
 router.get('/oauth2/redirect/google',
     passport.authenticate('google', { failureRedirect: '/', failureMessage: true }),
     (req, res) => {
@@ -45,17 +45,33 @@ router.get('/oauth2/redirect/google',
 );
 
 router.get('/', (req, res) => {
-    console.log('home screen');
     if (req.isAuthenticated()) {
         res.redirect('/redirect');
     }
-    res.sendFile(path.normalize(__dirname + '/../views/index.html'));
+    else {
+        res.sendFile(path.normalize(__dirname + '/../views/index.html'));
+    }
 });
 
 router.get('/redirect', (req, res) => {
-    console.log('redirect screen');
     if (req.isAuthenticated()) {
-        res.sendFile(path.normalize(__dirname + '/../views/redirect.html'));
+        var email = req.user.email;
+        var authorized_users = process.env.authorized_users.split(",");
+        if (authorized_users.includes(email)) {
+            // if (email == authorized_users[0]) {
+            //     res.sendFile(path.normalize(__dirname + '/../views/redirect.html'));
+            // }
+            // else {
+            //     res.redirect('/server');
+            // }
+            res.sendFile(path.normalize(__dirname + '/../views/redirect.html'));
+        }
+        else {
+            req.logout(function(err) {
+                if (err) { return next(err); }
+                res.redirect('/');
+            });
+        }
     }
     else {
         res.redirect('/');
@@ -63,7 +79,6 @@ router.get('/redirect', (req, res) => {
 });
 
 router.get('/menu_board', (req, res) => {
-    console.log('menu_board');
     if (req.isAuthenticated()) {
         res.sendFile(path.normalize(__dirname + '/../views/menu_board.html'));
     }
@@ -90,12 +105,12 @@ router.post('/logout', function(req, res, next){
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
-        cb(null, JSON.stringify(user));  //{ id: user.id, username: user.username, name: user.name }
+        cb(null, user);
     });
 });
 passport.deserializeUser(function(user, cb) {
     process.nextTick(function() {
-        return cb(null, JSON.parse(user));
+        return cb(null, user);
     });
 });
 
