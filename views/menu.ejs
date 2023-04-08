@@ -1,4 +1,10 @@
-<table>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Manager Menu</title>
+</head>
+<body>
+	<table>
     <thead>
       <tr>
         <th>Menu Item</th>
@@ -6,7 +12,7 @@
         <th>Price</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody contenteditable="true" id="menu_table">
       <% menu.forEach(menu => { %>
         <tr>
           <td><%= menu.menu_item_id %></td>
@@ -16,4 +22,6 @@
       <% }); %>
     </tbody>
   </table>
+</body>
+</html>
   
