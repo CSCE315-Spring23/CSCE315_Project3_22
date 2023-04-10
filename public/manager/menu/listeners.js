@@ -30,6 +30,9 @@ function load_item_ingredients_modal(button) {
 }
 
 function edit_ingredient_cell(cell) {
+	if (cell.innerHTML == '<input type="text">') {  // if you double click the cell, the innerHTML is the input element that was set by the first click
+		return
+	}
 	// take into account - menu_ingredients array already has array for ingredients, just need to add and remove items from it, no pushing to menu_ingredients
 	// const ing_row = cell.parentElement;
 	// console.log('ing_row in edit ingredient cell');
@@ -105,6 +108,9 @@ function join(arr) {
 }
 
 function edit_menu_cell(cell) {
+	if (cell.innerHTML == '<input type="text">') {  // if you double click the cell, the innerHTML is the input element that was set by the first click
+		return
+	}
 	const table_row = cell.closest('tr');
 
 	// Create an input field with the current cell content
@@ -135,7 +141,6 @@ function edit_menu_cell(cell) {
 		xhr.onload = () => {
 			// menu, menu_ingredients
 			var response = JSON.parse(xhr.response);
-			// console.log(JSON.parse(xhr.response));
 			var menu = response.menu;
 			var menu_ingredients = response.menu_ingredients;
 			var updated_table = "";
