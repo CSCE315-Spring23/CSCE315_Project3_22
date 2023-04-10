@@ -13,6 +13,9 @@ const app = express();
 app.set("view engine", "ejs");
 app.set('views', './views')
 
+const body_parser = require('body-parser');
+app.use(body_parser.urlencoded({extended: true}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 const login_routes = require('./login/routes')
