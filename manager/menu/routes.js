@@ -29,80 +29,73 @@ var items = new Map();
 var items2 = new Map();
 
 router.get('/', function(req, res) {
-    query1 = () => {
-		return new Promise((resolve, reject) => {
-			var query = "SELECT * FROM menu ORDER BY menu_item_id";
-			pool.query(query, function(err, result) {
-				if (err) return reject(err);
-				for (let i = 0; i < result.rowCount; ++i) {
-					menu.push(result.rows[i]);
-					items.set(result.rows[i].menu_item_id, 1);
-				}
-				return resolve();
-			});
-		})
-    }
-	query2 = () => {
-		return new Promise((resolve, reject) => {
-			var query = "SELECT product_id, product_name FROM inventory ORDER BY product_id";
-			pool.query(query, function(err, result) {
-				if (err) return reject(err);
-				for (let i = 0; i < result.rowCount; ++i) {
-					id_to_name.set(result.rows[i].product_id, result.rows[i].product_name);
-					name_to_id.set(result.rows[i].product_name, result.rows[i].product_id);
-				}
-				return resolve();
-			});
-		})
-    }
-    query3 = () => {
-      return new Promise((resolve, reject) => {
-			var item_ingredients = [];
-			var query = "SELECT menu_item_id,product_id,quantity FROM menu_item_ingredients ORDER BY menu_item_id";
-			pool.query(query, function(err, result) {
-				if (err) return reject(err);
-				var curr_item = result.rows[0].menu_item_id;
-				for (let i = 0; i < result.rowCount; ++i) {
-					if (result.rows[i].menu_item_id != curr_item) {
-						menu_ingredients.push(item_ingredients);
-						items2.set(curr_item, 1);
-						item_ingredients = [];
-						curr_item = result.rows[i].menu_item_id;
+    if (req.isAuthenticated()) {
+        query1 = () => {
+			return new Promise((resolve, reject) => {
+				var query = "SELECT * FROM menu ORDER BY menu_item_id";
+				pool.query(query, function(err, result) {
+					if (err) return reject(err);
+					for (let i = 0; i < result.rowCount; ++i) {
+						menu.push(result.rows[i]);
+						items.set(result.rows[i].menu_item_id, 1);
 					}
-					item_ingredients.push(JSON.stringify({product_id: id_to_name.get(result.rows[i].product_id), quantity: result.rows[i].quantity}));
-				}
-				menu_ingredients.push(item_ingredients);
-				items2.set(curr_item, 1);
-				return resolve();
-			});
-      })
-    }
-    async function sequential_queries() {
-		const q1 = await query1();
-		const q2 = await query2();
-		const q3 = await query3();
-
-		for (let [key, val] of items) {
-			if (!items2.has(key)) {
-				console.log('menu item ingredients missing ' + key);
-				exit(0);
-			}
+					return resolve();
+				});
+			})
 		}
-		res.render('menu', { menu: menu, menu_ingredients : menu_ingredients });
+		query2 = () => {
+			return new Promise((resolve, reject) => {
+				var query = "SELECT product_id, product_name FROM inventory ORDER BY product_id";
+				pool.query(query, function(err, result) {
+					if (err) return reject(err);
+					for (let i = 0; i < result.rowCount; ++i) {
+						id_to_name.set(result.rows[i].product_id, result.rows[i].product_name);
+						name_to_id.set(result.rows[i].product_name, result.rows[i].product_id);
+					}
+					return resolve();
+				});
+			})
+		}
+		query3 = () => {
+		  return new Promise((resolve, reject) => {
+				var item_ingredients = [];
+				var query = "SELECT menu_item_id,product_id,quantity FROM menu_item_ingredients ORDER BY menu_item_id";
+				pool.query(query, function(err, result) {
+					if (err) return reject(err);
+					var curr_item = result.rows[0].menu_item_id;
+					for (let i = 0; i < result.rowCount; ++i) {
+						if (result.rows[i].menu_item_id != curr_item) {
+							menu_ingredients.push(item_ingredients);
+							items2.set(curr_item, 1);
+							item_ingredients = [];
+							curr_item = result.rows[i].menu_item_id;
+						}
+						item_ingredients.push(JSON.stringify({product_id: id_to_name.get(result.rows[i].product_id), quantity: result.rows[i].quantity}));
+					}
+					menu_ingredients.push(item_ingredients);
+					items2.set(curr_item, 1);
+					return resolve();
+				});
+		  })
+		}
+		async function sequential_queries() {
+			const q1 = await query1();
+			const q2 = await query2();
+			const q3 = await query3();
+	
+			for (let [key, val] of items) {
+				if (!items2.has(key)) {
+					console.log('menu item ingredients missing ' + key);
+					exit(0);
+				}
+			}
+			res.render('menu', { menu: menu, menu_ingredients : menu_ingredients });
+		}
+		sequential_queries();
     }
-    sequential_queries();
-    
-    // if (req.isAuthenticated()) {
-    //     const query = "SELECT * FROM menu;";
-    //     pool.query(query, function(err, result) {
-    //         if (err) throw err;
-    
-    //         res.render('menu', { menu: result.rows });
-    //     });
-    // }
-    // else {
-    //     res.redirect('/');
-    // }
+    else {
+        res.redirect('/');
+    }
 });
 
 router.put("/update_ingredients", function(req, res) {
