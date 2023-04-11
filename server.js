@@ -42,6 +42,37 @@ app.get("/", function(req, res) {
     })
 });
 
+// route to get menu items
+app.get("/menu-items", function(req, res) {
+    const category = req.query.category;
+
+    let query;
+    if (category == "featured") {
+        // fetch the featured items (most selling)
+        query = "SELECT menu_item_id, COUNT(menu_item_id) FROM orders_by_item GROUP BY menu_item_id ORDER BY COUNT(menu_item_id) DESC LIMIT 15;";
+        pool.query(query)
+        .then(result => {
+            res.json(result.rows);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({error: "Error fetching menu items"});
+        });
+    }
+    else {
+        // fetch menu items based on the category
+        query = "SELECT * FROM menu WHERE category = $1;";
+        pool.query(query, [category])
+        .then(result => {
+            res.json(result.rows);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({error: "Error fetching menu items"});
+        });
+    }
+});
+
 // start web app and listen on port 3000
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

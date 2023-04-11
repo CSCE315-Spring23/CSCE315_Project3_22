@@ -45,7 +45,7 @@
 
             <div class="grid-item menu-item-container">
                 <div class="sub-grid-item" id="category-container">
-                    <button>Featured</button>
+                    <button class="active">Featured</button>
                     <button>Feel Energized</button>
                     <button>Manage Weight</button>
                     <button>Get Fit</button>
@@ -53,22 +53,66 @@
                     <button>Enjoy a Treat</button>
                     <button>Snacks</button>
                 </div>
-                <div class="sub-grid-item menu-item-list">
-                    <% featured_items.forEach(item => { %>
-                        <div class="menu-item featured">
-                            <div class="menu-item-name">
-                                <%= item %>
-                            </div>
-                            <div class="menu-item-size">
-                                <button>20</button>
-                                <button>32</button>
-                                <button>40</button>
-                            </div>
-                        </div>
-                    <% }); %>
-                </div>
+                <div class="sub-grid-item menu-item-list"></div>
             </div>
 
         </div>
     </body>
 </html>
+
+<!-- SCRIPT TO SWITCH CATEGORIES-->
+<script>
+    function loadMenuItems(category) {
+        fetch(`/menu-items?category=${category}`)
+        .then(response => response.json())
+        .then(data => {
+            let menuItems = '';
+            data.forEach(item => {
+                if (category == "snacks") {
+                    menuItems += `
+                    <div class="menu-item">
+                        <div class="menu-item-name">
+                            ${item.menu_item_id}
+                        </div>
+                        <div class="menu-item-size">
+                            <button>Add</button>
+                        </div>
+                    </div>`;
+                }
+                else {
+                    menuItems += `
+                    <div class="menu-item">
+                        <div class="menu-item-name">
+                            ${item.menu_item_id}
+                        </div>
+                        <div class="menu-item-size">
+                            <button>20</button>
+                            <button>32</button>
+                            <button>40</button>
+                        </div>
+                    </div>`; 
+                }
+                
+            });
+            document.querySelector(".menu-item-list").innerHTML = menuItems;
+        });
+    }
+
+    document.querySelectorAll("#category-container button").forEach(button => {
+        button.addEventListener("click", (event) => {
+            // Remove the 'active' class from all buttons
+            document.querySelectorAll("#category-container button").forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            // Add the 'active' class to the clicked button
+            event.target.classList.add("active");
+            
+            const category = event.target.textContent.toLowerCase();
+            loadMenuItems(category);
+        });
+    });
+
+    // load featured by default
+    loadMenuItems("featured");
+</script>
