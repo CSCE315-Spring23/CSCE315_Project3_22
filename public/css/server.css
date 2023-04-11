@@ -38,6 +38,11 @@ body {
     grid-template-rows: repeat(5, 1fr);
 }
 
+.menu-item {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
 /* CLASS STYLING */
 .main-header-container {
     text-align: center;
@@ -67,6 +72,11 @@ body {
     border-style: solid;
     border-radius: 10px;
     margin: 10px;
+    padding: 10px;
+    align-items: center;
+
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
 }
 
 /* ID STYLING */
