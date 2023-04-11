@@ -27,6 +27,9 @@ app.use('/manager/inventory', inventory_routes)
 const menu_routes = require('./manager/menu/routes')
 app.use('/manager/menu', menu_routes)
 
+const reports_routes = require('./manager/reports/routes')
+app.use('/manager/reports', reports_routes)
+
 const server_routes = require('./server/routes')
 app.use('/server', server_routes)
 
