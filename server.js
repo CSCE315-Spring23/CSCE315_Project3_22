@@ -73,6 +73,28 @@ app.get("/menu-items", function(req, res) {
     }
 });
 
+app.get("/smoothie-price", (req, res) => {
+    const { name } = req.query;
+
+    if (!name) {
+        return res.status(400).send("Name is required");
+    }
+
+    pool.query("SELECT price FROM menu WHERE menu_item_id = $1", [name])
+        .then(result => {
+            if (result.rowCount === 0) {
+                return res.status(404).send("Smoothie price not found");
+            }
+
+            res.json({ price: result.rows[0].price });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send("Internal server error");
+        });
+});
+
+
 // start web app and listen on port 3000
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
