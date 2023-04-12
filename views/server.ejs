@@ -66,6 +66,8 @@
         fetch(`/menu-items?category=${category}`)
         .then(response => response.json())
         .then(data => {
+            const menu_set = new Set();
+
             let menuItems = '';
             data.forEach(item => {
                 if (category == "snacks") {
@@ -80,43 +82,26 @@
                     </div>`;
                 }
                 else {
-                    menuItems += `
-                    <div class="menu-item">
-                        <div class="menu-item-name">
-                            ${item.menu_item_id}
-                        </div>
-                        <div class="menu-item-size">
-                            <button data-name="${item.menu_item_id}">20</button>
-                            <button data-name="${item.menu_item_id}">32</button>
-                            <button data-name="${item.menu_item_id}">40</button>
-                        </div>
-                    </div>`; 
-                }
-                
-            });
-            document.querySelector(".menu-item-list").innerHTML = menuItems;
+                    // filters out same items but different sizes
+                    if (!menu_set.has(item.menu_item_id.substring(0, item.menu_item_id.length - 5))) {
+                        menu_set.add(item.menu_item_id.substring(0, item.menu_item_id.length - 5));
 
-            // Add event listeners to the size buttons after they are added to the DOM
-            document.querySelectorAll(".menu-item-size button").forEach(button => {
-                button.addEventListener("click", async (event) => {
-                    const name = event.target.dataset.name;
-
-                    try {
-                        const response = await fetch(`/smoothie-price?name=${encodeURIComponent(name)}`);
-                        
-                        if (!response.ok) {
-                            console.error(`Error fetching smoothie price: ${response.status}`);
-                            return;
-                        }
-
-                        const data = await response.json();
-                        addToOrder(name, data.price);
-                    } catch (error) {
-                        console.error(`Error fetching smoothie price: ${error}`);
+                        menuItems += `
+                        <div class="menu-item">
+                            <div class="menu-item-name">
+                                ${item.menu_item_id.substring(0, item.menu_item_id.length - 5)}
+                            </div>
+                            <div class="menu-item-size">
+                                <button data-name="${item.menu_item_id}">20</button>
+                                <button data-name="${item.menu_item_id}">32</button>
+                                <button data-name="${item.menu_item_id}">40</button>
+                            </div>
+                        </div>`; 
                     }
-                });
+                }
             });
 
+            document.querySelector(".menu-item-list").innerHTML = menuItems;
         });
     }
 
@@ -137,44 +122,4 @@
 
     // load featured by default
     loadMenuItems("featured");
-
-    function addToOrder(name, price) {
-        const orderList = document.querySelector(".order-item-list");
-        const totalLabel = document.getElementById("total-label");
-
-        const orderItem = document.createElement("div");
-        orderItem.className = "order-item";
-        orderItem.innerHTML = `
-            <div class="order-item-name">${name}</div>
-            <div class="order-item-price">$${price.toFixed(2)}</div>
-            <button class="delete-item">Delete</button>
-        `;
-
-        orderItem.querySelector(".delete-item").addEventListener("click", () => {
-            orderItem.remove();
-            updateTotal();
-        });
-
-        orderList.appendChild(orderItem);
-        updateTotal();
-    }
-
-    function updateTotal() {
-        const orderItems = document.querySelectorAll(".order-item-price");
-        const totalLabel = document.getElementById("total-label");
-
-        let total = 0;
-        orderItems.forEach(item => {
-            total += parseFloat(item.textContent.slice(1));
-        });
-
-        totalLabel.innerHTML = `<h1>Total: $${total.toFixed(2)}</h1>`;
-    }
-
-    document.querySelector("#buttons-container button:first-child").addEventListener("click", () => {
-        document.querySelectorAll(".order-item").forEach(item => item.remove());
-        updateTotal();
-    });
-
-    
 </script>
