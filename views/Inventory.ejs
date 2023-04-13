@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <head>
     <title>Inventory</title>
-    
+    <!-- Add the Bootstrap CSS file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="manager_style.css">
+
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div id="google_translate_element"></div>
@@ -16,23 +21,269 @@
         }, 'google_translate_element');
       }
     </script>
-    <h1>Inventory</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Quantity</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% for (var i in teammembers) {%>
-            <tr>
-                <td><%=teammembers[i].product_id%></td>
-                <td><%=teammembers[i].product_name%></td>
-                <td><%=teammembers[i].quantity%></td>
-            </tr>
-            <% } %>
-        </tbody>
-    </table>
+    
+    <!-- Add the navigation bar using Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Inventory</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Help</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        // initialize nextProductID
+        var nextProductID = 0;
+        var preUpdateFinalID = 0;
+    </script>
+    <div class="container mt-4">
+        <h1>Inventory</h1>
+        <!-- Add the Bootstrap table class and make it scrollable -->
+        <div class="table-responsive" style="max-height: 500px";>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (var i in teammembers) {%>
+                    <tr>
+                        
+                        <td><%=teammembers[i].product_id%></td>
+                        <td contenteditable="true"><%=teammembers[i].product_name%></td>
+                        <td contenteditable="true"><%=teammembers[i].quantity%></td>
+                        <script> 
+                            // find nextProductID
+                            currProductID = <%=teammembers[i].product_id%>;
+                            if(currProductID >= nextProductID){
+                                preUpdateFinalID = currProductID;
+                                nextProductID = currProductID + 1;
+                            }
+                        </script>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <script>
+            // Get the table element
+            var table = document.querySelector('table');
+          
+            // Get the rows of the table
+            var rows = Array.from(table.querySelectorAll('tr'));
+          
+            // Remove the header row from the array
+            rows.shift();
+          
+            // Sort the rows by the first column in ascending order
+            rows.sort(function(a, b) {
+                var aId = parseInt(a.cells[0].textContent);
+                var bId = parseInt(b.cells[0].textContent);
+                return aId - bId;
+            });
+          
+            // Remove the old rows from the table
+            table.querySelector('tbody').innerHTML = '';
+          
+            // Add the sorted rows back to the table, ignoring rows with quantity = -1
+            rows.forEach(function(row) {
+                var quantity = parseInt(row.cells[2].textContent);
+                if (quantity !== -1) {
+                    table.querySelector('tbody').appendChild(row);
+                }
+            });
+        </script>
+
+        <script>
+            // Get a reference to the table body
+            var tableBody = document.querySelector('tbody');
+  
+            // Add an event listener to the table body
+            tableBody.addEventListener('click', function(event) {
+            // Check if the clicked element is a table cell
+            if (event.target.tagName === 'TD') {
+                // Get a reference to the clicked row
+                var clickedRow = event.target.parentElement;
+  
+                // Remove the highlight class from all rows
+                tableBody.querySelectorAll('tr').forEach(function(row) {
+                    row.classList.remove('highlight');
+                });
+  
+                // Add the highlight class to the clicked row
+                clickedRow.classList.add('highlight');
+            }
+            });
+        </script>
+
+        <div class="row-md-4">
+            <div class="d-flex flex-row align-items-center">
+                <script>
+                    $(document).ready(function(){
+                        $('[data-toggle="tooltip"]').tooltip(); 
+                    });
+                </script>
+                <button id="addRowBtn" class = "btn btn-primary mx-2" data-toggle="tooltip" data-placement="top" title="Add New Row"> Add </button>
+                <script>
+                    // Get a reference to the table body
+                    var tableBody = document.querySelector('tbody');
+        
+                    // Get a reference to the "Add Row" button
+                    var addRowBtn = document.querySelector('#addRowBtn');
+        
+                    // Keep track of the next product ID to use
+                    //var nextProductID = 1;
+        
+                    // Add an event listener to the "Add Row" button
+                    addRowBtn.addEventListener('click', function() {
+                        // Create a new row
+                        var newRow = document.createElement('tr');
+        
+                        // Insert the cells for the row
+                        newRow.innerHTML = '<td>' + nextProductID + '</td><td contenteditable="true"></td><td contenteditable="true"></td>';
+        
+                        // Append the row to the table
+                        tableBody.appendChild(newRow);
+        
+                        // Increment the product ID for the next row
+                        nextProductID++;
+                    });
+                </script>
+
+                <button id="removeRowBtn" class = "btn btn-danger mx-2" data-toggle="tooltip" data-placement="top" title="Delete highlighted Row"> Remove </button>
+                <script>
+                    // Get a reference to the table body
+                    var tableBody = document.querySelector('tbody');
+                  
+                    // Get a reference to the "Remove Row" button
+                    var removeRowBtn = document.querySelector('#removeRowBtn');
+                  
+                    // Keep track of the selected row
+                    var selectedRow = null;
+                  
+                    // Keep track of the removed product IDs
+                    var removedProductIDs = [];
+                  
+                    // Add an event listener to the table body to handle row selection
+                    tableBody.addEventListener('click', function(event) {
+                      // Get a reference to the clicked row
+                      var clickedRow = event.target.parentNode;
+                  
+                      // Deselect the previously selected row
+                      if (selectedRow !== null) {
+                        selectedRow.classList.remove('table-primary');
+                      }
+                  
+                      // Select the clicked row
+                      clickedRow.classList.add('table-primary');
+                      selectedRow = clickedRow;
+                    });
+                  
+                    // Add an event listener to the "Remove Row" button
+                    removeRowBtn.addEventListener('click', function() {
+                      // Check that a row is selected
+                      if (selectedRow !== null) {
+                        // Get the product ID of the selected row
+                        var productID = selectedRow.cells[0].textContent;
+                  
+                        // Remove the selected row from the table
+                        tableBody.removeChild(selectedRow);
+                  
+                        // Add the removed product ID to the list
+                        removedProductIDs.push(productID);
+                  
+                        // Deselect the selected row
+                        selectedRow.classList.remove('table-primary');
+                        selectedRow = null;
+                      }
+                    });
+                </script>
+
+                <button id="updateBtn" class = "btn btn-success mx-2" data-toggle="tooltip" data-placement="top" title="Commit All Changes to Database"> Update </button>
+                <script>
+                    /*
+                    $('#inventoryTable tbody tr').each(function() {
+                        const id = $(this).find('.product-id').text().trim();
+                        const name = $(this).find('.product-name').text().trim();
+                        const quantity = parseInt($(this).find('.product-quantity').text().trim());
+
+                        // If the product ID is blank or NaN, it's a new product
+                        if (!id > currProductID) {
+                            productsToAdd.push({ id: null, name, quantity });
+                        } else {
+                            productsToUpdate.push({ id, name, quantity });
+                        }
+                    });
+                    */
+
+                    $(document).ready(function() {
+                      $("#updateBtn").click(function() {
+
+                        var productsToUpdate = [];
+                        var productsToAdd = [];
+                        $('table tbody tr').each(function() {
+                            const id = $(this).children().eq(0).text().trim();
+                            const name = $(this).children().eq(1).text().trim();
+                            const quantity = parseInt($(this).children().eq(2).text().trim());
+
+                            if (!isNaN(quantity)) {
+                                if (id > preUpdateFinalID && name != '') {
+                                    productsToAdd.push({ id , name, quantity });
+                                } else {
+                                    productsToUpdate.push({ id, name, quantity });
+                                }
+                            }
+                        });
+                        const temp = JSON.stringify(productsToUpdate);
+                        const temp2 = JSON.stringify(removedProductIDs);
+                        const temp3 = JSON.stringify(productsToAdd);
+                        console.log(temp);
+                        $.ajax({
+                            type: "PUT",
+                            url: "route/update/" + preUpdateFinalID + "/" + encodeURIComponent(temp) + "/" + encodeURIComponent(temp2) + "/" + encodeURIComponent(temp3),
+                            data: JSON.stringify({
+                                pufID: preUpdateFinalID,
+                                ptu: temp,
+                                rpID: temp2,
+                                ptA: temp3
+                                
+                            }),
+                            contentType: "app/json",
+
+                            success: function(data) {
+                                console.log(data);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                      });
+                    });
+                </script>
+            </div>
+        </div>
+          
+    </div>
+
+    <!-- Add the Bootstrap JavaScript files for table functionality -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
 </body>
+</html>
