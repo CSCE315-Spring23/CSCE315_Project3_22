@@ -49,7 +49,7 @@ app.get("/menu-items", function(req, res) {
     let query;
     if (category == "featured") {
         // fetch the featured items (most selling)
-        query = "SELECT menu_item_id, COUNT(menu_item_id) FROM orders_by_item GROUP BY menu_item_id ORDER BY COUNT(menu_item_id) DESC LIMIT 15;";
+        query = "SELECT menu_item_id, COUNT(menu_item_id) FROM orders_by_item GROUP BY menu_item_id ORDER BY COUNT(menu_item_id) DESC LIMIT 10;";
         pool.query(query)
         .then(result => {
             res.json(result.rows);
