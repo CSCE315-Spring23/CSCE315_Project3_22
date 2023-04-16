@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/user.css">
     <link rel="icon" href="../images/favicon.png" type="image/png">
+    <script src="../user-functions.js"></script>
     <title>Smoothie King</title>
 </head>
 <body>
@@ -173,5 +174,88 @@
             </div>
         </div>
     </div>
+
+    <div id="popup-container" style="display:none;">
+        <div class="popup-content">
+            <div class="popup-left-side">
+                <div class="popup-image">
+                    <img src="" style="width:350px; height:300px;">
+                </div>
+                <div class="popup-desc">
+                    <p>popup description<p>
+                </div>
+            </div>
+            <div class="popup-right-side">
+                <div class="popup-size-selection">
+                    <h3>Select a Size</h3>
+                    <form class="size-container">
+                        <div>
+                            <input type="radio" name="size" value="20">
+                            <label>20</label><br>
+                        </div>
+                        <div>
+                            <input type="radio" name="size" value="32">
+                            <label>32</label><br>
+                        </div>
+                        <div>
+                            <input type="radio" name="size" value="40">
+                            <label>40</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="popup-ingredient-selection">
+                    <h3>Select Ingredients</h3>
+                </div>
+                <div class="popup-additives-selection">
+                    <h3>Select Additives</h3>
+                </div>
+                <div class="popup-add-button">
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function updatePopupContent(imageSrc, description) {
+            const popupImage = document.querySelector(".popup-image img");
+            const popupDesc = document.querySelector(".popup-desc p");
+
+            popupImage.src = imageSrc;
+            popupDesc.textContent = description;
+        }
+
+        function showPopup(event) {
+            const menuItem = event.target.closest(".menu-item");
+            const imageSrc = menuItem.querySelector(".menu-item-image img").src;
+            const description = menuItem.querySelector(".menu-item-description p").textContent;
+
+            updatePopupContent(imageSrc, description);
+
+            const popupContainer = document.getElementById("popup-container");
+            popupContainer.style.display = "flex";
+            setTimeout(() => {
+                popupContainer.style.opacity = "1";
+            }, 1);
+        }
+    
+        function hidePopup() {
+            const popupContainer = document.getElementById("popup-container");
+            popupContainer.style.opacity = "0";
+            setTimeout(() => {
+                popupContainer.style.display = "none";
+            }, 100);
+        }
+    
+        const addItemButtons = document.querySelectorAll(".add-item-button button");
+        addItemButtons.forEach(function(button) {
+            button.addEventListener("click", showPopup);
+        });
+    
+        document.getElementById("popup-container").addEventListener("click", hidePopup);
+
+        addItemButtons.forEach(function(button) {
+            button.addEventListener("click", showPopup);
+        });
+    </script>
 </body>
 </html>
