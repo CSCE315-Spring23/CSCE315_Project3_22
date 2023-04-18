@@ -25,21 +25,22 @@ process.on("SIGINT", function() {
     process.exit(0);
 });
 
-// home route
-app.get("/", function(req, res) {
-    // load menu items by category
-    pool.query("SELECT menu_item_id, COUNT(menu_item_id) FROM orders_by_item GROUP BY menu_item_id ORDER BY COUNT(menu_item_id) DESC LIMIT 15;")
-    .then(result => {
-        let menu_set = new Set();
-        for (let i = 0; i < result.rowCount; i++) {
-            // get the actual name of item and add it to the menu set
-            let item_name = result.rows[i].menu_item_id;
-            menu_set.add(item_name.substring(0, item_name.length - 5));
-        }
+// server route
+app.get("/server", function(req, res) {
+    res.render('server');
+});
 
-        const data = {featured_items: menu_set}
-        res.render('server', data);
-    })
+// user route
+app.get("/user", function(req, res) {
+    query = "SELECT menu_item_id, COUNT(menu_item_id) FROM orders_by_item GROUP BY menu_item_id ORDER BY COUNT(menu_item_id) DESC LIMIT 10;";
+        pool.query(query)
+        .then(result => {
+            res.json(result.rows);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({error: "Error fetching menu items"});
+        });
 });
 
 // route to get menu items
@@ -72,28 +73,6 @@ app.get("/menu-items", function(req, res) {
         });
     }
 });
-
-app.get("/smoothie-price", (req, res) => {
-    const { name } = req.query;
-
-    if (!name) {
-        return res.status(400).send("Name is required");
-    }
-
-    pool.query("SELECT price FROM menu WHERE menu_item_id = $1", [name])
-        .then(result => {
-            if (result.rowCount === 0) {
-                return res.status(404).send("Smoothie price not found");
-            }
-
-            res.json({ price: result.rows[0].price });
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(500).send("Internal server error");
-        });
-});
-
 
 // start web app and listen on port 3000
 app.listen(port, () => {
