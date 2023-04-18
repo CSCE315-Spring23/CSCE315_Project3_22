@@ -1,4 +1,5 @@
 const express = require("express");
+var bodyParser = require('body-parser');
 require('dotenv').config();
 
 const passport = require('passport');
@@ -21,6 +22,8 @@ const pool = new Pool({
     ssl: {rejectUnauthorized: false}
 });
 
+router.use(express.static('/public/styles'));
+
 router.get('/', (req, res) => {
     if (req.isAuthenticated()) {
         const query = {
@@ -40,6 +43,59 @@ router.get('/', (req, res) => {
     else {
         res.redirect('/');
     }
+});
+
+router.use(bodyParser.json());
+//app.put('/update/:removedProductIDs/:productsToUpdate/:productsToAdd', (req, res) => {
+router.put('/route/update/:pufID/:ptu/:rpID/:ptA', (req, res) => {
+  const removedProductIDs = JSON.parse(req.params.rpID);
+  const productsToUpdate = JSON.parse(req.params.ptu);
+  const productsToAdd = JSON.parse(req.params.ptA);
+  const pufID = req.params.pufID;
+    
+  // do something with the data...
+    
+  //console.log(pufID);
+  //console.log(productsToAdd);
+  
+  const updateQueries = [];
+
+  for(let i = 0; i < productsToUpdate.length; i++){
+    const query = {
+      text: 'UPDATE inventory SET product_name = $1, quantity = $2 WHERE product_id = $3',
+      values: [productsToUpdate[i].name, productsToUpdate[i].quantity, productsToUpdate[i].id]
+    };
+
+    updateQueries.push(pool.query(query));
+  }
+
+  for(let i = 0; i < productsToAdd.length; i++){
+    const query = {
+      text: 'INSERT INTO inventory (product_id, product_name, quantity) VALUES ($1, $2, $3)',
+      values: [productsToAdd[i].id, productsToAdd[i].name, productsToAdd[i].quantity]
+    };
+
+    updateQueries.push(pool.query(query));
+  }
+
+  for(let i = 0; i < removedProductIDs.length; i++){
+    const query2 = {
+      text: 'UPDATE inventory SET quantity = -1 WHERE product_id = $1',
+      values: [removedProductIDs[i]]
+    };
+
+    updateQueries.push(pool.query(query2));
+  }
+  
+  Promise.all(updateQueries)
+    .then(() => {
+      res.send('Successfully updated inventory');
+    })
+    .catch(err => {
+      console.error('Error executing update queries', err.stack);
+      res.send('Error updating inventory');
+    });
+
 });
 
 module.exports = router
