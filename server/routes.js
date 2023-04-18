@@ -5,19 +5,19 @@ const dotenv = require('dotenv').config();
 const app = express();
 const port = 3000;
 
-app.set('view engine', 'ejs');
-app.use(express.static('public'));
+const router = express.Router();
+// router.set('view engine', 'ejs');
+// app.use(express.static('public'));
 
 // create pool
-const pool = new Pool ({
-    user: process.env.PSQL_USER,
-    host: process.env.PSQL_HOST,
-    database: process.env.PSQL_DATABASE,
-    password: process.env.PSQL_PASSWORD,
-    port: process.env.PSQL_PORT,
+const pool = new Pool({
+    user: process.env.db_username,
+    host: process.env.db_host,
+    database: process.env.db_name,
+    password: process.env.db_pass,
+    port: 5432,
     ssl: {rejectUnauthorized: false}
 });
-
 // add process hook to shutdown pool
 process.on("SIGINT", function() {
     pool.end();
@@ -26,7 +26,7 @@ process.on("SIGINT", function() {
 });
 
 // home route
-app.get("/", function(req, res) {
+router.get("/", function(req, res) {
     // load menu items by category
     pool.query("SELECT menu_item_id, COUNT(menu_item_id) FROM orders_by_item GROUP BY menu_item_id ORDER BY COUNT(menu_item_id) DESC LIMIT 15;")
     .then(result => {
@@ -43,7 +43,7 @@ app.get("/", function(req, res) {
 });
 
 // route to get menu items
-app.get("/menu-items", function(req, res) {
+router.get("/menu-items", function(req, res) {
     const category = req.query.category;
 
     let query;
@@ -73,7 +73,7 @@ app.get("/menu-items", function(req, res) {
     }
 });
 
-app.get("/smoothie-price", (req, res) => {
+router.get("/smoothie-price", (req, res) => {
     const { name } = req.query;
 
     if (!name) {
@@ -94,8 +94,4 @@ app.get("/smoothie-price", (req, res) => {
         });
 });
 
-
-// start web app and listen on port 3000
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
+module.exports = router

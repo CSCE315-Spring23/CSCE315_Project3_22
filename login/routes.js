@@ -78,9 +78,9 @@ router.get('/redirect', (req, res) => {
     }
 });
 
-router.get('/menu_board', (req, res) => {
+router.get('/user_index', (req, res) => {
     if (req.isAuthenticated()) {
-        res.sendFile(path.normalize(__dirname + '/../views/menu_board.html'));
+        res.sendFile(path.normalize(__dirname + '/../views/user_index.html'));
     }
     else {
         res.redirect('/');
