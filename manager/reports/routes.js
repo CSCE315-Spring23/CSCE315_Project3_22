@@ -96,5 +96,18 @@ router.put('/sells_together', (req, res) => {
     start();
 });
 
+router.put('/load_restock', async (req, res) => {
+    var restock_query = "SELECT product_id, product_name, 0.25 * MAX(quantity) AS quarter_max_quantity FROM inventory_snapshot WHERE snapshot_date >= '2022-12-02' AND snapshot_date <= '2023-01-01' GROUP BY product_id, product_name";
+
+    try {
+        const restock_report = await pool.query(restock_query);
+        res.send({restock: restock_report.rows});
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send("Internal server error");
+    }
+});
+
 
 module.exports = router
