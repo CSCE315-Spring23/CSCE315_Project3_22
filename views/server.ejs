@@ -21,6 +21,15 @@
         <div class="main-grid-container">
             <div class="grid-item sub-heading-container">
                 <h1>Order Summary</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id = "order-summary"></tbody>
+                </table>
             </div>
 
             <div class="grid-item sub-heading-container">
@@ -33,11 +42,11 @@
                         <!--DELETE ITEM BUTTON-->
                 </div>
                 <div class="sub-grid-item lower-panel">
-                    <div id="total-label">
-                        <h1>Total: $0.00</h1>
+                    <div >
+                        <h1 id="total-label">Total: $0.00</h1>
                     </div>
                     <div id="buttons-container">
-                        <button>Clear Items</button>
+                        <button onclick="clearOrder()">Clear Items</button>
                         <button>Pay Now</button>
                     </div>
                 </div>
@@ -57,53 +66,132 @@
             </div>
 
         </div>
-    </body>
-</html>
 
-<!-- SCRIPT TO SWITCH CATEGORIES-->
-<script>
-    function loadMenuItems(category) {
-        fetch(`/menu-items?category=${category}`)
-        .then(response => response.json())
-        .then(data => {
-            const menu_set = new Set();
+        <!-- SCRIPT TO SWITCH CATEGORIES-->
+        <script>
 
-            let menuItems = '';
-            data.forEach(item => {
-                if (category == "snacks") {
-                    menuItems += `
-                    <div class="menu-item">
-                        <div class="menu-item-name">
-                            ${item.menu_item_id}
-                        </div>
-                        <div class="menu-item-size">
-                            <button data-name="${item.menu_item_id}">Add</button>
-                        </div>
-                    </div>`;
+        
+        const clearButton = document.createElement('button');
+        clearButton.id = 'clear-items-button'; // Add an id to the button
+        clearButton.innerText = 'Clear Items';
+        clearButton.addEventListener('click', clearOrder);
+        document.getElementById('buttons-container').appendChild(clearButton);
+
+        function loadMenuItems(category) {
+            fetch(`/menu-items?category=${category}`)
+            .then(response => response.json())
+            .then(data => {
+                const menuItems = {};
+                const menuItemsContainer = document.querySelector(".menu-item-list");
+                menuItemsContainer.innerHTML = '';
+
+                const addToOrder = (item, price) => {
+                    const orderTable = document.getElementById('order-summary');
+                    const orderTotal = document.getElementById('total-label');
+                    let total = parseFloat(orderTotal.innerText.replace('Total: $', ''));
+                    total += price;
+                    orderTotal.innerText = `Total: $${total.toFixed(2)}`;
+
+                    const row = document.createElement('tr');
+                    const itemCell = document.createElement('td');
+                    const priceCell = document.createElement('td');
+                    const removeButtonCell = document.createElement('td'); 
+                    const removeButton = document.createElement('button');
+                    removeButton.classList.add('remove-from-order');
+                    removeButton.innerText = 'Remove';
+
+                    // Add the event listener to the removeButton
+                    removeButton.addEventListener('click', function() {
+                        const row = this.parentNode.parentNode;
+                        const itemPrice = parseFloat(row.querySelector('.price').innerText.replace('$', ''));
+                        let total = parseFloat(document.getElementById('total-label').innerText.replace('Total: $', ''));
+                        total -= itemPrice;
+                        document.getElementById('total-label').innerText = `Total: $${total.toFixed(2)}`;
+                        row.remove();
+                    });
+
+                    removeButtonCell.appendChild(removeButton);
+
+                    itemCell.innerText = item;
+                    priceCell.innerText = `$${price.toFixed(2)}`;
+                    row.appendChild(itemCell);
+                    row.appendChild(priceCell);
+                    row.appendChild(removeButtonCell); 
+                    orderTable.appendChild(row);
+                };
+
+                data.forEach(item => {
+                const menuItemId = item.menu_item_id;
+                const menuItemName = menuItemId.replace(/\s\d+$/, '');
+
+                if (!menuItems.hasOwnProperty(menuItemName)) {
+                    const menuItemBox = document.createElement('div');
+                    menuItemBox.classList.add('menu-item');
+
+                    const menuItemNameContainer = document.createElement('div');
+                    menuItemNameContainer.classList.add('menu-item-name');
+                    menuItemBox.appendChild(menuItemNameContainer);
+
+                    const menuItemSizeContainer = document.createElement('div');
+                    menuItemSizeContainer.classList.add('menu-item-size');
+                    menuItemBox.appendChild(menuItemSizeContainer);
+
+                    menuItemsContainer.appendChild(menuItemBox);
+
+                    menuItems[menuItemName] = {
+                        box: menuItemBox,
+                        sizes: {}
+                    };
+
+                    menuItemNameContainer.innerText = menuItemName;
                 }
-                else {
-                    // filters out same items but different sizes
-                    if (!menu_set.has(item.menu_item_id.substring(0, item.menu_item_id.length - 5))) {
-                        menu_set.add(item.menu_item_id.substring(0, item.menu_item_id.length - 5));
 
-                        menuItems += `
-                        <div class="menu-item">
-                            <div class="menu-item-name">
-                                ${item.menu_item_id.substring(0, item.menu_item_id.length - 5)}
-                            </div>
-                            <div class="menu-item-size">
-                                <button data-name="${item.menu_item_id}">20</button>
-                                <button data-name="${item.menu_item_id}">32</button>
-                                <button data-name="${item.menu_item_id}">40</button>
-                            </div>
-                        </div>`; 
+                if (category !== 'snacks') { // Check if category is not snacks
+                    const menuItemSize = menuItemId.substring(menuItemId.length - 2);
+
+                    if (!menuItems[menuItemName].sizes.hasOwnProperty(menuItemSize)) {
+                        const menuItemSizeButton = document.createElement('button');
+                        menuItemSizeButton.classList.add('add-to-order');
+                        menuItemSizeButton.setAttribute('data-name', menuItemId);
+                        menuItemSizeButton.setAttribute('data-price', item.price);
+                        menuItemSizeButton.innerText = menuItemSize;
+                        menuItemSizeButton.addEventListener('click', (event) => {
+                            const item = event.target.getAttribute('data-name');
+                            const price = parseFloat(event.target.getAttribute('data-price'));
+                            addToOrder(item, price);
+                        });
+
+                        menuItems[menuItemName].sizes[menuItemSize] = menuItemSizeButton;
+                        menuItems[menuItemName].box.querySelector('.menu-item-size').appendChild(menuItemSizeButton);
                     }
+                } 
+                else { // For snacks category, add a default "add" button
+                    const menuItemAddButton = document.createElement('button');
+                    menuItemAddButton.classList.add('add-to-order');
+                    menuItemAddButton.setAttribute('data-name', menuItemId);
+                    menuItemAddButton.setAttribute('data-price', item.price);
+                    menuItemAddButton.innerText = 'Add';
+                    menuItemAddButton.addEventListener('click', (event) => {
+                        const item = event.target.getAttribute('data-name');
+                        const price = parseFloat(event.target.getAttribute('data-price'));
+                        addToOrder(item, price);
+                    });
+
+                    menuItems[menuItemName].sizes['add'] = menuItemAddButton;
+                    menuItems[menuItemName].box.querySelector('.menu-item-size').appendChild(menuItemAddButton);
                 }
             });
-
-            document.querySelector(".menu-item-list").innerHTML = menuItems;
+                
         });
     }
+
+
+    function clearOrder() {
+        const orderTable = document.getElementById('order-summary');
+        orderTable.innerHTML = '';
+        document.getElementById('total-label').innerText = 'Total: $0.00';
+    }
+
 
     document.querySelectorAll("#category-container button").forEach(button => {
         button.addEventListener("click", (event) => {
