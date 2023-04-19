@@ -23,4 +23,3 @@ function sells_together_report() {
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(JSON.stringify(request));
 }
-

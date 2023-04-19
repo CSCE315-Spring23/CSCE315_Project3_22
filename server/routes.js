@@ -1,124 +1,97 @@
-/*const {Client} = require('pg')
-const client = new Client({
-    user: "csce315331_team_22_master",
-    password: "0000",
-    host: "csce-315-db.engr.tamu.edu",
-    database: "csce315331_team_22"
-})
-
-
-
-/**ORDER BY ITEM UPDATE
- * TRY TO MAKE IT ITERATE THROUGH ORDER CORRECTLY
- */
-/*
-client.connect(function (err) {
-    if (err) throw err;
-
-    var query = "SELECT * FROM orders_by_item ORDER BY order_id DESC LIMIT 1;"
-    client.query(query, function(err, results) {
-        if (err) throw err;
-
-        console.log(results.rows[0].order_id) //display last orderid
-        let new_order_id = Number(results.rows[0].order_id) + 1
-        new_order_id = new_order_id.toString()
-        console.log("new order id " + new_order_id) //display new orderid
-        
-            
-            
-            query = "SELECT * FROM orders_by_item ORDER BY item_id DESC LIMIT 1;"
-            client.query(query, function(err, results) {
-            if (err) throw err;
-
-            console.log("current item_id" + results.rows[0].item_id)
-            let new_item_id = Number(results.rows[0].item_id) + 1
-            new_item_id = new_item_id.toString()
-            console.log("new item id" + new_item_id)
-
-            var currDate = new Date()
-            var timestamp = currDate.getFullYear() + "-" + (currDate.getMonth() + 1) + "-" + currDate.getDate() + " " + currDate.getHours() + ":"  
-            + currDate.getMinutes() + ":" 
-            + currDate.getSeconds() + "." + currDate.getMilliseconds();
-            console.log(timestamp)
-
-            var item = "banana boat - 20"
-            var price = "5.69"
-            query = "INSERT INTO orders_by_item (item_id, order_id, menu_item_id, item_date, item_price) VALUES ($1, $2, $3, $4, $5)"
-            client.query(query, [new_item_id, new_order_id, item, timestamp, price], function(err, results) {
-                if (err) throw err;
-
-                console.log("item inserted")
-            })
-        })
-    })
-})
-*/
-
-/**
- * ORDER SUMMARY UPDATE
- */
-
-/*
-var query = "SELECT * FROM orders_summary ORDER BY order_id DESC LIMIT 1;"
-client.query(query, function(err, results) {
-    if (err) throw err;
-
-    console.log(results.rows[0].order_id) //display last orderid
-    let new_order_id = Number(results.rows[0].order_id) + 1
-    new_order_id = new_order_id.toString()
-    console.log("new order id " + new_order_id) //display new orderid
-
-    var currDate = new Date()
-    var timestamp = currDate.getFullYear() + "-" + (currDate.getMonth() + 1) + "-" + currDate.getDate() + " " + currDate.getHours() + ":"  
-    + currDate.getMinutes() + ":" 
-    + currDate.getSeconds() + "." + currDate.getMilliseconds();
-    console.log(timestamp)
-
-    var employee_id = Math.floor((Math.random() * 6) + 1)
-    console.log(employee_id)
-    
-    const total_price = "15.25"
-
-    query = "INSERT INTO orders_summary (order_id, employee_id, order_date, total_price) VALUES ($1, $2, $3, $4)"
-    client.query(query, [new_order_id, employee_id, timestamp, total_price], function(err, results) {
-        if (err) throw err;
-
-        console.log("order inserted")
-    })
-})
-
-*/
-
 const express = require('express');
-const { Client } = require('pg');
+const { Pool } = require('pg');
+const dotenv = require('dotenv').config();
+
+const app = express();
+const port = 3000;
+
 const router = express.Router();
+// router.set('view engine', 'ejs');
+// app.use(express.static('public'));
 
-const port = process.env.PORT || 3000;
-
-const client = new Client({
-    user: "csce315331_team_22_master",
-    password: "0000",
-    host: "csce-315-db.engr.tamu.edu",
-    database: "csce315331_team_22"
+// create pool
+const pool = new Pool({
+    user: process.env.db_username,
+    host: process.env.db_host,
+    database: process.env.db_name,
+    password: process.env.db_pass,
+    port: 5432,
+    ssl: {rejectUnauthorized: false}
+});
+// add process hook to shutdown pool
+process.on("SIGINT", function() {
+    pool.end();
+    console.log("Application successfully shutdown");
+    process.exit(0);
 });
 
-router.get('/', function(req, res) {
-    if (req.isAuthenticated()) {
-        client.connect(function(err) {
-            if (err) throw err;
-            
-            const query = "SELECT * FROM menu;";
-            client.query(query, function(err, results) {
-                if (err) throw err;
-    
-                res.render('server', { data: results.rows });
-            });
+// home route
+router.get("/", function(req, res) {
+    // load menu items by category
+    pool.query("SELECT menu_item_id, COUNT(menu_item_id) FROM orders_by_item GROUP BY menu_item_id ORDER BY COUNT(menu_item_id) DESC LIMIT 15;")
+    .then(result => {
+        let menu_set = new Set();
+        for (let i = 0; i < result.rowCount; i++) {
+            // get the actual name of item and add it to the menu set
+            let item_name = result.rows[i].menu_item_id;
+            menu_set.add(item_name.substring(0, item_name.length - 5));
+        }
+
+        const data = {featured_items: menu_set}
+        res.render('server', data);
+    })
+});
+
+// route to get menu items
+router.get("/menu-items", function(req, res) {
+    const category = req.query.category;
+
+    let query;
+    if (category == "featured") {
+        // fetch the featured items (most selling)
+        query = "SELECT menu_item_id, COUNT(menu_item_id) FROM orders_by_item GROUP BY menu_item_id ORDER BY COUNT(menu_item_id) DESC LIMIT 10;";
+        pool.query(query)
+        .then(result => {
+            res.json(result.rows);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({error: "Error fetching menu items"});
         });
     }
     else {
-        res.redirect('/');
+        // fetch menu items based on the category
+        query = "SELECT * FROM menu WHERE category = $1;";
+        pool.query(query, [category])
+        .then(result => {
+            res.json(result.rows);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({error: "Error fetching menu items"});
+        });
     }
 });
 
+router.get("/smoothie-price", (req, res) => {
+    const { name } = req.query;
+
+    if (!name) {
+        return res.status(400).send("Name is required");
+    }
+
+    pool.query("SELECT price FROM menu WHERE menu_item_id = $1", [name])
+        .then(result => {
+            if (result.rowCount === 0) {
+                return res.status(404).send("Smoothie price not found");
+            }
+
+            res.json({ price: result.rows[0].price });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send("Internal server error");
+        });
+});
 
 module.exports = router
