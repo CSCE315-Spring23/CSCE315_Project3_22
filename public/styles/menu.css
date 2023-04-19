@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+
+body {
+    background-color: #f7f7f7;
+}
+
+table {
+    text-align: center;
+    align-self: center;
+    padding-top: 15px;
+    padding-bottom: 20px;
+    border-bottom: 3px groove;
+}
+
+#menu_table {
+    border-style: solid;
+    border-radius: 10px;
+    margin: 10px;
+    font-family: "Poppins", sans-serif;
+}
+
+#menu_table tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+#menu_table tr:hover {
+    background-color: #ddd;
+}
+
+#menu_table thead {
+    font-size: 20px;
+
+}
+
+button:hover {
+    background: red;
+    transition: transform 0.3s ease;
+    transform: translateY(-5px);
+}
