@@ -42,13 +42,15 @@
                         <!--DELETE ITEM BUTTON-->
                 </div>
                 <div class="sub-grid-item lower-panel">
-                    <div >
-                        <h1 id="total-label">Total: $0.00</h1>
-                    </div>
-                    <div id="buttons-container">
-                        <button onclick="clearOrder()">Clear Items</button>
-                        <button>Pay Now</button>
-                    </div>
+                    <form method = "post" action = "/">
+                        <div>
+                            <h1 id="total-label" name = "total">0.00</h1>
+                        </div>
+                        <div id="buttons-container">
+                            <button>Clear Items</button>
+                            <button name = "pay_button" type = "submit">Pay Now</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 

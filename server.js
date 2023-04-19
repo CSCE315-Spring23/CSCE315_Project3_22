@@ -74,6 +74,49 @@ app.get("/menu-items", function(req, res) {
     }
 });
 
+
+app.post("/", (req, res) => {
+
+    /**
+     * ORDER SUMMARY UPDATE
+    */ 
+        var query = "SELECT * FROM orders_summary ORDER BY order_id DESC LIMIT 1;";
+        pool.query(query)
+        .then (result => {
+    
+            //New Order ID
+            let new_order_id = Number(result.rows[0].order_id) + 1
+            new_order_id = new_order_id.toString()
+            console.log(new_order_id)
+    
+    
+            //Timestamp
+            var currDate = new Date()
+            var timestamp = currDate.getFullYear() + "-" + (currDate.getMonth() + 1) + "-" + currDate.getDate() + " " + currDate.getHours() + ":"  
+            + currDate.getMinutes() + ":" 
+            + currDate.getSeconds() + "." + currDate.getMilliseconds();
+            console.log(timestamp)
+    
+    
+            //Employee ID
+            var employee_id = Math.floor((Math.random() * 6) + 1)
+            console.log(employee_id)
+    
+    
+            //Total Price
+            let total_price = "22.73"  //Fix Total Price to fetch from ejs
+    
+            //for loop to iterate through order summary
+            //query sql to get most recent item_id and incremenmt
+            //get timestamp
+            //get menu_item_id and price and insert into sql
+                
+        })
+        
+    });
+    
+    
+
 // start web app and listen on port 3000
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
