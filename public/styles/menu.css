@@ -5,31 +5,41 @@ body {
 }
 
 table {
+    width: 100%;
     text-align: center;
     align-self: center;
     padding-top: 15px;
     padding-bottom: 20px;
-    border-bottom: 3px groove;
-}
-
-#menu_table {
-    border-style: solid;
-    border-radius: 10px;
     margin: 10px;
     font-family: "Poppins", sans-serif;
+}
+
+#menu_table th {
+    font-size: 20px;
+
 }
 
 #menu_table tr:nth-child(even){
     background-color: #f2f2f2;
 }
 
-#menu_table tr:hover {
-    background-color: #ddd;
+th:first-child { 
+	border-radius: 15px 0 0 0; 
 }
 
-#menu_table thead {
-    font-size: 20px;
+th:last-child { 
+	border-radius: 0 15px 0 0; 
+}
 
+tr:last-child td:first-child { 
+	border-radius: 0 0 0 15px; 
+}
+tr:last-child td:last-child { 
+	border-radius: 0 0 15px 0; 
+}
+
+#menu_table tr:hover {
+    background-color: #ddd;
 }
 
 button:hover {
