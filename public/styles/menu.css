@@ -61,8 +61,14 @@ button{
 
 #menu_table tr:hover {
     background-color: #ddd;
-    transition: transform 0.3s ease;
-    transform: scale(1.05);
+    font-weight: bold;
+    /* transition: transform 0.3s ease;
+    transform: scale(1.05); */
+}
+
+#menu_table tr:last-child:hover {
+    background-color: white;
+   
 }
 
 button:hover {
