@@ -51,6 +51,8 @@ tr:last-child td:last-child {
 
 #menu_table tr:hover {
     background-color: #ddd;
+    transition: transform 0.3s ease;
+    transform: scale(1.05);
 }
 
 button{
