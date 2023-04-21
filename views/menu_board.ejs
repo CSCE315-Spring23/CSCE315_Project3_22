@@ -1,0 +1,50 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrap core CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+    <link href="/bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/styles/menu.css" rel="stylesheet"> 
+    <link rel="icon" href="images/smoothie-king-logo.png" type="image/png">
+    <title>Menu Board</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src="/menu_board/refresh.js"></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</head>
+<body>
+    <div id="google_translate_element"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: true,
+            multilanguagePage: true
+            }, 'google_translate_element');
+        }
+    </script>
+    <div id="display_items_container">
+        <% for (let i = 0; i < display_items.length; i++) { %>
+            <div id="display_item_<%= i %>">
+                <h3><%= menu[display_items[i]].menu_item_id %> <%= menu[display_items[i]].category %></h3>
+                <% for (let j = 0; j < menu_ingredients[display_items[i]].length; j++) { %>
+                    <p><%= menu_ingredients[display_items[i]][j] %></p>
+                <% } %>
+            </div>
+        <% } %>
+    </div>
+    <script type="text/javascript">
+        setTimeout(() => {
+            refresh_items();
+        }, 10000);  // have to change in refresh.js as well
+    </script>
+</body>
+</html>
