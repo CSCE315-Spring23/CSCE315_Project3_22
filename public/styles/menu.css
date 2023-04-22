@@ -35,18 +35,18 @@ body {
 }
 
 th:first-child { 
-	border-radius: 15px 0 0 0; 
+	border-radius: 10px 0 0 0; 
 }
 
 th:last-child { 
-	border-radius: 0 15px 0 0; 
+	border-radius: 0 10px 0 0; 
 }
 
 tr:last-child td:first-child { 
-	border-radius: 0 0 0 15px; 
+	border-radius: 0 0 0 10px; 
 }
 tr:last-child td:last-child { 
-	border-radius: 0 0 15px 0; 
+	border-radius: 0 0 10px 0; 
 }
 
 button{
@@ -62,8 +62,6 @@ button{
 #menu_table tr:hover {
     background-color: #ddd;
     font-weight: bold;
-    /* transition: transform 0.3s ease;
-    transform: scale(1.05); */
 }
 
 #menu_table tr:last-child:hover {
