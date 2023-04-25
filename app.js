@@ -2,7 +2,7 @@ const express = require("express");
 const { Pool } = require('pg');
 require('dotenv').config();
 const path = require('path');
-const port = process.env.port;
+const port = process.env.PORT;
 
 const passport = require('passport');
 // const {check, validationResult} = require('express-validator');
