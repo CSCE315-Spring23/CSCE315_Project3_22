@@ -4,6 +4,10 @@ const dotenv = require('dotenv').config();
 
 const app = express();
 const port = 3000;
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -87,7 +91,7 @@ app.post("/", (req, res) => {
             //New Order ID
             let new_order_id = Number(result.rows[0].order_id) + 1
             new_order_id = new_order_id.toString()
-            console.log(new_order_id)
+            //console.log(new_order_id)
     
     
             //Timestamp
@@ -95,17 +99,55 @@ app.post("/", (req, res) => {
             var timestamp = currDate.getFullYear() + "-" + (currDate.getMonth() + 1) + "-" + currDate.getDate() + " " + currDate.getHours() + ":"  
             + currDate.getMinutes() + ":" 
             + currDate.getSeconds() + "." + currDate.getMilliseconds();
-            console.log(timestamp)
+            //console.log(timestamp)
     
     
             //Employee ID
             var employee_id = Math.floor((Math.random() * 6) + 1)
-            console.log(employee_id)
+            //console.log(employee_id)
     
     
             //Total Price
-            let total_price = "22.73"  //Fix Total Price to fetch from ejs
-    
+            const totalPrice = req.body.price;
+            //console.log(totalPrice)
+
+
+            //ORDERS_SUMMARY INSERT
+            
+            query = "INSERT INTO orders_summary (order_id, employee_id, order_date, total_price) VALUES ($1, $2, $3, $4)"
+            pool.query(query, [new_order_id, employee_id, timestamp, totalPrice], function(err, results) {
+                if (err) throw err;
+            
+                console.log("Success")
+            }) 
+            
+            const item = req.body.hiddenItem;
+            const price = req.body.hiddenPrice;
+
+            //ORDERS BY ITEMS INSERT
+            
+            query = "SELECT * FROM orders_by_item ORDER BY item_id DESC LIMIT 1;"
+            pool.query(query) 
+            .then(result => {
+                var new_item_id = Number(result.rows[0].item_id)
+                for (let i = 0; i < item.length; i++) {
+                    new_item_id += 1;
+                    console.log(new_item_id)
+
+                    query = "INSERT INTO orders_by_item (item_id, order_id, menu_item_id, item_date, item_price) VALUES ($1, $2, $3, $4, $5);"
+                    pool.query(query, [new_item_id, new_order_id, item[i], timestamp, price[i]], function(err, results) {
+                        if (err) throw err;
+
+                        console.log("Victory")
+                    })
+                } 
+            })
+
+
+
+
+            
+
             //for loop to iterate through order summary
             //query sql to get most recent item_id and incremenmt
             //get timestamp
