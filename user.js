@@ -142,7 +142,6 @@ app.post('/store-cart', (req, res) => {
 // render the cart page
 app.get("/cart", function(req, res) {
     // render html code and css styling
-    console.log(req.session.cart)
     res.render('cart', {cart: req.session.cart});
 });
 

@@ -18,7 +18,7 @@
         </button>-->
         <!--cart button-->
         <!--menu pop up/drop down (stretch)-->
-        <div class="cart-container">
+        <div class="checkout-container" style="display:none;">
             <button class="checkout-button">
                 <h2>CHECKOUT $0.00</h2>
             </button>
@@ -198,6 +198,7 @@
                     ${ingredients[i]}
                 </label>`;
         }
+        ingredients_div.style.padding = "20px";
 
         // load additives
         const additives = await load_additives();
@@ -212,6 +213,7 @@
                     ${additives[i]}
                 </label>`;
         }
+        additives_div.style.padding = "20px";
     }
 
     function showPopup(event) {
@@ -283,8 +285,11 @@
         cart.push(smoothie);
 
         // update price of checkout button
-        let cart_price = parseFloat(document.querySelector('.cart-container h2').textContent.slice(10));
-        document.querySelector('.cart-container h2').textContent = `CHECKOUT $${cart_price + parseFloat(smoothie_price)}`;
+        const checkout_button = document.querySelector(".checkout-container");
+        checkout_button.style.display = "block";
+
+        let cart_price = parseFloat(document.querySelector('.checkout-container h2').textContent.slice(10));
+        document.querySelector('.checkout-container h2').textContent = `CHECKOUT $${cart_price + parseFloat(smoothie_price)}`;
 
         // hide the popup container
         const popupContainer = document.getElementById("popup-container");

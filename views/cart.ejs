@@ -34,7 +34,7 @@
                             <h2><%= item.name %></h2>
                         </div>
                         <div class="cil-desc">
-                            <h3><%= item.size %></h3>
+                            <h3><%= item.size %> oz</h3>
                         </div>
                     </div>
                     <div class="cart-item-right">
@@ -42,11 +42,14 @@
                             <h2>$<%= item.price %></h2>
                         </div>
                         <div class="cir-desc">
-                            <button>EDIT</button>
+                            <button class="edit-button">EDIT</button>
                         </div>
                         <div class="cir-desc">
-                            <button>REMOVE</button>
+                            <button class="remove-button">REMOVE</button>
                         </div>
+                    </div>
+                    <div class="item-info" style="display:none;">
+                        <!-- use this to save ingredient and additive information-->
                     </div>
                 </div>
             <% }); %>
@@ -61,7 +64,42 @@
 </html>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('Document loaded');
+    // helper functions
+    function place_order() {
+        // orders_summary
+        // orders_by_item
+        // inventory
+
+        const cart_items = document.querySelectorAll(".cart-item");
+        cart_items.forEach(item => {
+            console.log("TEST");
+
+            // get item name
+
+        })
+    }
+
+    // remove individual items from the cart
+    const remove_buttons = document.querySelectorAll(".remove-button");
+
+    remove_buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            const cart_item = button.parentNode.parentNode.parentNode;
+            cart_item.remove();
+        })
     });
+
+    // clear all item from the cart
+    const clear_button = document.querySelector(".clear-button");
+
+    clear_button.addEventListener('click', () => {
+        const item_container = document.querySelector(".item-container");
+        item_container.innerHTML = "";
+    })
+
+    // place the order and update the database
+    const place_order_button = document.querySelector(".place-order-button");
+
+    place_order_button.addEventListener('click', place_order);
+
 </script>
