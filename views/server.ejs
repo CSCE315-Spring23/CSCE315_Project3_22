@@ -42,12 +42,12 @@
                         <!--DELETE ITEM BUTTON-->
                 </div>
                 <div class="sub-grid-item lower-panel">
-                    <form method = "post" action = "/">
-                        <div>
+                    <form id = "update" method = "post" action = "/">
+                        <div id="hiddenValues">
                             <h1 id="total-label" name = "total">0.00</h1>
+                            <input type="hidden" name="price" id="price"> 
                         </div>
                         <div id="buttons-container">
-                            <button>Clear Items</button>
                             <button name = "pay_button" type = "submit">Pay Now</button>
                         </div>
                     </form>
@@ -120,6 +120,14 @@
                     row.appendChild(priceCell);
                     row.appendChild(removeButtonCell); 
                     orderTable.appendChild(row);
+
+                    var total_price = document.getElementById("price");
+                    total_price.setAttribute("value", total)
+
+                    const hiddenValues = document.getElementById("hiddenValues");
+                    hiddenValues.innerHTML += "<input type='hidden', name = 'hiddenPrice', id = 'hiddenPrice', value = '" + price + "'>"
+                    hiddenValues.innerHTML += "<input type='hidden', name = 'hiddenItem', id = 'hiddenItem', value = '" + item + "'>"
+                    
                 };
 
                 data.forEach(item => {
