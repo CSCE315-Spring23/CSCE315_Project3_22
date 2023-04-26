@@ -24,30 +24,33 @@
             <h1>CART</h1>
         </div>
         <div class="body-item item-container">
-            <div class="cart-item">
-                <div class="cart-item-left">
-                    <div class="cil-desc">
-                        <img src="../images/smoothie0.png" style="width: 120px; height: 100px">
+            <% cart.forEach(function(item) { %>
+                <div class="cart-item">
+                    <div class="cart-item-left">
+                        <div class="cil-desc">
+                            <img src=../images/smoothie0.png style="width: 120px; height: 100px">
+                        </div>
+                        <div class="cil-desc">
+                            <h2><%= item.name %></h2>
+                        </div>
+                        <div class="cil-desc">
+                            <h3><%= item.size %></h3>
+                        </div>
                     </div>
-                    <div class="cil-desc">
-                        <h2>Smoothie Name</h2>
-                    </div>
-                    <div class="cil-desc">
-                        <h3>Size</h3>
+                    <div class="cart-item-right">
+                        <div class="cir-desc">
+                            <h2>$<%= item.price %></h2>
+                        </div>
+                        <div class="cir-desc">
+                            <button>EDIT</button>
+                        </div>
+                        <div class="cir-desc">
+                            <button>REMOVE</button>
+                        </div>
                     </div>
                 </div>
-                <div class="cart-item-right">
-                    <div class="cir-desc">
-                        <h2>$9.99</h2>
-                    </div>
-                    <div class="cir-desc">
-                        <button>EDIT</button>
-                    </div>
-                    <div class="cir-desc">
-                        <button>REMOVE</button>
-                    </div>
-                </div>
-            </div>
+            <% }); %>
+
         </div>
         <div class="body-item cart-dashboard">
             <button class="clear-button">Clear Order</button>

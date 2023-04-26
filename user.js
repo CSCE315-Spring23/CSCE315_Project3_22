@@ -3,6 +3,7 @@ const express = require('express');
 const { Pool } = require('pg');
 const dotenv = require('dotenv').config();
 const session = require('express-session');
+const bodyParser = require('body-parser');
 
 // create the express web app and set port no
 const app = express();
@@ -18,6 +19,7 @@ app.use(session({
 app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
+app.use(bodyParser.json());
 
 // create connection pool
 const pool = new Pool ({
@@ -140,8 +142,8 @@ app.post('/store-cart', (req, res) => {
 // render the cart page
 app.get("/cart", function(req, res) {
     // render html code and css styling
-
-    res.render('cart');
+    console.log(req.session.cart)
+    res.render('cart', {cart: req.session.cart});
 });
 
 // start web app and listen on port 3000
