@@ -2,12 +2,18 @@
 
 /* general table styling (includes header) */
 table {
-    width: 100%;
+    width: 90%;
     text-align: center;
     align-self: center;
     padding-top: 15px;
     padding-bottom: 20px;
     font-family: "Poppins", sans-serif;
+}
+
+/* general table styling (does not include header) */
+body {
+    background-color: #f7f7f7;
+    border-color: rgba(181,18,27,.8);
 }
 
 /* general table styling (includes header) */
@@ -17,20 +23,17 @@ table {
     border-color: rgba(181,18,27,.8); 
 }
 
-#menu_table tr {
-    border: 1px solid #ddd;
-    padding: 3px;  
-    border-color: rgba(181,18,27,.8); 
-}
-
-/* general table styling (does not include header) */
-body {
-    background-color: #f7f7f7;
-    border-color: rgba(181,18,27,.8);
+#menu_table th {
+    background-color: rgba(181,18,27,.8) !important;
+    font-size: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    color: white;
+    font-size: 25px;
 }
 
 /* styles the edges of the table to approximate rounded corners */
-tr:first-child th:first-child { 
+th:first-child { 
 	border-radius: 10px 0 0 0; 
 }
 
@@ -55,7 +58,6 @@ tr:last-child td:last-child {
     font-size: 20px;
     padding-top: 12px;
     padding-bottom: 12px;
-    background-color: rgba(181,18,27,.8) !important;
     color: white;
     font-size: 25px;
 }
@@ -75,11 +77,6 @@ button{
 #menu_table tr:hover {
     background-color: #ddd;
     font-weight: bold;
-}
-
-#menu_table tr:last-child:hover {
-    background-color: white;
-   
 }
 
 button:hover {
