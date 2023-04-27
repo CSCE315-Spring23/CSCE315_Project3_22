@@ -22,7 +22,7 @@ const pool = new Pool({
 
 menu = [];  // array of menu items, without size specifier, each is a row straight from the query
 menu_ingredients = [];  // array corresponding to menu itmes, each idx is an array of ingredients by text name for respective menu item. items in same order as menu array
-display_items = Array(5); display_items.fill(0);
+display_items = Array(4); display_items.fill(0);
 
 var ignored_ingredients = new Map([  // keys are product ids not to add to ingredients (straws/cups), value doesn't matter, just checking membership
     ['77', 1],
@@ -30,6 +30,14 @@ var ignored_ingredients = new Map([  // keys are product ids not to add to ingre
     ['79', 1],
     ['80', 1]
 ])
+
+var category_to_img = {
+    'be well': 1,
+    'enjoy a treat': 2,
+    'feel energized': 3,
+    'get fit': 5,
+    'manage weight': 6
+}
 
 var items = new Map();
 var id_to_name = new Map();
@@ -122,7 +130,7 @@ router.get('/', function(req, res) {
         const q3 = await query3();
 
         update_display_items();
-        res.render('menu_board', { menu: menu, menu_ingredients: menu_ingredients, display_items: display_items});
+        res.render('menu_board', { menu: menu, menu_ingredients: menu_ingredients, display_items: display_items, category_to_img: category_to_img});
     }
     sequential_queries();
     // if (req.isAuthenticated()) {
@@ -135,8 +143,7 @@ router.get('/', function(req, res) {
 
 router.put('/refresh_items', (req, res) => {
     update_display_items();
-    res.send({menu: menu, menu_ingredients: menu_ingredients, display_items: display_items});
-    // res.render('menu_board', {menu: menu, menu_ingredients: menu_ingredients, display_items: display_items});
+    res.send({menu: menu, menu_ingredients: menu_ingredients, display_items: display_items, category_to_img: category_to_img});
 })
 
 module.exports = router
