@@ -157,7 +157,6 @@ app.post('/place-order', async (req, res) => {
     // Process each item in the cart
     for (let item of cart) {
         // Get the latest item_id
-        item_id += 1;
         let menu_item_id = item.name;
         let item_price = parseFloat(item.price);
 
@@ -171,19 +170,13 @@ app.post('/place-order', async (req, res) => {
 
         // Update the inventory for each additive in the item
         item.additives.forEach(async additive => {
-            await updateInventory(additive, menu_item_id);
+            await updateAdditives(additive, item_id);
         });
 
         await update_straws_cups(menu_item_id);
-    }
 
-    // orders_by_item = item_id, order_id, menu_item_id, item_date, item_price
-    // item_id - query the databse to get the latest item_id
-    // SELECT item_id FROM orders_by_item ORDER BY item_id DESC limit 1;
-    // order_id - use the order_id from above
-    // menu_item_id - loop through each item in the cart, use the item name
-    // item_date - use the date from above
-    // item_price - loop through each item in the cart, use the price
+        item_id += 1;
+    }
 
     res.sendStatus(200);
 });
@@ -194,7 +187,6 @@ app.listen(port, () => {
 });
 
 async function getLatestOrderId() {
-    // Your database query implementation here
     let order_id = -1;
 
     let query;
@@ -211,8 +203,6 @@ async function getLatestOrderId() {
 }
 
 async function getLatestItemId() {
-    // Your database query implementation here
-    // Your database query implementation here
     let item_id = -1;
 
     let query;
@@ -228,36 +218,19 @@ async function getLatestItemId() {
     return item_id;
 }
 
-// Function to insert the order into orders_summary
 async function update_order_summary(order_id, employee_id, order_date, total_price) {
-    // Your database query implementation here
     query = "INSERT INTO orders_summary (order_id, employee_id, order_date, total_price) VALUES ($1, $2, $3, $4)"
     pool.query(query, [order_id, employee_id, order_date, total_price], function(err, results) {
         if (err) throw err;
     }) 
 }
 
-// Function to insert the item into orders_by_item
 async function update_order_items(item_id, order_id, menu_item_id, item_date, item_price) {
-    // Your database query implementation here
     query = "INSERT INTO orders_by_item (item_id, order_id, menu_item_id, item_date, item_price) VALUES ($1, $2, $3, $4, $5);"
     pool.query(query, [item_id, order_id, menu_item_id, item_date, item_price], function(err, results) {
         if (err) throw err;
     })
 }
-
-// inventory = product_id, product_name, quantity
-    // figure out how much quantity of an ingredient is in the smoothie (amount_in_smoothie)
-        // query the database to get the product_id from a product_name
-        // SELECT product_id FROM inventory WHERE product_name=<ingredient/additive name>;
-
-        // we need to query menu_item_ingredients and filter by menu_item_id and product_id, this will return amount_in_smoothie
-        // SELECT quantity FROM menu_item_ingredients WHERE menu_item_id=<menu_item_id> AND product_id=<product_id>;
-
-    // query to database to get the current quantity, then set it to a new quantity (old_quan - amount_in_smoothie)
-        // SELECT quantity FROM inventory WHERE product_name='almond butter';
-
-        // UPDATE inventory SET quantity=<current_quantity - amount_in_smoothie> WHERE product_name='<menu_item_id>';
 
 async function updateInventory(product_name, menu_item_id) {
     let product_id = await getProductID(product_name);
@@ -267,12 +240,26 @@ async function updateInventory(product_name, menu_item_id) {
     let curr_quantity = await get_inv_quantity(product_name);
 
     let new_quantity = curr_quantity - quantity;
+
     await update_inv_quantity(product_name, new_quantity);
 }
 
+async function updateAdditives(additive, item_id) {
+    let product_id = await getProductID(additive);
+
+    let curr_quantity = await get_inv_quantity(additive);
+
+    // decrement inventory
+    await update_inv_quantity(additive, curr_quantity - 3);
+
+    // insert into item_additives
+    query = "INSERT INTO item_additives(item_id, product_id, additive_price, additive_quantity) VALUES ($1, $2, 0.99, 3.0)"
+    pool.query(query, [item_id, product_id], function(err, results) {
+        if (err) throw err;
+    });
+}
+
 async function getProductID(product_name) {
-    // Your database query implementation here
-    // Your database query implementation here
     let product_id = -1;
 
     let query;
@@ -288,9 +275,7 @@ async function getProductID(product_name) {
     return product_id;
 }
 
-// Function to get the current quantity of the ingredient in the inventory
 async function get_quantity(menu_item_id, product_id) {
-    // Your database query implementation here
     let quantity = -1;
 
     let query;
@@ -307,7 +292,6 @@ async function get_quantity(menu_item_id, product_id) {
 }
 
 async function get_inv_quantity(product_name) {
-    // Your database query implementation here
     let quantity = -1;
 
     let query;
@@ -323,9 +307,7 @@ async function get_inv_quantity(product_name) {
     return quantity;
 }
 
-// Function to update the inventory with the new quantity
 async function update_inv_quantity(product_name, new_quantity) {
-    // Your database query implementation here
     query = "UPDATE inventory SET quantity= $1 WHERE product_name= $2;"
     pool.query(query, [new_quantity, product_name], function(err, results) {
         if (err) throw err;
@@ -336,21 +318,18 @@ async function update_straws_cups(menu_item_id) {
     // update cups
     let size = menu_item_id.substr(-2);
     if (size == "20") {
-        // update straws and cups
         query = "UPDATE inventory SET quantity = quantity - 1 WHERE product_id = 77;"
         pool.query(query, function(err, results) {
             if (err) throw err;
         })
     }
     else if (size == "32") {
-        // update straws and cups
         query = "UPDATE inventory SET quantity = quantity - 1 WHERE product_id = 78;"
         pool.query(query, function(err, results) {
             if (err) throw err;
         })
     }
     else {
-        // update straws and cups
         query = "UPDATE inventory SET quantity = quantity - 1 WHERE product_id = 79;"
         pool.query(query, function(err, results) {
             if (err) throw err;
@@ -358,7 +337,6 @@ async function update_straws_cups(menu_item_id) {
     }
 
     // update straws
-    // update straws and cups
     query = "UPDATE inventory SET quantity = quantity - 1 WHERE product_id = 80;"
     pool.query(query, function(err, results) {
         if (err) throw err;
