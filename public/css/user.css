@@ -161,6 +161,10 @@ body {
     margin: 40px;
 }
 
+.item-panel-price {
+    text-align: center;
+}
+
 .add-item-button, .menu-item-description, .menu-item-name{
     text-align: center;
     margin: 20px;
@@ -187,6 +191,10 @@ body {
 .active {
     background-color: rgba(60, 0, 0, 0.4) !important;
     color: white;
+}
+
+label {
+    letter-spacing: 1px;
 }
 
 /* POP-UP STYLING */

@@ -170,19 +170,23 @@
         popupDesc.textContent = description;
 
         // add size selection
+        const item_price_20 = await get_item_price(_menu_item_id.trim().toLowerCase() + " - 20");
+        const item_price_32 = await get_item_price(_menu_item_id.trim().toLowerCase() + " - 32");
+        const item_price_40 = await get_item_price(_menu_item_id.trim().toLowerCase() + " - 40");
+
         const size_container = document.querySelector(".size-container");
         size_container.innerHTML = `
             <div>
                 <input type="radio" name="size" value="20">
-                <label>20</label><br>
+                <label>20 oz - $${item_price_20}</label><br>
             </div>
             <div>
                 <input type="radio" name="size" value="32">
-                <label>32</label><br>
+                <label>32 oz - $${item_price_32}</label><br>
             </div>
             <div>
                 <input type="radio" name="size" value="40">
-                <label>40</label>
+                <label>40 oz - $${item_price_40}</label>
             </div>`;
 
         // load the ingredients
