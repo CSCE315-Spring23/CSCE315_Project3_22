@@ -1,0 +1,11 @@
+{
+    "source": {
+        "include": ["app.js", "login/routes.js", "manager/inventory/routes.js", "manager/inventory/routes.js", "manager/menu/routes.js", "manager/reports/routes.js",
+                    "menu_board/routes.js", "public/manager/menu/listeners.js", "public/manager/reports/restock.js", "public/manager/reports/sells_together.js", 
+                    "public/menu_board/refresh.js"],
+        "exclude": ["node_modules", "public/bootstrap-3.4.1-dist"]
+    },
+    "opts": {
+        "destination": "./docs"
+    }
+}

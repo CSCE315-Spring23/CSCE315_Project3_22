@@ -22,6 +22,9 @@ app.use(express.static("public"));
 const login_routes = require('./login/routes')
 app.use('/', login_routes)
 
+const menu_board_routes = require('./menu_board/routes')
+app.use('/menu_board', menu_board_routes)
+
 const inventory_routes = require('./manager/inventory/routes')
 app.use('/manager/inventory', inventory_routes)
 
