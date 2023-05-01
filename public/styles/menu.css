@@ -86,16 +86,12 @@ button{
 
 button:hover {
 	border-color: black;
-    background-color: rgba(60, 0, 0, .9);
     transition: transform 0.3s ease;
     transform: translateY(-5px);
-    color: white;
 }
 
 .btn button:hover{
     border-color: black;
-    background-color: rgba(60, 0, 0, .9);
     transition: transform 0.3s ease;
     transform: translateY(-5px);
-    color: white ;
 }
