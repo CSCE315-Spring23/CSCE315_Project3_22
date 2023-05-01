@@ -17,6 +17,7 @@ const body_parser = require('body-parser');
 app.use(body_parser.urlencoded({extended: true}));
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static("public"));
 
 const login_routes = require('./login/routes')
 app.use('/', login_routes)
