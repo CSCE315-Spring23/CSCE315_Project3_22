@@ -1,207 +1,458 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/server.css">
-        <link rel="icon" href="images/favicon.png" type="image/png">
-        <title>Smoothie King</title>
-    </head>
-    <body>
-        <div class="main-header-container">
-            <img src="images/smoothie-king-logo.png" style="width:400px; height:70px;" id="logo">
-            <!--SIGN OUT BUTTON-->
-            <button id="sign-out-button"    >
-                <img src="images/sign-out-button.png" style="width:70px; height:70px">
-            </button>
-            
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/server.css">
+    <link rel="icon" href="../images/favicon.png" type="image/png">
+    <script src="/test/test.js"></script>
+    <title>Smoothie King</title>
+</head>
+<body>
+    <div class="main-header-container">
+        <img src="../images/smoothie-king-logo.png" style="width:400px; height:70px;" id="logo">
+        <!--SIGN OUT BUTTON-->
+        <!--<button id="sign-out-button"    >
+            <img src="../images/sign-out-button.png" style="width:70px; height:70px">
+        </button>-->
+        <!--cart button-->
+        <!--menu pop up/drop down (stretch)-->
+        
+    </div>
+
+    <div class="main-grid-container">
+        <div class="grid-item sub-heading-container">
+            <h1>Order Summary</h1>
         </div>
 
-        <div class="main-grid-container">
-            <div class="grid-item sub-heading-container">
-                <h1>Order Summary</h1>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Price</th>
-                        </tr>
-                    </thead>
-                    <tbody id = "order-summary"></tbody>
-                </table>
-            </div>
+        <div class="grid-item sub-heading-container">
+            <h1>Menu</h1>
+        </div>
 
-            <div class="grid-item sub-heading-container">
-                <h1>Menu</h1>
+        <div class="grid-item order-items-container">
+            <div class="sub-grid-item order-item-list">
+                <!--TABLE/VIEW OF ORDER ITEMS-->
+                <!--DELETE ITEM BUTTON-->
+                <div id="order-summary"></div> <!-- Add this div for displaying the order summary -->
             </div>
-
-            <div class="grid-item order-items-container">
-                <div class="sub-grid-item order-item-list">
-                    <!--TABLE/VIEW OF ORDER ITEMS-->
-                        <!--DELETE ITEM BUTTON-->
+            <div class="sub-grid-item lower-panel">
+                <div id="total-label">
+                    <h1>Total: $0.00</h1>
                 </div>
-                <div class="sub-grid-item lower-panel">
-                    <form id = "update" method = "post" action = "/">
-                        <div id="hiddenValues">
-                            <h1 id="total-label" name = "total">0.00</h1>
-                            <input type="hidden" name="price" id="price"> 
+                <div id="buttons-container">
+                    <button>Clear Items</button>
+                    <button class = "place-order-button">Pay Now</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <div class="nb-cat-container" id="category-container">
+                <button class="active">Featured</button>
+                <button>Feel Energized</button>
+                <button>Manage Weight</button>
+                <button>Get Fit</button>
+                <button>Be Well</button>
+                <button>Enjoy a Treat</button>
+                <button>Snacks</button>
+            </div>
+            <!--<div class="nb-filter-container">
+                <button>Filter</button>
+            </div>-->
+
+            <div class="sub-grid-item menu-item-list" id="menu-container"></div>
+        </div>
+
+    <div id="popup-container" style="display:none;">
+        <div class="popup-content">
+            <div class="popup-left-side">
+                <div class="popup-image">
+                </div>
+                <div class="popup-desc">
+                </div>
+            </div>
+            
+            <div class="popup-right-side">
+                <div class="popup-smoothie-name">
+                    <h2>Smoothie</h2>
+                </div>
+                <div class="popup-size-selection">
+                    <h3>Select a Size</h3>
+                    <form class="size-container">
+                        <div>
+                            <input type="radio" name="size" value="20">
+                            <label>20</label><br>
                         </div>
-                        <div id="buttons-container">
-                            <button name = "pay_button" type = "submit">Pay Now</button>
+                        <div>
+                            <input type="radio" name="size" value="32">
+                            <label>32</label><br>
+                        </div>
+                        <div>
+                            <input type="radio" name="size" value="40">
+                            <label>40</label>
                         </div>
                     </form>
                 </div>
-            </div>
-
-            <div class="grid-item menu-item-container">
-                <div class="sub-grid-item" id="category-container">
-                    <button class="active">Featured</button>
-                    <button>Feel Energized</button>
-                    <button>Manage Weight</button>
-                    <button>Get Fit</button>
-                    <button>Be Well</button>
-                    <button>Enjoy a Treat</button>
-                    <button>Snacks</button>
+                <div class="popup-ingredient-selection">
+                    <h3>Select Ingredients</h3>
                 </div>
-                <div class="sub-grid-item menu-item-list"></div>
+                <div class="popup-additives-selection">
+                    <h3>Select Additives</h3>
+                </div>
+                <div class="popup-add-button">
+                    <button>Add to Cart</button>
+                </div>
             </div>
-
         </div>
+    </div>
+</body>
+</html>
 
-        <!-- SCRIPT TO SWITCH CATEGORIES-->
-        <script>
+<script>
+    // SESSION INFORMATION
+    let cart = [];
+
+    // HELPER CODE
+    function capitalize_words(str) {
+        // split the string into an array of words
+        const words = str.split(" ");
+
+        // map over the array of words and capitalize the first letter of each word
+        const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+
+        // join the capitalized words back into a new string
+        const capitalizedStr = capitalizedWords.join(" ");
+
+        return capitalizedStr;
+    }
+
+    async function load_ingredients(_menu_item_id) {
+        const ingredients = [];
+
+        const response = await fetch(`/item-ingredients?menu_item_id=${_menu_item_id.toLowerCase().trim() + " - 20"}`);
+        const data = await response.json();
+        data.forEach(item => {
+                // filter out straws and cups for popup display
+                if (item.product_name != "straws" && item.product_name.substring(0, 4) != "cups")
+                ingredients.push(item.product_name);
+        });
+
+        return ingredients;
+    }
+
+    async function load_additives() {
+        const additives = [];
+
+        const response = await fetch("/additives");
+        const data = await response.json();
+        data.forEach(item => {
+            additives.push(item.product_name);
+        });
+
+        return additives;
+    }
+
+    async function get_item_price(_item) {
+        let item_price = 0.00;
+
+        const response = await fetch(`/item-price?menu_item_id=${_item}`);
+        const data = await response.json();
+        data.forEach(item => {
+            item_price =  item.price;
+        });
+
+        return item_price;
+    }
+
+    // POPUP CODE
+    async function getContent(description, _menu_item_id) {
+        // load the smoothie name
+        const popupName = document.querySelector(".popup-smoothie-name h2");
+        popupName.textContent = _menu_item_id;
+        
+        // add size selection
+        const size_container = document.querySelector(".size-container");
+        size_container.innerHTML = `
+            <div>
+                <input type="radio" name="size" value="20">
+                <label>20</label><br>
+            </div>
+            <div>
+                <input type="radio" name="size" value="32">
+                <label>32</label><br>
+            </div>
+            <div>
+                <input type="radio" name="size" value="40">
+                <label>40</label>
+            </div>`;
+
+        // load the ingredients
+        const ingredients = await load_ingredients(_menu_item_id);
+        
+        const ingredients_div = document.querySelector(".popup-ingredient-selection");
+        ingredients_div.innerHTML = `<h3>Select Ingredients</h3>`;
+
+        for (let i = 0; i < ingredients.length; i++) {
+            ingredients_div.innerHTML += 
+                `<label>
+                    <input type="checkbox" name="option1" value="1" checked>
+                    ${ingredients[i]}
+                </label>`;
+        }
+        ingredients_div.style.padding = "20px";
+
+        // load additives
+        const additives = await load_additives();
+
+        const additives_div = document.querySelector(".popup-additives-selection");
+        additives_div.innerHTML = `<h3>Select Additives</h3>`;
+
+        for (let i = 0; i < additives.length; i++) {
+            additives_div.innerHTML += 
+                `<label>
+                    <input type="checkbox" name="option1" value="1">
+                    ${additives[i]}
+                </label>`;
+        }
+        additives_div.style.padding = "20px";
+    }
+
+    function clearItems() {
+    // Clear the cart array
+    cart = [];
+
+    // Update the order summary
+    updateOrderSummary();
+    }
+
+    // Add the missing updateOrderSummary function
+    function updateOrderSummary() {
+    const orderSummary = document.querySelector("#order-summary");
+    orderSummary.innerHTML = ""; // Clear the current order summary
+
+    let total = 0;
+
+    cart.forEach((smoothie, index) => {
+        total += parseFloat(smoothie.price);
+
+        // Remove the size and dash from the smoothie name
+        const displayName = smoothie.name.replace(/ - \d+$/, "");
+
+        const smoothieItem = `
+            <div>
+                <h4>${displayName}</h4>
+                <p>Size: ${smoothie.size}</p>
+                <p>Ingredients: ${smoothie.ingredients.join(", ")}</p>
+                <p>Additives: ${smoothie.additives.join(", ")}</p>
+                <p>Price: $${parseFloat(smoothie.price).toFixed(2)}</p>
+            </div>
+        `;
+
+        orderSummary.innerHTML += smoothieItem;
+    });
+
+    // Update the total amount in the Total-label
+    const totalLabel = document.querySelector("#total-label h1");
+    totalLabel.textContent = `Total: $${total.toFixed(2)}`;
+}
+
+
+    function showPopup(event) {
+        // get the menu item
+        const menuItem = event.target.closest(".menu-item");
+        
+        // get information for popup
+        const imageSrc = menuItem.querySelector(".menu-item-image img").src;
+        const description = menuItem.querySelector(".menu-item-description p").textContent;
+
+        const menu_item_id = menuItem.querySelector(".menu-item-name").textContent;
+        let menu_item_id_q = menu_item_id.toLowerCase().trim() + " - 20"; // format item properly for query
+
+        getContent(description, menu_item_id);
+
+        // display the popup
+        const popupContainer = document.getElementById("popup-container");
+        popupContainer.style.display = "flex";
+
+        // set delay so items can load
+        setTimeout(() => {
+            popupContainer.style.opacity = "1";
+        }, 200);
+        
+    }
+
+    // get rid of pop and handle cart logic
+    async function hidePopup() {
+        // get name
+        const smoothie_name = document.querySelector(".popup-smoothie-name").textContent.trim();
+
+        // get selected size
+        const selectedSize = document.querySelector('input[name="size"]:checked').value;
+
+        // get selected ingredients
+        const ingredientsCheckboxes = document.querySelectorAll(".popup-ingredient-selection input[type='checkbox']");
+        const selectedIngredients = [];
+        ingredientsCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                selectedIngredients.push(checkbox.parentElement.textContent.trim());
+            }
+        });
+
+        // get selected additives
+        const additivesCheckboxes = document.querySelectorAll(".popup-additives-selection input[type='checkbox']");
+        const selectedAdditives = [];
+        additivesCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                selectedAdditives.push(checkbox.parentElement.textContent.trim());
+            }
+        });
+
+        // create smoothie name for query
+        let smoothie_name_real = smoothie_name.toLowerCase() + " - " + selectedSize;
+
+        // get smoothie price
+        let smoothie_price = await get_item_price(smoothie_name_real);
+
+        // Create smoothie object
+        const smoothie = {
+            name: smoothie_name_real,
+            size: selectedSize,
+            ingredients: selectedIngredients,
+            additives: selectedAdditives,
+            price: smoothie_price
+        };
+
+        // Add smoothie object to cart
+        cart.push(smoothie);
 
         
-        const clearButton = document.createElement('button');
-        clearButton.id = 'clear-items-button'; // Add an id to the button
-        clearButton.innerText = 'Clear Items';
-        clearButton.addEventListener('click', clearOrder);
-        document.getElementById('buttons-container').appendChild(clearButton);
 
-        function loadMenuItems(category) {
-            fetch(`/menu-items?category=${category}`)
-            .then(response => response.json())
-            .then(data => {
-                const menuItems = {};
-                const menuItemsContainer = document.querySelector(".menu-item-list");
-                menuItemsContainer.innerHTML = '';
+        // Update the order summary and total amount
+        updateOrderSummary();
 
-                const addToOrder = (item, price) => {
-                    const orderTable = document.getElementById('order-summary');
-                    const orderTotal = document.getElementById('total-label');
-                    let total = parseFloat(orderTotal.innerText.replace('Total: $', ''));
-                    total += price;
-                    orderTotal.innerText = `Total: $${total.toFixed(2)}`;
+        // hide the popup container
+        const popupContainer = document.getElementById("popup-container");
+        popupContainer.style.opacity = "0";
+        popupContainer.style.display = "none";
+    }
 
-                    const row = document.createElement('tr');
-                    const itemCell = document.createElement('td');
-                    const priceCell = document.createElement('td');
-                    const removeButtonCell = document.createElement('td'); 
-                    const removeButton = document.createElement('button');
-                    removeButton.classList.add('remove-from-order');
-                    removeButton.innerText = 'Remove';
+    async function place_order() {
+        let cart_json = JSON.stringify(cart);
 
-                    // Add the event listener to the removeButton
-                    removeButton.addEventListener('click', function() {
-                        const row = this.parentNode.parentNode;
-                        const itemPrice = parseFloat(row.querySelector('.price').innerText.replace('$', ''));
-                        let total = parseFloat(document.getElementById('total-label').innerText.replace('Total: $', ''));
-                        total -= itemPrice;
-                        document.getElementById('total-label').innerText = `Total: $${total.toFixed(2)}`;
-                        row.remove();
-                    });
-
-                    removeButtonCell.appendChild(removeButton);
-
-                    itemCell.innerText = item;
-                    priceCell.innerText = `$${price.toFixed(2)}`;
-                    row.appendChild(itemCell);
-                    row.appendChild(priceCell);
-                    row.appendChild(removeButtonCell); 
-                    orderTable.appendChild(row);
-
-                    var total_price = document.getElementById("price");
-                    total_price.setAttribute("value", total)
-
-                    const hiddenValues = document.getElementById("hiddenValues");
-                    hiddenValues.innerHTML += "<input type='hidden', name = 'hiddenPrice', id = 'hiddenPrice', value = '" + price + "'>"
-                    hiddenValues.innerHTML += "<input type='hidden', name = 'hiddenItem', id = 'hiddenItem', value = '" + item + "'>"
-                    
-                };
-
-                data.forEach(item => {
-                const menuItemId = item.menu_item_id;
-                const menuItemName = menuItemId.replace(/\s\d+$/, '');
-
-                if (!menuItems.hasOwnProperty(menuItemName)) {
-                    const menuItemBox = document.createElement('div');
-                    menuItemBox.classList.add('menu-item');
-
-                    const menuItemNameContainer = document.createElement('div');
-                    menuItemNameContainer.classList.add('menu-item-name');
-                    menuItemBox.appendChild(menuItemNameContainer);
-
-                    const menuItemSizeContainer = document.createElement('div');
-                    menuItemSizeContainer.classList.add('menu-item-size');
-                    menuItemBox.appendChild(menuItemSizeContainer);
-
-                    menuItemsContainer.appendChild(menuItemBox);
-
-                    menuItems[menuItemName] = {
-                        box: menuItemBox,
-                        sizes: {}
-                    };
-
-                    menuItemNameContainer.innerText = menuItemName;
-                }
-
-                if (category !== 'snacks') { // Check if category is not snacks
-                    const menuItemSize = menuItemId.substring(menuItemId.length - 2);
-
-                    if (!menuItems[menuItemName].sizes.hasOwnProperty(menuItemSize)) {
-                        const menuItemSizeButton = document.createElement('button');
-                        menuItemSizeButton.classList.add('add-to-order');
-                        menuItemSizeButton.setAttribute('data-name', menuItemId);
-                        menuItemSizeButton.setAttribute('data-price', item.price);
-                        menuItemSizeButton.innerText = menuItemSize;
-                        menuItemSizeButton.addEventListener('click', (event) => {
-                            const item = event.target.getAttribute('data-name');
-                            const price = parseFloat(event.target.getAttribute('data-price'));
-                            addToOrder(item, price);
-                        });
-
-                        menuItems[menuItemName].sizes[menuItemSize] = menuItemSizeButton;
-                        menuItems[menuItemName].box.querySelector('.menu-item-size').appendChild(menuItemSizeButton);
-                    }
-                } 
-                else { // For snacks category, add a default "add" button
-                    const menuItemAddButton = document.createElement('button');
-                    menuItemAddButton.classList.add('add-to-order');
-                    menuItemAddButton.setAttribute('data-name', menuItemId);
-                    menuItemAddButton.setAttribute('data-price', item.price);
-                    menuItemAddButton.innerText = 'Add';
-                    menuItemAddButton.addEventListener('click', (event) => {
-                        const item = event.target.getAttribute('data-name');
-                        const price = parseFloat(event.target.getAttribute('data-price'));
-                        addToOrder(item, price);
-                    });
-
-                    menuItems[menuItemName].sizes['add'] = menuItemAddButton;
-                    menuItems[menuItemName].box.querySelector('.menu-item-size').appendChild(menuItemAddButton);
-                }
+        // Send cart data to the server
+        try {
+            const response = await fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: cart_json
             });
-                
+
+            // If the server responds with a success status, redirect to the home page
+            if (response.ok) {
+                window.location.href = "/";
+                console.log("TEST")
+            } 
+            else {
+                console.error("Failed to place order. Server responded with status:", response.status);
+            }
+        } 
+        catch (error) {
+            console.error("Failed to place order. Error:", error);
+        }
+    }
+
+    const place_order_button = document.querySelector(".place-order-button");
+
+    place_order_button.addEventListener('click', place_order);
+
+    function attachAddToCartEventListeners() {
+        const addItemButtons = document.querySelectorAll(".add-item-button button");
+        addItemButtons.forEach(function(button) {
+            button.addEventListener("click", showPopup);
         });
     }
 
-
-    function clearOrder() {
-        const orderTable = document.getElementById('order-summary');
-        orderTable.innerHTML = '';
-        document.getElementById('total-label').innerText = 'Total: $0.00';
+    
+    function attachClearItemsEventListener() {
+    const clearItemsButton = document.querySelector("#buttons-container button:first-child");
+    clearItemsButton.addEventListener("click", clearItems);
     }
 
+    
+    //document.getElementById("popup-container").addEventListener("click", hidePopup);
+
+    // CATEGORY CODE
+    function loadMenuItems(category) {
+    // select the menu container and clear its contents
+    const menu_container = document.getElementById('menu-container');
+    menu_container.innerHTML = ``;
+
+    // create menu set
+    const menu_set = new Set();
+
+    fetch(`/menu-items?category=${category}`)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(item => {
+                let item_name_spliced;
+                if (category == "snacks") {
+                    item_name_spliced = capitalize_words(item.menu_item_id);
+                }
+                else {
+                    item_name_spliced = capitalize_words(item.menu_item_id.slice(0, -5));
+                }
+
+                if (!menu_set.has(item_name_spliced)) {
+                    menu_set.add(item_name_spliced);
+                    
+                    if (category == "snacks") {
+                        menu_container.innerHTML += `
+                        <div class="sub-grid-item menu-item-list">
+                            <div class="menu-item">
+                                <div class="menu-item-name">
+                                    <h2>${item_name_spliced}</h2>
+                                </div>
+                                <div class="add-item-button">
+                                    <button>Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                    }
+                    else {
+                        menu_container.innerHTML += `
+                        <div class="sub-grid-item menu-item-list">
+                            <div class="menu-item">
+                                <div class="menu-item-image">
+                                    <img src="">
+                                </div>
+                                <div class="menu-item-name">
+                                    <h2>${item_name_spliced}</h2>
+                                </div>
+                                <div class="menu-item-description">
+                                    <p></p>
+                                </div>
+                                <div class="add-item-button">
+                                    <button>Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                    }
+                    
+                }
+            });
+
+            // attach event listener to add to cart button
+            attachAddToCartEventListeners();
+
+            // attach event listender to add to cart button within the popup
+            document.querySelector(".popup-add-button button").addEventListener("click", hidePopup);
+        });
+}
 
     document.querySelectorAll("#category-container button").forEach(button => {
         button.addEventListener("click", (event) => {
@@ -218,6 +469,8 @@
         });
     });
 
-    // load featured by default
     loadMenuItems("featured");
+    attachClearItemsEventListener();
+
+    
 </script>

@@ -33,15 +33,14 @@ body {
 }
 
 .menu-item-list {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 10px; /* Add space between the menu items */
+  margin: 50px;
 }
 
-.menu-item {
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-}
+
 
 /* CLASS STYLING */
 .main-header-container {
@@ -64,23 +63,16 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-.menu-item-list {
-    margin: 50px;
-}
 
 .menu-item {
-    border-style: solid;
-    border-radius: 10px;
-    margin: 10px;
-    padding: 10px;
-    align-items: center;
-
-    font-family: 'Poppins', sans-serif;
-    text-align: center;
-}
-
-.active {
-    background-color: rgba(181,18,27,.5) !important;
+  border-style: solid;
+  border-radius: 10px;
+  margin: 0; /* Remove the margin to avoid interference with the grid gap */
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  width: 100%; /* Make the menu item fill the entire grid cell */
+  height: 100%; /* Make the menu item fill the entire grid cell */
+  box-sizing: border-box; /* Make the border part of the element size */
 }
 
 /* ID STYLING */
@@ -114,6 +106,10 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+.active {
+  background-color: rgba(181,18,27,.5) !important;
+}
+
 #buttons-container button {
     border: solid;
     border-radius: 5px;
@@ -127,4 +123,54 @@ body {
     display: none;
     float: right;
     margin-right: 40px;
+}
+
+/* POP-UP STYLING */
+#popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    font-family: 'cabo rounded', sans-serif;
+}
+
+.popup-content {
+    display: grid;
+    grid-template-columns: 400px 400px;
+
+    background-color: white;
+    border-radius: 10px;
+    max-width: 60%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.popup-right-side {
+    text-align: center;
+    display: flex;
+    margin: 10px;
+}
+
+
+
+.popup-right-side {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;    
+}
+
+
+.popup-right-side {
+    border-radius: 10px;
+    background-color: rgba(232, 232, 232, 0.2);
+}
+
+.size-container {
+    display: inline-block;
 }
