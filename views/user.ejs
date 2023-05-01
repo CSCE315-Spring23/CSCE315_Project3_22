@@ -274,7 +274,7 @@
 
         // Create smoothie object
         const smoothie = {
-            name: smoothie_name_real,
+            name: smoothie_name,
             size: selectedSize,
             ingredients: selectedIngredients,
             additives: selectedAdditives,
@@ -289,7 +289,7 @@
         checkout_button.style.display = "block";
 
         let cart_price = parseFloat(document.querySelector('.checkout-container h2').textContent.slice(10));
-        document.querySelector('.checkout-container h2').textContent = `CHECKOUT $${cart_price + parseFloat(smoothie_price)}`;
+        document.querySelector('.checkout-container h2').textContent = `CHECKOUT $${(cart_price + parseFloat(smoothie_price)).toFixed(2)}`;
 
         // hide the popup container
         const popupContainer = document.getElementById("popup-container");
