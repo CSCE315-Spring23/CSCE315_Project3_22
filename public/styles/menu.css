@@ -2,7 +2,7 @@
 
 /* general table styling (includes header) */
 table {
-    width: 90%;
+    width: 100%;
     text-align: center;
     align-self: center;
     padding-top: 15px;
@@ -85,13 +85,11 @@ button{
 }
 
 button:hover {
-	border-color: black;
     transition: transform 0.3s ease;
     transform: translateY(-5px);
 }
 
 .btn button:hover{
-    border-color: black;
     transition: transform 0.3s ease;
     transform: translateY(-5px);
 }
