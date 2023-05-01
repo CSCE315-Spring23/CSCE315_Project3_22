@@ -81,6 +81,7 @@ body {
 
 .checkout-container button:hover {
     cursor: pointer;
+    background-color: rgb(232, 232, 232);
 }
 
 .ad-container {
@@ -186,6 +187,7 @@ body {
 
 .add-item-button button:hover, .popup-add-button button:hover {
     cursor: pointer;
+    background-color: rgb(232, 232, 232);
 }
 
 .active {
@@ -215,7 +217,7 @@ label {
 
 .popup-content {
     display: grid;
-    grid-template-columns: 400px 400px;
+    grid-template-columns: 450px 450px;
 
     background-color: white;
     border-radius: 10px;
@@ -230,7 +232,7 @@ label {
 }
 
 .popup-left-side {
-    padding: 20px;
+    padding: 10px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -241,6 +243,7 @@ label {
 }
 
 .popup-right-side {
+    padding: 10px;
     flex-direction: column;
     align-items: center;
     justify-content: center;    
@@ -257,4 +260,31 @@ label {
 
 .size-container {
     display: inline-block;
+}
+
+#back-button {
+    text-align: left;
+    width: 100%;
+    margin: 0;
+}
+
+#back-button button {
+    position: relative;
+    top: -35px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 10px;
+    background-color: rgb(240, 240, 240);
+    border-style: none;
+    font-family: 'cabo rounded', sans-serif;
+    text-transform: uppercase;
+    font-size: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2), inset 0 -2px 5px rgba(0,0,0,0.2);
+}
+
+#back-button button:hover{
+    cursor: pointer;
+    background-color: rgb(232, 232, 232);
 }

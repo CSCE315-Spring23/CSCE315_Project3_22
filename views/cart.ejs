@@ -34,9 +34,6 @@
                         <div class="cir-desc cart-item-price">
                             <h2>$<%= item.price %></h2>
                         </div>
-                        <div class="cir-desc cart-edit-button">
-                            <button class="edit-button">EDIT</button>
-                        </div>
                         <div class="cir-desc cart-remove-button">
                             <button class="remove-button">REMOVE</button>
                         </div>
@@ -60,19 +57,41 @@
 
         </div>
         <div class="body-item cart-dashboard">
+            <button class="back-to-menu-button">Back to Menu</button>
             <button class="clear-button">Clear Order</button>
             <button class="place-order-button">Place Order</button>
+            <div class="total-price-div">
+                <h2>Total: $0.00</h2>
+            </div>
         </div>
     </div>
 </body>
 </html>
 
 <script>
-    // helper functions
+    document.addEventListener("DOMContentLoaded", () => {
+        let cart_total = 0.00;
+
+        document.querySelectorAll(".cart-item").forEach(item => {
+            let item_price = parseFloat(item.querySelector(".cart-item-price").textContent.trim().substring(1));
+
+            cart_total += item_price;
+        });
+
+        document.querySelector(".total-price-div").textContent = `TOTAL: $${cart_total}`;
+    });
+
     async function place_order() {
         let cart = [];
 
         const cart_items = document.querySelectorAll(".cart-item");
+
+        // handle cart with no items
+        if (cart_items.length == 0) {
+            alert("Your cart is empty. Please add items before placing an order.");
+            return;
+        }
+
         cart_items.forEach(item => {
             // get the smoothie name
             const smoothie_name = item.querySelector(".cart-item-name").textContent;
@@ -125,8 +144,8 @@
 
             // If the server responds with a success status, redirect to the home page
             if (response.ok) {
+                alert("Order placed successfully! Enjoy!");
                 window.location.href = "/";
-                console.log("TEST")
             } 
             else {
                 console.error("Failed to place order. Server responded with status:", response.status);
@@ -143,9 +162,22 @@
     remove_buttons.forEach(button => {
         button.addEventListener('click', () => {
             const cart_item = button.parentNode.parentNode.parentNode;
+
+            let current_total = parseFloat(document.querySelector(".total-price-div").textContent.slice(8));
+
+            let item_price = parseFloat(cart_item.querySelector(".cart-item-price").textContent.trim().slice(1));
+            
+            document.querySelector(".total-price-div").textContent = `TOTAL: $${current_total - item_price}`;
+
             cart_item.remove();
-        })
+        });
     });
+
+    // go back to the menu
+    const back_to_menu_button = document.querySelector(".back-to-menu-button");
+    back_to_menu_button.addEventListener("click", () => {
+        window.location.href = "/";
+    })
 
     // clear all item from the cart
     const clear_button = document.querySelector(".clear-button");
@@ -153,6 +185,8 @@
     clear_button.addEventListener('click', () => {
         const item_container = document.querySelector(".item-container");
         item_container.innerHTML = "";
+
+        document.querySelector(".total-price-div").textContent = `TOTAL: $0.00`;
     })
 
     // place the order and update the database

@@ -164,9 +164,10 @@ app.post('/place-order', async (req, res) => {
         await update_order_items(item_id, order_id, menu_item_id, timestamp, item_price);
 
         // Update the inventory for each ingredient in the item
-        item.ingredients.forEach(async ingredient => {
+        for (let i = 0; i < item.ingredients.length; i++) {
+            const ingredient = item.ingredients[i];
             await updateInventory(ingredient, menu_item_id);
-        });
+        }
 
         // Update the inventory for each additive in the item
         item.additives.forEach(async additive => {
@@ -177,7 +178,7 @@ app.post('/place-order', async (req, res) => {
 
         item_id += 1;
     }
-
+    
     res.sendStatus(200);
 });
 

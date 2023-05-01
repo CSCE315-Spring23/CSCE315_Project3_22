@@ -57,6 +57,9 @@
     <div id="popup-container" style="display:none;">
         <div class="popup-content">
             <div class="popup-left-side">
+                <div id="back-button">
+                    <button onclick="hidePopupSimple()">BACK</button>
+                </div>
                 <div class="popup-image">
                     <img src="" style="width:350px; height:300px;">
                 </div>
@@ -240,7 +243,7 @@
         // set delay so items can load
         setTimeout(() => {
             popupContainer.style.opacity = "1";
-        }, 200);
+        }, 500);
         
     }
 
@@ -296,6 +299,12 @@
         document.querySelector('.checkout-container h2').textContent = `CHECKOUT $${(cart_price + parseFloat(smoothie_price)).toFixed(2)}`;
 
         // hide the popup container
+        const popupContainer = document.getElementById("popup-container");
+        popupContainer.style.opacity = "0";
+        popupContainer.style.display = "none";
+    }
+
+    function hidePopupSimple() {
         const popupContainer = document.getElementById("popup-container");
         popupContainer.style.opacity = "0";
         popupContainer.style.display = "none";
@@ -411,7 +420,7 @@
             },
             body: cart_json
         });
-
+        
         window.location.href = "/cart";
     })
 
