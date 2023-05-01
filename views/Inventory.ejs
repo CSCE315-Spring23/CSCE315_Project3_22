@@ -20,6 +20,7 @@
           multilanguagePage: true
         }, 'google_translate_element');
       }
+      googleTranslateElementInit();
     </script>
     
     <!-- Add the navigation bar using Bootstrap -->
@@ -255,7 +256,7 @@
                         const temp = JSON.stringify(productsToUpdate);
                         const temp2 = JSON.stringify(removedProductIDs);
                         const temp3 = JSON.stringify(productsToAdd);
-                        console.log(temp);
+                        // console.log(temp);
                         $.ajax({
                             type: "PUT",
                             url: "route/update/" + preUpdateFinalID + "/" + encodeURIComponent(temp) + "/" + encodeURIComponent(temp2) + "/" + encodeURIComponent(temp3),
@@ -269,7 +270,7 @@
                             contentType: "app/json",
 
                             success: function(data) {
-                                console.log(data);
+                                // console.log(data);
                             },
                             error: function(xhr, status, error) {
                                 console.error(error);

@@ -125,6 +125,7 @@ function edit_menu_cell(cell) {
 	
 	// When the input field loses focus, send an AJAX request to the server to update the database
 	input.addEventListener("blur", function() {
+
 		// Update the cell content with the new value
 		var newValue = input.value;
 		cell.innerHTML = newValue;
@@ -141,6 +142,10 @@ function edit_menu_cell(cell) {
 		xhr.onload = () => {
 			// menu, menu_ingredients
 			var response = JSON.parse(xhr.response);
+			if (response.status == 1) {
+				return;
+			}
+
 			var menu = response.menu;
 			var menu_ingredients = response.menu_ingredients;
 			var updated_table = "";
@@ -153,7 +158,7 @@ function edit_menu_cell(cell) {
 				updated_table += '</tr>';
 			}
 			updated_table += '<tr id="">';
-			updated_table += '<td onclick="edit_menu_cell(this)"></td>';
+			updated_table += '<td onclick="edit_menu_cell(this)">Enter New Item</td>';
 			updated_table += '<td onclick="edit_menu_cell(this)"></td>';
 			updated_table += '<td onclick="edit_menu_cell(this)"></td>';
 			updated_table += '<td><button class="btn btn-width bkgrnd-cyan">Edit</button></td>';

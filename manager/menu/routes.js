@@ -176,7 +176,7 @@ router.put("/update_menu", function(req, res) {
 		}
         update_menu_item_ingredients = () => {
 			return new Promise((resolve, reject) => {
-				var query2 = "INSERT INTO menu_item_ingredients VALUES (\'" + row.menu_item_id + "\', 1, 0)";
+				var query2 = "INSERT INTO menu_item_ingredients VALUES (\'" + row.menu_item_id + "\', 77, 1.0)";
 				pool.query(query2, function(err, result) {
 					if (err) return reject(err);
 					return resolve();
@@ -221,7 +221,7 @@ router.put("/update_menu", function(req, res) {
 		}
 		sequential_delete();
     }
-    else if (row.menu_item_id != "" && row.menu_item_id == menu[row.idx].menu_item_id) {  // if not deleting, can't change the menu_item_id
+    else if (row.menu_item_id != "" && row.menu_item_id == menu[row.idx].menu_item_id && row.price != "" && row.category != "") {  // if not deleting, can't change the menu_item_id
 		menu[row.idx] = {menu_item_id: row.menu_item_id, category: row.category, price: row.price};
         var query = "UPDATE menu SET category=$1, price=$2 WHERE menu_item_id=$3";
         pool.query(query, [row.category, row.price, row.menu_item_id], function(err, result) {
@@ -229,7 +229,9 @@ router.put("/update_menu", function(req, res) {
         });
 		res.send({menu : menu, menu_ingredients : menu_ingredients});
     }
-    
+    else {
+		res.send({menu : menu, menu_ingredients : menu_ingredients});
+	}
 });
   
 
