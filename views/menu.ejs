@@ -6,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <!-- Bootstrap core CSS -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-  <script src="/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
-  <link href="/bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
 
   <!-- Custom styles for this template -->
   <link href="/styles/menu.css" rel="stylesheet"> 
@@ -41,7 +39,7 @@
 				</div>
 			</div>
 		</nav>
-		<img src="/images/smoothie-king-logo.png" style="width:400px; height:70px;" alt="Smoothie King Logo">	
+		<img src="/images/smoothie-king-logo.png" style="width:400px; height:70px;" alt="Smoothie King Logo">
 		<div id="google_translate_element"></div>
    			<script type="text/javascript">
 				function googleTranslateElementInit() {
@@ -70,14 +68,14 @@
 				<td onclick="edit_menu_cell(this)"><%= menu[i].menu_item_id %></td>
 				<td onclick="edit_menu_cell(this)"><%= menu[i].category %></td>
 				<td onclick="edit_menu_cell(this)"><%= menu[i].price %></td>
-				<td><button data-toggle="modal" data-target="#ingredientsModal" onclick="load_item_ingredients_modal(this)" data-ingredients="<%= menu_ingredients[i] %>" class="btn btn-width bkgrnd-cyan">Edit</button></td>
+				<td><button data-toggle="modal" data-target="#ingredientsModal" onclick="load_item_ingredients_modal(this)" data-ingredients="<%= menu_ingredients[i] %>" class="btn btn-width">Edit</button></td>
 			</tr>
 		<% } %>
 		<tr id="">
 			<td onclick="edit_menu_cell(this)"><%= "Enter New Item" %></td>
 			<td onclick="edit_menu_cell(this)"><%= "" %></td>
 			<td onclick="edit_menu_cell(this)"><%= "" %></td>
-			<td><button class="btn btn-width bkgrnd-cyan">Edit</button></td>
+			<td><button class="btn btn-width">Edit</button></td>
 		</tr>
     </tbody>
   	</table>
