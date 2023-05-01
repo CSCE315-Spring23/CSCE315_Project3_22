@@ -31,10 +31,13 @@ router.get('/', (req, res) => {
 });
 
 router.put('/sells_together', (req, res) => {
+    var start_date = req.body.startDate;
+    var end_date = req.body.endDate;
+    
     // mio - multi item orders (orders with multiple items)
     var mio_query = "SELECT DISTINCT order_id FROM (SELECT a.* FROM orders_by_item a JOIN (SELECT order_id, COUNT(*) " 
                             + "FROM orders_by_item GROUP BY order_id HAVING count(*) > 1) b ON a.order_id = b.order_id ORDER BY a.order_id) t " 
-                            + "WHERE t.item_date between '2022-12-31' and '2023-03-25'";
+                            + "WHERE t.item_date between '" + start_date + "' and '" + end_date + "'";
     var qry = "SELECT menu_item_id FROM orders_by_item WHERE order_id=$1";
 
     mio_promise = () => {

@@ -54,6 +54,7 @@
           multilanguagePage: true
         }, 'google_translate_element');
       }
+      googleTranslateElementInit();
     </script>
 	<button data-toggle="modal" data-target="#reportModal" class="btn btn-lg btn-primary btn-block" onclick="sells_together_report()">Sells Together Report</button>
   <button data-toggle="modal" data-target="#reportModal" class="btn btn-lg btn-primary btn-block" onclick="restock_report()">Restock Report</button>
@@ -63,17 +64,18 @@
 			<div class="modal-content"> 
 				<div class="modal-header">
 					<h5 class="modal-title" id="reportModalLabel">Report</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="clear_modal()>
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
+          <div id="date"></div>
 					<form>
 						<div class="container-fluid" id="modal_table"></div>
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clear_modal()">Close</button>
 				</div>
 			</div>
 		</div>

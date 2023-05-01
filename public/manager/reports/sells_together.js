@@ -1,9 +1,51 @@
+function clear_modal() {
+    $('#modal_table').html("");
+}
+
 function sells_together_report() {
 	// console.log('in modal');
 	// console.log(button.dataset.ingredients);
+    const popup = document.getElementById("date");
+    popup.innerHTML = `
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="start-date">
+        <br>
+        <label for="end-date">End Date:</label>
+        <input type="date" id="end-date">
+        <br>
+        <button onclick="generate_sells_together_report()">Submit</button>
+    `;
+    
+    // Style the popup
+    popup.style.position = 'fixed';
+    popup.style.zIndex = '100';
+    popup.style.width = '240px';
+    popup.style.height = '122px';
+    popup.style.top = '50%';
+    popup.style.left = '50%';
+    popup.style.transform = 'translate(-50%, -50%)';
+    popup.style.padding = '20px';
+    popup.style.border = '1px solid black';
+    popup.style.background = 'white';
+}
+
+function generate_sells_together_report() {
+    const startDate = document.getElementById('start-date').value;
+    const endDate = document.getElementById('end-date').value;
+    if ((startDate == "") || (endDate == "")) {
+        return;
+    }
+    
+    const popup = document.getElementById("date");
+    popup.innerHTML = "";
+    popup.style.width = '0px';
+    popup.style.height = 'opx';
+    popup.style.padding = '0px';
+    popup.style.border = 'none';
+    popup.style.background = 'none';
 
     // Send an AJAX request to the server to update the database
-    var request = {}
+    var request = {startDate: startDate, endDate: endDate}
     var xhr = new XMLHttpRequest();
     xhr.onload = () => {
         // menu, menu_ingredients

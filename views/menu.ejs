@@ -10,7 +10,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
   <!-- Custom styles for this template -->
   <link href="/styles/menu.css" rel="stylesheet"> 
-<title>Manager Menu</title>
+  <title>Manager Menu</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/manager/menu/listeners.js"></script>
@@ -42,15 +42,16 @@
 		<img src="/images/smoothie-king-logo.png" style="width:400px; height:70px;" alt="Smoothie King Logo">
 		<div id="google_translate_element"></div>
    			<script type="text/javascript">
-      		function googleTranslateElementInit() {
-        		new google.translate.TranslateElement({
-            		pageLanguage: 'en',
-            		layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-            		autoDisplay: true,
-            		multilanguagePage: true
-            	}, 'google_translate_element');
-            }
-   			 </script>
+				function googleTranslateElementInit() {
+					new google.translate.TranslateElement({
+						pageLanguage: 'en',
+						layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+						autoDisplay: true,
+						multilanguagePage: true
+					}, 'google_translate_element');
+				}
+				googleTranslateElementInit();
+   			</script>
 	</div>
 	<table>
     <thead>
@@ -71,7 +72,7 @@
 			</tr>
 		<% } %>
 		<tr id="">
-			<td onclick="edit_menu_cell(this)"><%= "" %></td>
+			<td onclick="edit_menu_cell(this)"><%= "Enter New Item" %></td>
 			<td onclick="edit_menu_cell(this)"><%= "" %></td>
 			<td onclick="edit_menu_cell(this)"><%= "" %></td>
 			<td><button class="btn btn-width">Edit</button></td>

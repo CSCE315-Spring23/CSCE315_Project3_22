@@ -32,7 +32,7 @@ router.get('/', (req, res) => {
         pool.query(query)
             .then(query_res => {
                 const data = {teammembers: query_res.rows};
-                console.log(query_res.rows);
+                // console.log(query_res.rows);
                 res.render('Inventory', data);
             })
             .catch(err => {
