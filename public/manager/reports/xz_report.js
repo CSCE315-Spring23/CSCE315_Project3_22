@@ -54,7 +54,7 @@ function xz_report() {
         var formattedDate = myobj.getFullYear() + "-" + ('0' + (myobj.getMonth() + 1)).slice(-2) + "-" + ('0' + myobj.getDate()).slice(-2);
         
         //handles old z reports 
-        total_sales += response.xz[i].total_price;
+        
         if (prev_splitted !== splitted) {
             if (splitted === formattedDate && myobj.getHours() < 17) {
                 row.push("x report");
@@ -67,6 +67,9 @@ function xz_report() {
             table += '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>';
             total_sales = 0; 
             prev_splitted = splitted;
+        }
+        else {
+            total_sales += response.xz[i].total_price;
         }
         //handles old x reports if they're needed 
     }
