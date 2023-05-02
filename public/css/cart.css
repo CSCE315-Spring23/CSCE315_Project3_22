@@ -9,6 +9,24 @@ body {
     margin: 0;
 }
 
+/* LAYOUT STYLING */
+.body-container {
+    display: grid;
+    grid-template-rows: 80px 600px 120px;
+}
+
+.item-container {
+    display: grid;
+    grid-template-rows: repeat(50, 1fr);
+    overflow: auto;
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+/* CLASS STYLING */
 .body-container {
     padding-top: 112px;
 }
@@ -24,4 +42,107 @@ body {
     padding-bottom: 20px;
     box-shadow: inset 0 -4px 6px rgba(0, 0, 0, 0.1);
     background-color: white;
+}
+
+
+/* cart header styling */
+.cart-header {
+    display: flex;
+    align-items: center;
+    border-bottom: double;
+}
+
+.cart-header h1 {
+    padding-left: 30px;
+    font-family: 'cabo rounded', sans-serif;
+    letter-spacing: 3px;
+}
+
+/* cart item styling */
+.item-container {
+    padding-bottom: 20px;
+}
+
+.cart-item {
+    font-family: 'cabo rounded', sans-serif;
+    margin: 20px;
+    margin-bottom: 0px;
+    background-color: rgba(212, 212, 212, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+}
+
+.cart-item-left, .cart-item-right {
+    display: flex;
+    align-items: center;
+}
+
+.cart-item-right {
+    justify-content: right;
+    padding-right: 20px;
+}
+
+.cil-desc {
+    display: inline-block;
+    margin: 30px;
+}
+
+.cir-desc {
+    display: inline-block;
+    margin: 15px;
+}
+
+.cir-desc button {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 10px;
+    background-color: rgb(240, 240, 240);
+    border-style: none;
+    font-family: 'cabo rounded', sans-serif;
+    text-transform: uppercase;
+    font-size: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2), inset 0 -2px 5px rgba(0,0,0,0.2);
+}
+
+.cir-desc button:hover {
+    cursor: pointer;
+}
+
+/* cart dashboard styling */
+.cart-dashboard {
+    display: flex;
+    border-top: double;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-dashboard button {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin: 30px;
+    border-style: none;
+    font-family: 'cabo rounded', sans-serif;
+    text-transform: uppercase;
+    font-size: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2), inset 0 -2px 5px rgba(0,0,0,0.2);
+}
+
+.clear-button {
+    background-color: rgb(240, 240, 240);
+}
+
+.place-order-button {
+    background-color: rgba(186, 25, 33, 0.6);
+}
+
+.cart-dashboard button:hover {
+    cursor: pointer;
+}
+
+.total-price-div {
+    font-family: 'cabo rounded', sans-serif;
+    font-size: 25px;
 }

@@ -1,3 +1,12 @@
+/**
+ * The routes for handling login and user authentication using Google Oauth.
+ * @module user/routes
+ * @requires express
+ * @requires pg
+ * @requires dotenv
+ * @requires express-session
+ * @requires body-parser
+ */
 // import statements
 const express = require('express');
 const {Pool} = require('pg');
@@ -6,28 +15,29 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 
 // create the express web app and set port no
-const app = express();
-const port = 3000;
+// const app = express();
+// const port = 3000;
 
-// set up session
-app.use(session({
-    secret: 'your-session-secret',
-    resave: false,
-    saveUninitialized: false
-}));
+// // set up session
+// app.use(session({
+//     secret: 'your-session-secret',
+//     resave: false,
+//     saveUninitialized: false
+// }));
 
-app.set('view engine', 'ejs');
+const router = express.Router();
 
-app.use(express.static('public'));
-app.use(bodyParser.json());
+// router.set('view engine', 'ejs');
+
+router.use(bodyParser.json());
 
 // create connection pool
-const pool = new Pool ({
-    user: process.env.PSQL_USER,
-    host: process.env.PSQL_HOST,
-    database: process.env.PSQL_DATABASE,
-    password: process.env.PSQL_PASSWORD,
-    port: process.env.PSQL_PORT,
+const pool = new Pool({
+    user: process.env.db_username,
+    host: process.env.db_host,
+    database: process.env.db_name,
+    password: process.env.db_pass,
+    port: 5432,
     ssl: {rejectUnauthorized: false}
 });
 
@@ -36,12 +46,13 @@ const pool = new Pool ({
  * User home route that renders the user view.
  *
  * @function
+ * @memberof module:user/routes
  * @name homeRoute
  * @param {object} req - Express request object.
  * @param {object} res - Express response object.
  * @returns {undefined}
  */
-app.get("/", function(req, res) {
+router.get("/", function(req, res) {
     res.render('user');
 });
 
@@ -50,12 +61,13 @@ app.get("/", function(req, res) {
  * Route handler for retrieving menu items from the database.
  *
  * @function
+ * @memberof module:user/routes
  * @name menuItemsRouteHandler
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  * @returns {void}
  */
-app.get("/menu-items", function(req, res) {
+router.get("/menu-items", function(req, res) {
     const category = req.query.category;
 
     let query;
@@ -90,12 +102,13 @@ app.get("/menu-items", function(req, res) {
  * Route handler for retrieving the ingredients for a menu item from the database.
  *
  * @function
+ * @memberof module:user/routes
  * @name itemIngredientsRouteHandler
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  * @returns {void}
  */
-app.get("/item-ingredients", function(req, res) {
+router.get("/item-ingredients", function(req, res) {
     const menu_item_id = req.query.menu_item_id;
 
     let query;
@@ -115,12 +128,13 @@ app.get("/item-ingredients", function(req, res) {
  * Route handler for retrieving a list of 8 additives from the database for a user to choose from.
  *
  * @function
+ * @memberof module:user/routes
  * @name additivesRouteHandler
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  * @returns {void}
  */
-app.get("/additives", function(req, res) {
+router.get("/additives", function(req, res) {
     let query;
     query = "SELECT * FROM additives LIMIT 8;";
     pool.query(query)
@@ -138,12 +152,13 @@ app.get("/additives", function(req, res) {
  * Route handler for retrieving the price of a menu item from the database.
  *
  * @function
+ * @memberof module:user/routes
  * @name itemPriceRouteHandler
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  * @returns {void}
  */
-app.get("/item-price", function(req, res) {
+router.get("/item-price", function(req, res) {
     const menu_item_id = req.query.menu_item_id;
 
     let query;
@@ -163,12 +178,13 @@ app.get("/item-price", function(req, res) {
  * Route handler for storing cart information that was generated from the home page.
  *
  * @function
+ * @memberof module:user/routes
  * @name storeCartRouteHandler
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  * @returns {void}
  */
-app.post('/store-cart', (req, res) => {
+router.post('/store-cart', (req, res) => {
     if (!req.session.cart) {
         req.session.cart = [];
     }
@@ -182,12 +198,13 @@ app.post('/store-cart', (req, res) => {
  * Route handler for rendering the cart page with the cart information stored in the session.
  *
  * @function
+ * @memberof module:user/routes
  * @name cartPageRouteHandler
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  * @returns {void}
  */
-app.get("/cart", function(req, res) {
+router.get("/cart", function(req, res) {
     res.render('cart', {cart: req.session.cart});
 });
 
@@ -197,12 +214,13 @@ app.get("/cart", function(req, res) {
  *
  * @async
  * @function
+ * @memberof module:user/routes
  * @name placeOrderRouteHandler
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  * @returns {void}
  */
-app.post('/place-order', async (req, res) => {
+router.post('/place-order', async (req, res) => {
     let cart = req.body;
 
     // set up information for queries
@@ -250,17 +268,17 @@ app.post('/place-order', async (req, res) => {
 });
 
 
-/**
- * Starts the web app and listens on the specified port.
- *
- * @function
- * @name startServer
- * @param {number} port - The port number to listen on.
- * @returns {void}
- */
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
+// /**
+//  * Starts the web app and listens on the specified port.
+//  *
+//  * @function
+//  * @name startServer
+//  * @param {number} port - The port number to listen on.
+//  * @returns {void}
+//  */
+// router.listen(port, () => {
+//     console.log(`Server listening on port ${port}`);
+// });
 
 
 /**
@@ -268,6 +286,7 @@ app.listen(port, () => {
  *
  * @async
  * @function
+ * @memberof module:user/routes
  * @name getLatestOrderId
  * @returns {Promise<number>} The latest order ID.
  */
@@ -293,6 +312,7 @@ async function getLatestOrderId() {
  *
  * @async
  * @function
+ * @memberof module:user/routes
  * @name getLatestItemId
  * @returns {Promise<number>} The latest item ID.
  */
@@ -318,6 +338,7 @@ async function getLatestItemId() {
  *
  * @async
  * @function
+ * @memberof module:user/routes
  * @name updateOrderSummary
  * @param {number} order_id - The ID of the order.
  * @param {number} employee_id - The ID of the employee who fulfilled the order.
@@ -338,6 +359,7 @@ async function update_order_summary(order_id, employee_id, order_date, total_pri
  *
  * @async
  * @function
+ * @memberof module:user/routes
  * @name updateOrderItems
  * @param {number} item_id - The ID of the order item.
  * @param {number} order_id - The ID of the order.
@@ -359,6 +381,7 @@ async function update_order_items(item_id, order_id, menu_item_id, item_date, it
  *
  * @async
  * @function
+ * @memberof module:user/routes
  * @name updateInventory
  * @param {string} product_name - The name of the product in the inventory to update.
  * @param {number} menu_item_id - The ID of the menu item to update the inventory for.
@@ -382,6 +405,7 @@ async function updateInventory(product_name, menu_item_id) {
  *
  * @async
  * @function
+ * @memberof module:user/routes
  * @name updateAdditives
  * @param {string} additive - The name of the additive to update.
  * @param {number} item_id - The ID of the order item to update the additives for.
@@ -408,6 +432,7 @@ async function updateAdditives(additive, item_id) {
  *
  * @async
  * @function
+ * @memberof module:user/routes
  * @name getProductID
  * @param {string} product_name - The name of the product to get the ID for.
  * @returns {number} The ID of the product with the given name.
@@ -434,6 +459,7 @@ async function getProductID(product_name) {
  *
  * @async
  * @function
+ * @memberof module:user/routes
  * @name get_quantity
  * @param {number} menu_item_id - The ID of the menu item to get the quantity for.
  * @param {number} product_id - The ID of the product to get the quantity for.
@@ -461,6 +487,7 @@ async function get_quantity(menu_item_id, product_id) {
  *
  * @async
  * @function
+ * @memberof module:user/routes
  * @name get_inv_quantity
  * @param {string} product_name - The name of the product to get the quantity for.
  * @returns {number} The current quantity of the product with the given name.
@@ -487,6 +514,7 @@ async function get_inv_quantity(product_name) {
  *
  * @async
  * @function
+ * @memberof module:user/routes
  * @name update_inv_quantity
  * @param {string} product_name - The name of the product to update the quantity for.
  * @param {number} new_quantity - The new quantity to set for the product.
@@ -504,6 +532,7 @@ async function update_inv_quantity(product_name, new_quantity) {
  *
  * @async
  * @function
+ * @memberof module:user/routes
  * @name update_straws_cups
  * @param {string} menu_item_id - The id of the menu item to update the inventory for.
  */
@@ -535,3 +564,5 @@ async function update_straws_cups(menu_item_id) {
         if (err) throw err;
     })
 }
+
+module.exports = router

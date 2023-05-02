@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/user.css">
+    <link rel="stylesheet" href="/css/user.css">
     <link rel="icon" href="../images/favicon.png" type="image/png">
-    <script src="/test/test.js"></script>
     <title>Smoothie King</title>
 </head>
 <body>
@@ -91,6 +90,9 @@
 </html>
 
 <script>
+    /**
+     * @module user
+     */
     // this array stores cart information for the user
     let cart = [];
 
@@ -98,6 +100,7 @@
     /**
      * Capitalizes the first letter of each word in the given string.
      *
+     * @memberof module:user
      * @function
      * @name capitalize_words
      * @param {string} str - The string to capitalize the words of.
@@ -124,7 +127,7 @@
     async function load_ingredients(_menu_item_id) {
         const ingredients = [];
 
-        const response = await fetch(`/item-ingredients?menu_item_id=${_menu_item_id.toLowerCase().trim() + " - 20"}`);
+        const response = await fetch(`/user/item-ingredients?menu_item_id=${_menu_item_id.toLowerCase().trim() + " - 20"}`);
         const data = await response.json();
         data.forEach(item => {
                 // filter out straws and cups for popup display
@@ -147,7 +150,7 @@
     async function load_additives() {
         const additives = [];
 
-        const response = await fetch("/additives");
+        const response = await fetch("/user/additives");
         const data = await response.json();
         data.forEach(item => {
             additives.push(item.product_name);
@@ -169,7 +172,7 @@
     async function get_item_price(_item) {
         let item_price = 0.00;
 
-        const response = await fetch(`/item-price?menu_item_id=${_item}`);
+        const response = await fetch(`/user/item-price?menu_item_id=${_item}`);
         const data = await response.json();
         data.forEach(item => {
             item_price =  item.price;
@@ -385,7 +388,7 @@
         const menu_set = new Set();
 
         // get the items that belong to the category from the database and insert html elements
-        fetch(`/menu-items?category=${category}`)
+        fetch(`/user/menu-items?category=${category}`)
         .then(response => response.json())
         .then(data => {
             data.forEach(item => {
@@ -410,7 +413,7 @@
                                     <h2>${item_name_spliced}</h2>
                                 </div>
                                 <div class="menu-item-description">
-                                    <p>Description of a snack. The snack is good. The snack is not bad. Buy this snack. Description of a snack. The snack is good. The snack is not bad. Buy this snack.</p>
+                                    <p></p>
                                 </div>
                                 <div class="add-item-button">
                                     <button>Add to Cart</button>
@@ -422,13 +425,13 @@
                         main_container.innerHTML += `
                             <div class="menu-item">
                                 <div class="menu-item-image">
-                                    <img src="../images/smoothie${Math.floor(Math.random() * 3)}.png" style="width:350px; height:300px;">
+                                    <img src="/images/smoothie${Math.floor(Math.random() * 3)}.png" style="width:350px; height:300px;">
                                 </div>
                                 <div class="menu-item-name">
                                     <h2>${item_name_spliced}</h2>
                                 </div>
                                 <div class="menu-item-description">
-                                    <p>Description of a smoothie. The smoothie is good. The smoothie is not bad. Buy this smoothie. Description of a smoothie. The smoothie is good. The smoothie is not bad. Buy this smoothie.</p>
+                                    <p></p>
                                 </div>
                                 <div class="add-item-button">
                                     <button>Add to Cart</button>
@@ -469,7 +472,7 @@
         let cart_json = JSON.stringify(cart);
 
         // send cart data to the server
-        await fetch("/store-cart", {
+        await fetch("/user/store-cart", {
             method: "POST",
             headers: {
             "Content-Type": "application/json"
@@ -477,7 +480,7 @@
             body: cart_json
         });
         
-        window.location.href = "/cart";
+        window.location.href = "/user/cart";
     })
 
     loadMenuItems("featured");
