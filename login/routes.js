@@ -1,4 +1,5 @@
 /**
+ * The routes for handling login and user authentication using Google Oauth.
  * @module login/routes
  * @requires express
  * @requires passport

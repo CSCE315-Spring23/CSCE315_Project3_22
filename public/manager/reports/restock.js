@@ -1,3 +1,11 @@
+/**
+ * Generate the restock report, counting the items in the inventory that need restocking and suggested quantities for refill
+ *
+ * @memberof module:manager/reports
+ * @function
+ * @name restock_report
+ * @inner
+ */
 function restock_report() {
     var xhr = new XMLHttpRequest();
     xhr.onload = () => {

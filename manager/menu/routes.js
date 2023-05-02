@@ -1,3 +1,13 @@
+/**
+ * The routes that handle loading the manager menu and updates to the menu and menu item ingredients.
+ * @module manager/menu/routes
+ * @requires express
+ * @requires dotenv
+ * @requires path
+ * @requires pg
+ * @requires process
+ * @requires body-parser
+ */
 const express = require("express");
 require('dotenv').config();
 
@@ -11,6 +21,14 @@ const router = express.Router();
 // router.use(body_parser.urlencoded({extended: true}));
 router.use(express.json());
 
+/**
+ * Initialize pool for accessing the database
+ *
+ * @memberof module:manager/menu/routes
+ * @type {Pool}
+ * @name pool
+ * @inner
+ */
 const pool = new Pool({
     user: process.env.db_username,
     host: process.env.db_host,
@@ -20,16 +38,64 @@ const pool = new Pool({
     ssl: {rejectUnauthorized: false}
 });
 
+/**
+ * Array holding menu items like {menu_item_id: 'item', category: 'drink', price: 5.00}
+ *
+ * @memberof module:manager/menu/routes
+ * @type {Array}
+ * @name menu
+ * @inner
+ */
 var menu = []
+/**
+ * Parallel array to menu holding arrays of menu item ingredients like {product_id: 0, quantity: 3.4}
+ *
+ * @memberof module:manager/menu/routes
+ * @type {Array}
+ * @name menu_ingredients
+ * @inner
+ */
 var menu_ingredients = []
+/**
+ * Map from product_id to product name
+ *
+ * @memberof module:manager/menu/routes
+ * @type {Map}
+ * @name id_to_name
+ * @inner
+ */
 var id_to_name = new Map();
+/**
+ * Map from product name to product_id
+ *
+ * @memberof module:manager/menu/routes
+ * @type {Map}
+ * @name name_to_id
+ * @inner
+ */
 var name_to_id = new Map();
 
 var items = new Map();
 var items2 = new Map();
 
+/**
+ * Upon loading the page, execute 3 queries to: load menu items, load a map from inventory product_ids to product names and to load the ingredients for menu items
+ *
+ * @memberof module:manager/menu/routes
+ * @function
+ * @name get/
+ * @inner
+ */
 router.get('/', function(req, res) {
     if (req.isAuthenticated()) {
+		/**
+		 * Query the database for menu items and store in menu
+		 *
+		 * @memberof module:manager/menu/routes
+		 * @function
+		 * @name query1
+		 * @inner
+		 */
         query1 = () => {
 			return new Promise((resolve, reject) => {
 				var query = "SELECT * FROM menu ORDER BY menu_item_id";
@@ -43,6 +109,14 @@ router.get('/', function(req, res) {
 				});
 			})
 		}
+		/**
+		 * Query the database for product_ids and product names and store in id_to_name and name_to_id
+		 *
+		 * @memberof module:manager/menu/routes
+		 * @function
+		 * @name query2
+		 * @inner
+		 */
 		query2 = () => {
 			return new Promise((resolve, reject) => {
 				var query = "SELECT product_id, product_name FROM inventory ORDER BY product_id";
@@ -56,6 +130,14 @@ router.get('/', function(req, res) {
 				});
 			})
 		}
+		/**
+		 * Query the database for item ingredients for all menu items and store in item_ingredients
+		 *
+		 * @memberof module:manager/menu/routes
+		 * @function
+		 * @name query3
+		 * @inner
+		 */
 		query3 = () => {
 		  return new Promise((resolve, reject) => {
 				var item_ingredients = [];
@@ -78,6 +160,14 @@ router.get('/', function(req, res) {
 				});
 		  })
 		}
+		/**
+		 * Execute query1, query2 and query3 sequentially then render the menu
+		 *
+		 * @memberof module:manager/menu/routes
+		 * @function
+		 * @name sequential_queries
+		 * @inner
+		 */
 		async function sequential_queries() {
 			const q1 = await query1();
 			const q2 = await query2();
@@ -98,6 +188,14 @@ router.get('/', function(req, res) {
     }
 });
 
+/**
+ * Update the item ingredients associated with an item
+ *
+ * @memberof module:manager/menu/routes
+ * @function
+ * @name put/update_ingredients
+ * @inner
+ */
 router.put("/update_ingredients", function(req, res) {
 	var request = req.body;
 
@@ -139,6 +237,14 @@ router.put("/update_ingredients", function(req, res) {
 		})
     }
 
+	/**
+	 * Execute sequential queries to delete all ingredients associated with an item and replace them with the updated ingredients
+	 *
+	 * @memberof module:manager/menu/routes
+	 * @function
+	 * @name update_ingredients/sequential_queries
+	 * @inner
+	 */
     async function sequential_queries() {
 		const q1 = await query1();
 		const q2 = await query2();
@@ -147,6 +253,18 @@ router.put("/update_ingredients", function(req, res) {
     sequential_queries();
 });
 
+/**
+ * Handle all updates to the menu, including creating new items, deleting items and editing existing items.
+ * The manager can add new items by changing the item name/menu_item_id at the last row in the table.
+ * Items that exist already can be edited by clicking on the cell and changing the value, but the menu_item_id cannot be changed except for when deleting the item.
+ * To delete an item, delete the name/change it to nothing.
+ * The manager can edit the item ingredients by clicking the edit button next to the item and following similar rules. Ingredients cannot be added if they are not part of the inventory.
+ *
+ * @memberof module:manager/menu/routes
+ * @function
+ * @name put/update_menu
+ * @inner
+ */
 router.put("/update_menu", function(req, res) {
     // req.body = {idx : x, menu_item_id : x, category : x, price : x}
     var row = req.body;
@@ -183,6 +301,14 @@ router.put("/update_menu", function(req, res) {
 				});
 			})
 		}
+		/**
+		 * If a new item is being made, execute sequential queries to update the variables menu and item_ingredients, update the database menu and the database menu item ingredients
+		 *
+		 * @memberof module:manager/menu/routes
+		 * @function
+		 * @name add_item/sequential_queries
+		 * @inner
+		 */
 		async function sequential_queries() {  // have to wait for them to finish because you can edit the item ingredients for a new product before its in the menu
 			const q1 = await update_data();
 			const q2 = await update_menu();
@@ -211,6 +337,14 @@ router.put("/update_menu", function(req, res) {
 				});
 			})
 		}
+		/**
+		 * If deleting an item from the menu, remove it first from the menu_item_ingredients then from the menu
+		 *
+		 * @memberof module:manager/menu/routes
+		 * @function
+		 * @name remove_item/sequential_delete
+		 * @inner
+		 */
 		async function sequential_delete() {
 			const q1 = await del1();
 			const q2 = await del2();

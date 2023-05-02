@@ -1,3 +1,16 @@
+/**
+ * Functions for loading the menu board items and refreshing the menu board on a timer by sending a request to the backend and updating the frontend correspondingly.
+ * @module manager/menu_board
+ */
+/**
+ * Function to capitalize the first letter of each word in a string
+ *
+ * @memberof module:manager/menu_board
+ * @function
+ * @name capitalize_words
+ * @inner
+ * @param {String} str - String to split
+ */
 function capitalize_words(str) {
     // split the string into an array of words
     const words = str.split(" ");
@@ -8,9 +21,25 @@ function capitalize_words(str) {
     return capitalizedStr;
 }
 
+/**
+ * Sends a request to the backend pick new items then refresh the html for the page to show the items
+ *
+ * @memberof module:manager/menu_board
+ * @function
+ * @name refresh_items
+ * @inner
+ */
 function refresh_items() {
     var xhr = new XMLHttpRequest();
 
+    /**
+     * Reloads the html for the page, showing the new smoothies, their ingredients and selecting an image corresponding to the smoothie category
+     *
+     * @memberof module:manager/menu_board
+     * @function
+     * @name refresh/onload
+     * @inner
+     */
     xhr.onload = () => { // executes when response has been sent
         // menu, menu_ingredients, display_items
         var response = JSON.parse(xhr.response);

@@ -1,3 +1,13 @@
+/**
+ * The routes that handle generating each report for the manager.
+ * @module manager/reports/routes
+ * @requires express
+ * @requires dotenv
+ * @requires path
+ * @requires pg
+ * @requires process
+ * @requires http
+ */
 const express = require("express");
 require('dotenv').config();
 
@@ -12,6 +22,14 @@ const router = express.Router();
 // router.use(body_parser.urlencoded({extended: true}));
 router.use(express.json());
 
+/**
+ * Initialize pool for accessing the database
+ *
+ * @memberof module:manager/reports/routes
+ * @type {Pool}
+ * @name pool
+ * @inner
+ */
 const pool = new Pool({
     user: process.env.db_username,
     host: process.env.db_host,
@@ -21,6 +39,14 @@ const pool = new Pool({
     ssl: {rejectUnauthorized: false}
 });
 
+/**
+ * Render the reports page
+ *
+ * @memberof module:manager/reports/routes
+ * @function
+ * @name get/
+ * @inner
+ */
 router.get('/', (req, res) => {
     if (req.isAuthenticated()) {
         res.render('reports')
@@ -30,6 +56,14 @@ router.get('/', (req, res) => {
     }
 });
 
+/**
+ * Load the sells together report information. This report tells the manager what pairs of items sold most commonly together.
+ *
+ * @memberof module:manager/reports/routes
+ * @function
+ * @name put/sells_together
+ * @inner
+ */
 router.put('/sells_together', (req, res) => {
     var start_date = req.body.startDate;
     var end_date = req.body.endDate;
@@ -48,10 +82,26 @@ router.put('/sells_together', (req, res) => {
 			});
 		})
     }
+    /**
+     * Start the synchronous loop
+     *
+     * @memberof module:manager/reports/routes
+     * @function
+     * @name start
+     * @inner
+     */
     async function start() {
         const mios = await mio_promise();
 
         var pairs = {}
+        /**
+         * Loop synchronously through all orders with multiple items and count the occurences of each unique pair
+         *
+         * @memberof module:manager/reports/routes
+         * @function
+         * @name loop
+         * @inner
+         */
         var loop = function(idx) {
             if (idx < mios.rows.length) {
                 mio_items_promise = () => {
@@ -62,6 +112,14 @@ router.put('/sells_together', (req, res) => {
                         })
                     })
                 }
+                /**
+                 * Generate a list of possible unique pairs, then check if the item has been counted already, if so, increment the count, otherwise add it to the map
+                 *
+                 * @memberof module:manager/reports/routes
+                 * @function
+                 * @name get_mio_items
+                 * @inner
+                 */
                 async function get_mio_items() {
                     const mio_items = await mio_items_promise();
                     var item_names = [];
@@ -89,6 +147,7 @@ router.put('/sells_together', (req, res) => {
                 for (const key in pairs) {
                     pairs_arr.push(pairs[key]);
                 }
+                // sort the output by count to show highest frequency at the top of the report
                 pairs_arr = pairs_arr.sort((a, b) => {return b.count - a.count});
                 res.send({pairs : pairs_arr});
             }

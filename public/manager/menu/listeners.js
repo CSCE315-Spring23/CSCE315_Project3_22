@@ -1,3 +1,17 @@
+/**
+ * Listeners for updates to the manager's menu, these methods send requests to update the database, then refresh the frontend html to show the changes.
+ * @module manager/menu/listeners
+ */
+
+/**
+ * Replace the html in the item ingredients modal, which shows the ingredients for an item when editing
+ *
+ * @memberof module:manager/menu/listeners
+ * @function
+ * @name load_item_ingredients_modal
+ * @inner
+ * @param button - The edit button that was clicked, used to retrieve the row/item the ingredients are for
+ */
 function load_item_ingredients_modal(button) {
 	// console.log('in modal');
 	// console.log(button.dataset.ingredients);
@@ -29,6 +43,15 @@ function load_item_ingredients_modal(button) {
 	document.querySelector('#modal_table').dataset.idx = button.closest('tr').rowIndex;
 }
 
+/**
+ * Replace the table cell being edited with an input element then detect changes and update the menu correspondingly. Replace the cell with normal html after the update.
+ *
+ * @memberof module:manager/menu/listeners
+ * @function
+ * @name edit_ingredient_cell
+ * @inner
+ * @param cell - The cell being edited
+ */
 function edit_ingredient_cell(cell) {
 	if (cell.innerHTML == '<input type="text">') {  // if you double click the cell, the innerHTML is the input element that was set by the first click
 		return
@@ -49,7 +72,14 @@ function edit_ingredient_cell(cell) {
 	cell.appendChild(input);
 	input.focus();
 	
-	// When the input field loses focus, send an AJAX request to the server to update the database
+	/**
+	 * When the input field loses focus, send an AJAX request to the server to update the database, then reload the modal to show changes.
+	 *
+	 * @memberof module:manager/menu/listeners
+	 * @function
+	 * @name ingredients/input/addEventListener
+	 * @inner
+	 */
 	input.addEventListener("blur", function() {
 		// Update the cell content with the new value
 		var newValue = input.value;
@@ -77,6 +107,14 @@ function edit_ingredient_cell(cell) {
 
 		// Send an AJAX request to the server to update the database
 		var xhr = new XMLHttpRequest();
+		/**
+		 * When the backend responds after updating the database, update the ingredients stored in the button dataset ingredients field and reload the ingredients modal.
+		 *
+		 * @memberof module:manager/menu/listeners
+		 * @function
+		 * @name ingredients/onload
+		 * @inner
+		 */
 		xhr.onload = () => {
 			// menu, menu_ingredients
 			var response = JSON.parse(xhr.response);
@@ -90,7 +128,14 @@ function edit_ingredient_cell(cell) {
 		xhr.send(JSON.stringify(request));
 	});
 	
-		// When the Enter key is pressed, trigger the blur event to save the new cell content
+	/**
+	 * When the enter key is pressed, trigger the blur event to save the new cell content
+	 *
+	 * @memberof module:manager/menu/listeners
+	 * @function
+	 * @name ingredients/input/addEventListener
+	 * @inner
+	 */
 	input.addEventListener("keydown", function(event) {
 		if (event.key === 'Enter') {
 			input.blur();
@@ -98,6 +143,15 @@ function edit_ingredient_cell(cell) {
 	});
 }
 
+/**
+ * Join elements of an array with commas, without a comma after the last element
+ *
+ * @memberof module:manager/menu/listeners
+ * @function
+ * @name join
+ * @inner
+ * @param {String} arr - array to join
+ */
 function join(arr) {
 	var str = '';
 	for (let i = 0; i < arr.length - 1; ++i) {
@@ -107,6 +161,15 @@ function join(arr) {
 	return str;
 }
 
+/**
+ * Replace the table cell being edited with an input element then detect changes and update the menu correspondingly. Replace the cell with normal html after the update.
+ *
+ * @memberof module:manager/menu/listeners
+ * @function
+ * @name edit_menu_cell
+ * @inner
+ * @param cell - The cell being edited
+ */
 function edit_menu_cell(cell) {
 	if (cell.innerHTML == '<input type="text">') {  // if you double click the cell, the innerHTML is the input element that was set by the first click
 		return
@@ -123,7 +186,14 @@ function edit_menu_cell(cell) {
 	cell.appendChild(input);
 	input.focus();
 	
-	// When the input field loses focus, send an AJAX request to the server to update the database
+	/**
+	 * When the input field loses focus, send an AJAX request to the server to update the database, then reload the modal to show changes.
+	 *
+	 * @memberof module:manager/menu/listeners
+	 * @function
+	 * @name menu/input/addEventListener
+	 * @inner
+	 */
 	input.addEventListener("blur", function() {
 
 		// Update the cell content with the new value
@@ -139,6 +209,14 @@ function edit_menu_cell(cell) {
 
 		// Send an AJAX request to the server to update the database
 		var xhr = new XMLHttpRequest();
+		/**
+		 * When the backend responds after updating the database, replace the html for the menu table to show updates.
+		 *
+		 * @memberof module:manager/menu/listeners
+		 * @function
+		 * @name menu/onload
+		 * @inner
+		 */
 		xhr.onload = () => {
 			// menu, menu_ingredients
 			var response = JSON.parse(xhr.response);
@@ -176,7 +254,14 @@ function edit_menu_cell(cell) {
 		xhr.send(JSON.stringify(row));
 	});
 	
-		// When the Enter key is pressed, trigger the blur event to save the new cell content
+	/**
+	 * When the enter key is pressed, trigger the blur event to save the new cell content
+	 *
+	 * @memberof module:manager/menu/listeners
+	 * @function
+	 * @name menu/input/addEventListener
+	 * @inner
+	 */
 	input.addEventListener("keydown", function(event) {
 		if (event.key === 'Enter') {
 			input.blur();

@@ -1,7 +1,27 @@
+/**
+ * Functions for generating the sells together report, which counts the numer of times each pair of items is ordered together.
+ * @module manager/reports
+ */
+/**
+ * When the report modal is closed, reset the html to be empty
+ *
+ * @memberof module:manager/reports
+ * @function
+ * @name clear_modal
+ * @inner
+ */
 function clear_modal() {
     $('#modal_table').html("");
 }
 
+/**
+ * Show a popup for selecting a date range, then send call generate_sells_together_report()
+ *
+ * @memberof module:manager/reports
+ * @function
+ * @name sells_together_report
+ * @inner
+ */
 function sells_together_report() {
 	// console.log('in modal');
 	// console.log(button.dataset.ingredients);
@@ -29,6 +49,14 @@ function sells_together_report() {
     popup.style.background = 'white';
 }
 
+/**
+ * Send a request to the backend to generate the sells together report over the specified date range, then change the modal html to show the results
+ *
+ * @memberof module:manager/reports
+ * @function
+ * @name generate_sells_together_report
+ * @inner
+ */
 function generate_sells_together_report() {
     const startDate = document.getElementById('start-date').value;
     const endDate = document.getElementById('end-date').value;
