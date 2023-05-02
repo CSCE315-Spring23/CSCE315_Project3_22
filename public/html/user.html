@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/user.css">
     <link rel="icon" href="../images/favicon.png" type="image/png">
-    <script src="../user-functions.js"></script>
     <title>Smoothie King</title>
 </head>
 <body>
@@ -45,7 +44,6 @@
             </div>
         </div>
         <div class="main-grid-item content-container">
-            <!-- menu item = (Image -> Description -> Add Button)-->
             <div class="menu-item">
                 <div class="menu-item-image">
                     <img src="../images/smoothie.png" style="width:350px; height:300px;">
@@ -216,6 +214,7 @@
         </div>
     </div>
     <script>
+        // popup code
         function updatePopupContent(imageSrc, description) {
             const popupImage = document.querySelector(".popup-image img");
             const popupDesc = document.querySelector(".popup-desc p");
