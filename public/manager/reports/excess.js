@@ -12,12 +12,14 @@ function excess_report() {
         var response = JSON.parse(xhr.response);
         var table = '<table style="border-collapse: collapse; border: 1px solid black;"><thead><tr style="background-color: #ddd;"><th style="padding: 10px; border: 1px solid black;">Product ID</th><th style="padding: 10px; border: 1px solid black;">Quantity Name</th><th style="padding: 10px; border: 1px solid black;">Timestamp Quantity</th><th style="padding: 10px; border: 1px solid black;">Current Quantity</th></tr></thead><tbody>';
         for (var i = 0; i < response.excess.length; i++) {
-            table += '<tr>';
-            table += '<td style="padding: 10px; border: 1px solid black;">' + response.excess[i].product_id + '</td>';
-            table += '<td style="padding: 10px; border: 1px solid black;">' + response.excess[i].product_name + '</td>';
-            table += '<td style="padding: 10px; border: 1px solid black;">' + response.excess[i].timestamp_q + '</td>';
-            table += '<td style="padding: 10px; border: 1px solid black;">' + response.excess[i].quantity + '</td>';
-            table += '</tr>';
+            if( ((response.excess[i].timestamp_q - response.excess[i].quantity) > 0) && ((response.excess[i].timestamp_q - response.excess[i].quantity) < .1 * response.excess[i].timestamp_q) || (response.excess[i].timestamp_q - response.excess[i].quantity) == 0){
+                table += '<tr>';
+                table += '<td style="padding: 10px; border: 1px solid black;">' + response.excess[i].product_id + '</td>';
+                table += '<td style="padding: 10px; border: 1px solid black;">' + response.excess[i].product_name + '</td>';
+                table += '<td style="padding: 10px; border: 1px solid black;">' + response.excess[i].timestamp_q + '</td>';
+                table += '<td style="padding: 10px; border: 1px solid black;">' + response.excess[i].quantity + '</td>';
+                table += '</tr>';
+            }
         }
         table += '</tbody></table>';
         $('#modal_table3').html(table);
