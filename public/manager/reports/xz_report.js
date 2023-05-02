@@ -12,10 +12,11 @@ function xz_report() {
     var xhr = new XMLHttpRequest();
     var table = '<table><thead><tr><th>Report Type</th><th>Date</th><th>Total Sales</th></tr></thead><tbody>';
     var total_sales = 0;
+
+    xhr.onload = () => { 
     var response = JSON.parse(xhr.response);
     var prev_splitted = response.xz[0][2].split(" ");
-    xhr.onload = () => {
-    for (var i = 0; i < response.xz.length; i++) {
+    for (var i = 0; i < response.xz.length-1; i++) {
         var splitted = response.xz[i][2].split(" ");
         var row = [];
         var myobj = new Date();
