@@ -46,14 +46,14 @@
           </div>
       </div>
     </nav>
-    <img src="/images/smoothie-king-logo.png" style="width:400px; height:70px;" alt= "Smoothie King Logo">
+    <img class="logo" src="/images/smoothie-king-logo.png" style="width:400px; height:70px;" alt= "Smoothie King Logo">
     <div id="google_translate_element"></div>
       <script type="text/javascript">
         function googleTranslateElementInit() {
           new google.translate.TranslateElement({
             pageLanguage: 'en',
             layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false,
+            autoDisplay: true,
             multilanguagePage: true
           }, 'google_translate_element');
         }
@@ -61,39 +61,40 @@
   </div>
   
   <div>
-    <button data-toggle="modal" data-target="#reportModal" class="btn btn-lg btn-primary btn-block" onclick="sells_together_report()">Sells Together Report</button>
-    <button data-toggle="modal" data-target="#reportModal" class="btn btn-lg btn-primary btn-block" onclick="restock_report()">Restock Report</button>
+    <button data-toggle="modal" data-target="#reportModal" class="btn btn-lg btn-primary btn-block report_button" onclick="sells_together_report()">Sells Together Report</button>
+    <button data-toggle="modal" data-target="#reportModal" class="btn btn-lg btn-primary btn-block report_button" onclick="restock_report()">Restock Report</button>
 
     <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content"> 
           <div class="modal-header">
             <h5 class="modal-title" id="reportModalLabel">Report</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="clear_modal()">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
+            <div id="date"></div>
             <form>
               <div class="container-fluid" id="modal_table"></div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clear_modal()">Close</button>
           </div>
       </div>
     </div>
   </div>
 
   <div>
-    <button data-toggle="modal" data-target="#reportModal2" class="btn btn-lg btn-primary btn-block" onclick="sales_report()">Sales Report</button>
+    <button data-toggle="modal" data-target="#reportModal2" class="btn btn-lg btn-primary btn-block report_button" onclick="sales_report()">Sales Report</button>
     
     <div class="modal fade" id="reportModal2" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
           <div class="modal-content">
               <div class="modal-header">
                   <h5 class="modal-title" id="reportModalLabel">Sales Report</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="clear_modal()">
                       <span aria-hidden="true">&times;</span>
                   </button>
               </div>
@@ -112,7 +113,7 @@
                   </form>
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clear_modal()">Close</button>
               </div>
           </div>
       </div>
@@ -122,14 +123,14 @@
 
   <!-- Excess Report -->
   <div>
-    <button data-toggle="modal" data-target="#reportModal3" class="btn btn-lg btn-primary btn-block" onclick="excess_report()">Excess Report</button>
+    <button data-toggle="modal" data-target="#reportModal3" class="btn btn-lg btn-primary btn-block report_button" onclick="excess_report()">Excess Report</button>
     
     <div class="modal fade" id="reportModal3" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
           <div class="modal-content">
               <div class="modal-header">
                   <h5 class="modal-title" id="reportModalLabel">Excess Report</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="clear_modal()">
                       <span aria-hidden="true">&times;</span>
                   </button>
               </div>
@@ -143,7 +144,7 @@
                   </form>
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clear_modal()">Close</button>
               </div>
           </div>
       </div>

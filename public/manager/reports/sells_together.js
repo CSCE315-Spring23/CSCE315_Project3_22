@@ -12,6 +12,13 @@
  */
 function clear_modal() {
     $('#modal_table').html("");
+    const popup = document.getElementById("date");
+    popup.innerHTML = "";
+    popup.style.width = '0px';
+    popup.style.height = 'opx';
+    popup.style.padding = '0px';
+    popup.style.border = 'none';
+    popup.style.background = 'none';
 }
 
 /**

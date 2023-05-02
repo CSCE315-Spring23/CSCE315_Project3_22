@@ -1,3 +1,5 @@
+const { exit } = require("process");
+
 /**
  * Sends an AJAX request to the server to retrieve data for the XZ report,
  * formats today's date, and builds an HTML table with conditional formatting
@@ -20,7 +22,7 @@ function xz_report() {
         // menu, menu_ingredients
         var response = JSON.parse(xhr.response);
         var table = '<table><thead><tr><th>Report Type</th><th>Date</th><th>Total Sales</th></tr></thead><tbody>';
-        for (var i = 0; i < response.pairs.length; i++) {
+        for (var i = 0; i < response.xz.length; i++) {
             table += '<tr>';
             if (formattedDate === response.xz.report_date.toString() && today.getHours() < 17) {
                 table += '<td>' + "x report" + '</td>';

@@ -48,12 +48,12 @@ const pool = new Pool({
  * @inner
  */
 router.get('/', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.render('reports')
-    }
-    else {
-        res.redirect('/')
-    }
+    res.render('reports')
+    // if (req.isAuthenticated()) {
+    // }
+    // else {
+    //     res.redirect('/')
+    // }
 });
 
 /**

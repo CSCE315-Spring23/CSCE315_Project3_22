@@ -1,16 +1,25 @@
-.btn-primary{
+.report_button{
     border: 1px solid;
     /* border-color: rgba(181,18,27,.8); */
     padding: 10px;
     background-color: rgba(181,18,27,.8); 
-    width: 50%;
-    height: 50%;
-    margin-bottom: 50px;
+    width: 20%;
+    position: relative;
+    top: 10px;
+    left: 40%;
+    /* height: 50%; */
+    margin-bottom: 100px;
     color: white
 }
 
-.btn-primary button:hover{
+.report_button:hover{
     transition: transform 0.3s ease;
     transform: translateY(-5px);
     background-color: white; 
+    color: black;
+}
+
+.logo {
+    position: relative;
+    right: 74px;
 }
