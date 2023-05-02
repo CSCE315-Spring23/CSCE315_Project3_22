@@ -54,7 +54,6 @@
                     </div>
                 </div>
             <% }); %>
-
         </div>
         <div class="body-item cart-dashboard">
             <button class="back-to-menu-button">Back to Menu</button>
@@ -69,6 +68,7 @@
 </html>
 
 <script>
+    // set up the total price of the cart when the page is loaded
     document.addEventListener("DOMContentLoaded", () => {
         let cart_total = 0.00;
 
@@ -81,6 +81,14 @@
         document.querySelector(".total-price-div").textContent = `TOTAL: $${cart_total}`;
     });
 
+
+    /**
+     * Places an order by converting the smoothie cart data into a JSON object and sending it to the server.
+     * 
+     * @async
+     * @function place_order
+     * @returns {Promise<void>}
+     */
     async function place_order() {
         let cart = [];
 
@@ -93,13 +101,8 @@
         }
 
         cart_items.forEach(item => {
-            // get the smoothie name
             const smoothie_name = item.querySelector(".cart-item-name").textContent;
-
-            // get the smoothie size
             const smoothie_size = item.querySelector(".cart-item-size").textContent;
-
-            // get the smoothie price
             const smoothie_price = item.querySelector(".cart-item-price").textContent;
 
             // get smoothie ingredients
@@ -132,7 +135,7 @@
 
         let cart_json = JSON.stringify(cart);
 
-        // Send cart data to the server
+        // send cart data to the server
         try {
             const response = await fetch("/place-order", {
                 method: "POST",
@@ -142,7 +145,7 @@
                 body: cart_json
             });
 
-            // If the server responds with a success status, redirect to the home page
+            // if the server responds with a success status, redirect to the home page
             if (response.ok) {
                 alert("Order placed successfully! Enjoy!");
                 window.location.href = "/";
@@ -193,5 +196,4 @@
     const place_order_button = document.querySelector(".place-order-button");
 
     place_order_button.addEventListener('click', place_order);
-
 </script>
