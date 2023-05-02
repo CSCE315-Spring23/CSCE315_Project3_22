@@ -1,4 +1,3 @@
-const { exit } = require("process");
 
 /**
  * Sends an AJAX request to the server to retrieve data for the XZ report,
