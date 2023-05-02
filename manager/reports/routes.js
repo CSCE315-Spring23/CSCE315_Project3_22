@@ -175,7 +175,7 @@ router.put('/load_restock', async (req, res) => {
 
     PUT endpoint for retrieving all z_reports.
 
-    @name module:routes/xz_report
+    @name module:manager/reports/routes
 
     @param {Object} req - Express request object.
 

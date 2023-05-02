@@ -3,6 +3,7 @@
  * formats today's date, and builds an HTML table with conditional formatting
  * based on the current time. Displays the HTML table in a modal dialog on the page.
  *
+ * @memberof module:manager/reports
  * @function xz_report
  * @returns {void}
  */

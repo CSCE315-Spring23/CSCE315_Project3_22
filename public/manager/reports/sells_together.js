@@ -1,5 +1,5 @@
 /**
- * Functions for generating the sells together report, which counts the numer of times each pair of items is ordered together.
+ * Functions for generating the manager reports, which giving various kinds of information to help the manager run the business.
  * @module manager/reports
  */
 /**
