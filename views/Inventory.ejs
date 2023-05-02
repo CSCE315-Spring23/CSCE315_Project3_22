@@ -10,41 +10,43 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div id="google_translate_element"></div>
-    <script type="text/javascript">
-      function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-          pageLanguage: 'en',
-          layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-          autoDisplay: true,
-          multilanguagePage: true
-        }, 'google_translate_element');
-      }
-      googleTranslateElementInit();
-    </script>
-    
-    <!-- Add the navigation bar using Bootstrap -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="\manager\Inventory">Inventory</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="\manager\menu">Menu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="\manager\reports">Reports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Help</a>
-                    </li>
-                </ul>
+    <div class="d-flex justify-content-between align-items-center">
+        <!-- Add the navigation bar using Bootstrap -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="\manager\Inventory">Inventory</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="\manager\menu">Menu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="\manager\reports">Reports</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Help</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+
+        <img src="/images/smoothie-king-logo.png" style="width:400px; height:70px;" alt= "Smoothie King Logo">
+        <div id="google_translate_element"></div>
+        <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false,
+            multilanguagePage: true
+            }, 'google_translate_element');
+        }
+        </script>
+    </div>
 
     <script>
         // initialize nextProductID
@@ -256,7 +258,7 @@
                         const temp = JSON.stringify(productsToUpdate);
                         const temp2 = JSON.stringify(removedProductIDs);
                         const temp3 = JSON.stringify(productsToAdd);
-                        // console.log(temp);
+                        //console.log(temp);
                         $.ajax({
                             type: "PUT",
                             url: "route/update/" + preUpdateFinalID + "/" + encodeURIComponent(temp) + "/" + encodeURIComponent(temp2) + "/" + encodeURIComponent(temp3),
@@ -270,7 +272,7 @@
                             contentType: "app/json",
 
                             success: function(data) {
-                                // console.log(data);
+                                //console.log(data);
                             },
                             error: function(xhr, status, error) {
                                 console.error(error);
