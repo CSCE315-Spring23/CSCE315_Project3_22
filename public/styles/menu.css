@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+
+table {
+    width: 100%;
+    text-align: center;
+    align-self: center;
+    padding-top: 15px;
+    padding-bottom: 20px;
+    font-family: "Poppins", sans-serif;
+}
+
+#menu_table td, #menu_table th {
+    border: 1px solid #ddd;
+    padding: 3px;  
+    border-color: rgba(181,18,27,.8);
+   
+}
+
+body {
+    background-color: #f7f7f7;
+    border-color: rgba(181,18,27,.8);
+}
+
+#menu_table tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+#menu_table th {
+    font-size: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: rgba(181,18,27,.8) !important;
+    color: white;
+    font-size: 25px;
+}
+
+th:first-child { 
+	border-radius: 10px 0 0 0; 
+}
+
+th:last-child { 
+	border-radius: 0 10px 0 0; 
+}
+
+tr:last-child td:first-child { 
+	border-radius: 0 0 0 10px; 
+}
+tr:last-child td:last-child { 
+	border-radius: 0 0 10px 0; 
+}
+
+button{
+    border: 1px solid;
+    border-color: rgba(181,18,27,.8);
+    border-radius: 5px;
+    padding: 10px;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+}
+
+#menu_table tr:hover {
+    background-color: #ddd;
+    font-weight: bold;
+}
+
+#menu_table tr:last-child:hover {
+    background-color: white;
+   
+}
+
+button:hover {
+	border-color: black;
+    background-color: rgba(60, 0, 0, .9) !important;
+    transition: transform 0.3s ease;
+    transform: translateY(-5px);
+    color: white;
+}

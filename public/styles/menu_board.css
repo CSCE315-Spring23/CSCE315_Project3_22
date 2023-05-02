@@ -1,0 +1,21 @@
+body {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f7f7f7;
+}
+
+.weatherwidget-io {
+    position: relative;
+    top: 100px;
+}
+
+.btn {
+    background-color: #d12a2a;
+    border: 1px solid white;
+    margin-top: 200px;
+}
+
+.btn:hover {
+    background-color: white;
+    color: black;
+}

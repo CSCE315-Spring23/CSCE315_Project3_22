@@ -1,0 +1,14 @@
+.header-container {
+    display: grid;
+    grid-template-columns: 3;
+
+    border-bottom: solid;
+}
+
+.header-item {
+    border-style: solid;
+}
+
+.page-wrapper {
+    border-style: solid;
+}

@@ -1,38 +1,43 @@
 /**
- * This file handles the connection between the PSQL database and the Server-Side Client 
- * @module server/server
+ * The routes that handle loading the manager menu and updates to the menu and menu item ingredients.
+ * @module manager/menu/routes
  * @requires express
- * @requires passport
- * @requires uuid
  * @requires dotenv
- * @requires express-session
  * @requires path
+ * @requires pg
+ * @requires process
  * @requires body-parser
  */
+const express = require("express");
+require('dotenv').config();
 
-const express = require('express');
 const { Pool } = require('pg');
-const dotenv = require('dotenv').config();
+const path = require('path');
+const { exit } = require("process");
 
-const app = express();
-const port = 3000;
-const bodyParser = require('body-parser');
+const router = express.Router();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// const body_parser = require('body-parser');
+// router.use(body_parser.urlencoded({extended: true}));
+router.use(express.json());
 
-app.set('view engine', 'ejs');
-app.use(express.static('public'));
-
-// create pool
-const pool = new Pool ({
-    user: process.env.PSQL_USER,
-    host: process.env.PSQL_HOST,
-    database: process.env.PSQL_DATABASE,
-    password: process.env.PSQL_PASSWORD,
-    port: process.env.PSQL_PORT,
+/**
+ * Initialize pool for accessing the database
+ *
+ * @memberof module:manager/menu/routes
+ * @type {Pool}
+ * @name pool
+ * @inner
+ */
+const pool = new Pool({
+    user: process.env.db_username,
+    host: process.env.db_host,
+    database: process.env.db_name,
+    password: process.env.db_pass,
+    port: 5432,
     ssl: {rejectUnauthorized: false}
 });
+
 
 // add process hook to shutdown pool
 process.on("SIGINT", function() {
@@ -40,6 +45,7 @@ process.on("SIGINT", function() {
     console.log("Application successfully shutdown");
     process.exit(0);
 });
+
 
 /**
  * Routes to the Server Side
@@ -49,7 +55,7 @@ process.on("SIGINT", function() {
  * @name server/server
  * @inner
  */
-app.get("/server", function(req, res) {
+router.get("/server", function(req, res) {
     res.render('server');
 });
 
@@ -61,7 +67,7 @@ app.get("/server", function(req, res) {
  * @name server/user
  * @inner
  */
-app.get("/user", function(req, res) {
+router.get("/user", function(req, res) {
     query = "SELECT menu_item_id, COUNT(menu_item_id) FROM orders_by_item GROUP BY menu_item_id ORDER BY COUNT(menu_item_id) DESC LIMIT 10;";
         pool.query(query)
         .then(result => {
@@ -81,7 +87,7 @@ app.get("/user", function(req, res) {
  * @name server/menu-items
  * @inner
  */
-app.get("/menu-items", function(req, res) {
+router.get("/menu-items", function(req, res) {
     const category = req.query.category;
 
     let query;
@@ -119,7 +125,7 @@ app.get("/menu-items", function(req, res) {
  * @name server/
  * @inner
  */
-app.post("/", (req, res) => {
+router.post("/", (req, res) => {
 
     let cart = req.body;
     console.log(cart)
@@ -255,7 +261,7 @@ app.post("/", (req, res) => {
  * @name server/item-ingredients
  * @inner
  */
-app.get("/item-ingredients", function(req, res) {
+router.get("/item-ingredients", function(req, res) {
     const menu_item_id = req.query.menu_item_id;
 
     let query;
@@ -278,7 +284,7 @@ app.get("/item-ingredients", function(req, res) {
  * @name server/additives
  * @inner
  */
-app.get("/additives", function(req, res) {
+router.get("/additives", function(req, res) {
     let query;
     query = "SELECT * FROM additives LIMIT 8;";
     pool.query(query)
@@ -300,7 +306,7 @@ app.get("/additives", function(req, res) {
  * @name server/
  * @inner
  */
-app.get("/item-price", function(req, res) {
+router.get("/item-price", function(req, res) {
     const menu_item_id = req.query.menu_item_id;
 
     let query;
@@ -315,7 +321,7 @@ app.get("/item-price", function(req, res) {
     });
 });
 
-app.get("/item-price", function(req, res) {
+router.get("/item-price", function(req, res) {
     const menu_item_id = req.query.menu_item_id;
 
     let query;
@@ -330,8 +336,4 @@ app.get("/item-price", function(req, res) {
     });
 });
 
-
-// start web app and listen on port 3000
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
+module.exports = router

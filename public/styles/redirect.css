@@ -1,0 +1,36 @@
+body {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f7f7f7;
+}
+
+.container h1 {
+    max-width: 350px;
+    padding: 15px;
+    position: relative;
+    top: 50px;
+    margin: 0 auto;
+}
+
+.row {
+    position: relative;
+    top: 250px;
+}
+
+[class*="col-"] {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #eee;
+    background-color: rgba(86, 61, 124, .15);
+    border: 1px solid #ddd;
+    border: 1px solid rgba(86, 61, 124, .2);
+  }
+
+.btn {
+    background-color: #d12a2a;
+}
+
+.btn:hover {
+    background-color: white;
+    color: black;
+}

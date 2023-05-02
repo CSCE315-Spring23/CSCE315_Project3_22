@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Bootstrap core CSS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+  <link href="/bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="/styles/menu.css" rel="stylesheet"> 
+<title>Manager Menu</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/manager/menu/listeners.js"></script>
+ 
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</head>
+<body>
+	<img src="images/smoothie-king-logo.png" style="width:400px; height:70px;" id="logo">
+    <div id="google_translate_element"></div>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: false,
+          multilanguagePage: true
+        }, 'google_translate_element');
+      }
+    </script>
+	<table>
+    <thead>
+		<tr>
+			<th>Menu Item</th>
+			<th>Category</th>
+			<th>Price</th>
+			<th>Item Ingredients</th>
+		</tr>
+    </thead>
+    <tbody id="menu_table">
+		<% for (let i = 0; i < menu.length; i++) { %>
+			<tr id="<%= menu[i].menu_item_id %>">
+				<td onclick="edit_menu_cell(this)"><%= menu[i].menu_item_id %></td>
+				<td onclick="edit_menu_cell(this)"><%= menu[i].category %></td>
+				<td onclick="edit_menu_cell(this)"><%= menu[i].price %></td>
+				<td><button data-toggle="modal" data-target="#ingredientsModal" onclick="load_item_ingredients_modal(this)" data-ingredients="<%= menu_ingredients[i] %>" class="btn btn-width bkgrnd-cyan">Edit</button></td>
+			</tr>
+		<% } %>
+		<tr id="">
+			<td onclick="edit_menu_cell(this)"><%= "" %></td>
+			<td onclick="edit_menu_cell(this)"><%= "" %></td>
+			<td onclick="edit_menu_cell(this)"><%= "" %></td>
+			<td><button class="btn btn-width bkgrnd-cyan">Edit</button></td>
+		</tr>
+    </tbody>
+  	</table>
+
+	<div class="modal fade" id="ingredientsModal" tabindex="-1" role="dialog" aria-labelledby="ingredientsModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="ingredientsModalLabel">View/Edit Item Ingredients</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="container-fluid" id="modal_table"></div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+  
