@@ -1,4 +1,10 @@
+/**
+* Express router for handling inventory management routes
+* @module inventoryRouter
+*/
 const express = require("express");
+
+
 var bodyParser = require('body-parser');
 require('dotenv').config();
 
@@ -24,6 +30,12 @@ const pool = new Pool({
 
 router.use(express.static('/public/styles'));
 
+/**
+* An endpoint that retrieves the inventory data from the database and renders it using the 'Inventory' view.
+* @param {Object} req - The request object
+* @param {Object} res - The response object
+* @param {Function} next - The next middleware function
+*/
 router.get('/', (req, res) => {
     if (req.isAuthenticated()) {
         const query = {
@@ -32,7 +44,7 @@ router.get('/', (req, res) => {
         pool.query(query)
             .then(query_res => {
                 const data = {teammembers: query_res.rows};
-                // console.log(query_res.rows);
+                //console.log(query_res.rows);
                 res.render('Inventory', data);
             })
             .catch(err => {
@@ -46,7 +58,13 @@ router.get('/', (req, res) => {
 });
 
 router.use(bodyParser.json());
-//app.put('/update/:removedProductIDs/:productsToUpdate/:productsToAdd', (req, res) => {
+
+/**
+* An endpoint for updating the inventory data in the database.
+* @param {Object} req - The request object
+* @param {Object} res - The response object
+* @param {Function} next - The next middleware function
+*/
 router.put('/route/update/:pufID/:ptu/:rpID/:ptA', (req, res) => {
   const removedProductIDs = JSON.parse(req.params.rpID);
   const productsToUpdate = JSON.parse(req.params.ptu);

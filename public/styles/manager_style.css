@@ -9,6 +9,10 @@
     background-color: #e8f0fe;
 }
 
+.modal-dialog {
+    max-width: 800px;
+    height: 600px;
+}
 /*
 nav {
     background-color: #333;
