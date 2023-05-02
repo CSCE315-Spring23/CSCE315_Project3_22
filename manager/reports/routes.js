@@ -193,8 +193,18 @@ router.put('/load_restock', async (req, res) => {
     @returns {Promise<void>} - Sends a JSON response with all z_reports.
     */
 router.put('/xz_report', async (req, res) => {
-    var xz_query = "SELECT * FROM z_reports";
-})
+    var xz_query = "SELECT * FROM orders_summary";
+    
+    try {
+        const xz_report = await pool.query(xz_query);
+        res.send({xz: xz_report.rows});
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send("Internal server error");
+    }
+});
+
 /**
 * Retrieves a report of the number of menu items sold within a specified time period.
 * @name router.put('/load_sales')

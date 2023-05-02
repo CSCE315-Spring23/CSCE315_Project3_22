@@ -9,33 +9,39 @@
  * @returns {void}
  */
 function xz_report() {
-
-    // Send an AJAX request to the server to update the database
     var xhr = new XMLHttpRequest();
-    const today = new Date();    
-    const year = today.getFullYear(); // get the year (yyyy)
-    const month = ('0' + (today.getMonth() + 1)).slice(-2); // get the month (mm)
-    const day = ('0' + today.getDate()).slice(-2); // get the day (dd)
-    const formattedDate = `${year}-${month}-${day}`;
+    var table = '<table><thead><tr><th>Report Type</th><th>Date</th><th>Total Sales</th></tr></thead><tbody>';
+    var total_sales = 0;
+    var response = JSON.parse(xhr.response);
+    var prev_splitted = response.xz[0][2].split(" ");
     xhr.onload = () => {
-        // menu, menu_ingredients
-        var response = JSON.parse(xhr.response);
-        var table = '<table><thead><tr><th>Report Type</th><th>Date</th><th>Total Sales</th></tr></thead><tbody>';
-        for (var i = 0; i < response.xz.length; i++) {
-            table += '<tr>';
-            if (formattedDate === response.xz.report_date.toString() && today.getHours() < 17) {
-                table += '<td>' + "x report" + '</td>';
+    for (var i = 0; i < response.xz.length; i++) {
+        var splitted = response.xz[i][2].split(" ");
+        var row = [];
+        var myobj = new Date();
+        var formattedDate = myobj.getFullYear() + "-" + ('0' + (myobj.getMonth() + 1)).slice(-2) + "-" + ('0' + myobj.getDate()).slice(-2);
+        
+        //handles old z reports 
+        total_sales += response.xz[i][3];
+        if (prev_splitted[0] !== splitted[0]) {
+            if (splitted[0] === formattedDate && myobj.getHours() < 17) {
+                row.push("x report");
             }
             else {
-                table += '<td>' + "z report" + '</td>';
+                row.push("z report");
             }
-            table += '<td>' + response.xz.report_date + '</td>';
-            table += '<td>' + response.xz.daily_sales + '</td>';
-            table += '</tr>';
+            row.push(splitted[0]);
+            row.push(total_sales);
+            table += '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>';
+            total_sales = 0; 
+            prev_splitted = splitted;
         }
-        table += '</tbody></table>';
-        $('#modal_table').html(table);
+        //handles old x reports if they're needed 
     }
+    table += '</tbody></table>';
+    $('#modal_table').html(table);
+}
+
     xhr.open("PUT", "/manager/reports/xz_report", true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send();
