@@ -3,14 +3,18 @@ function xz_report() {
     // Send an AJAX request to the server to update the database
     var request = {}
     var xhr = new XMLHttpRequest();
-    const today = new Date();
+    const today = new Date();    
+    const year = today.getFullYear(); // get the year (yyyy)
+    const month = ('0' + (today.getMonth() + 1)).slice(-2); // get the month (mm)
+    const day = ('0' + today.getDate()).slice(-2); // get the day (dd)
+    const formattedDate = `${year}-${month}-${day}`;
     xhr.onload = () => {
         // menu, menu_ingredients
         var response = JSON.parse(xhr.response);
         var table = '<table><thead><tr><th>Report Type</th><th>Date</th><th>Total Sales</th></tr></thead><tbody>';
         for (var i = 0; i < response.pairs.length; i++) {
             table += '<tr>';
-            if (today.toDateString() === date.toDateString() && today.getHours() < 17) {
+            if (formattedDate === response.xz.report_date.toString() && today.getHours() < 17) {
                 table += '<td>' + "x report" + '</td>';
             }
             else {
