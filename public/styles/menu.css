@@ -62,10 +62,12 @@ tr:last-child td:last-child {
     font-size: 25px;
 }
 
+/* centering objects */
 .center {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: auto;
 }
 
 /* button styling */
@@ -78,12 +80,18 @@ button{
     height: 100%;
 }
 
+/* image padding */
+img{
+    padding-bottom: 10px;
+}
+
 /* hover action styling */
 #menu_table tr:hover {
     background-color: #ddd;
     font-weight: bold;
 }
 
+/* button specific styling depending on class identifier */
 button:hover {
     transition: transform 0.3s ease;
     transform: translateY(-5px);
@@ -94,6 +102,4 @@ button:hover {
     transform: translateY(-5px);
 }
 
-img{
-    padding-bottom: 10px;
-}
+
