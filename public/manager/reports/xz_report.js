@@ -41,7 +41,7 @@ function xz_report() {
 //     xhr.send();
 // }
     var xhr = new XMLHttpRequest();
-    var table = '<table><thead><tr><th>Report Type</th><th>Date</th><th>Total Sales</th></tr></thead><tbody>';
+    var table = '<table><thead><tr><th>Report Type </th><th> Date </th><th> Total Sales </th></tr></thead><tbody>';
     var total_sales = 0;
 
     xhr.onload = () => { 
@@ -53,7 +53,7 @@ function xz_report() {
         var myobj = new Date();
         var formattedDate = myobj.getFullYear() + "-" + ('0' + (myobj.getMonth() + 1)).slice(-2) + "-" + ('0' + myobj.getDate()).slice(-2);
         //handles old z reports 
-        
+        total_sales += response.xz[i].total_price;
         if (prev_splitted !== splitted) {
             if (response.xz[i].order_date === formattedDate && myobj.getHours() < 17) {
                 row.push("x report");
@@ -61,14 +61,11 @@ function xz_report() {
             else {
                 row.push("z report");
             }
-            row.push(splitted);
+            row.push();
             row.push(total_sales);
             table += '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>';
             total_sales = 0; 
             prev_splitted = splitted;
-        }
-        else {
-            total_sales += response.xz[i].total_price;
         }
         //handles old x reports if they're needed 
     }
