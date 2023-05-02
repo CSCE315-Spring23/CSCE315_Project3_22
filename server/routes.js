@@ -248,7 +248,8 @@ router.post("/", (req, res) => {
                     })
                 })
             }
-        })        
+        })
+        res.send({ok: true});        
     })     
 });
     

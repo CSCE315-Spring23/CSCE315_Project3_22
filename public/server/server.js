@@ -107,66 +107,66 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function clearItems() {
-    // Clear the cart array
-    cart = [];
+        // Clear the cart array
+        cart = [];
 
-    // Update the order summary
-    updateOrderSummary();
+        // Update the order summary
+        updateOrderSummary();
     }
 
     // Add the missing updateOrderSummary function
     function updateOrderSummary() {
-    const orderSummary = document.querySelector("#order-summary");
-    orderSummary.innerHTML = ""; // Clear the current order summary
+        const orderSummary = document.querySelector("#order-summary");
+        orderSummary.innerHTML = ""; // Clear the current order summary
 
-    let total = 0;
+        let total = 0;
 
-    const headings = `
-        <div class="summary-item">
-            <h3>Item Name</h3>
-            <h3>Size</h3>
-            <h3>Price</h3>
-        </div>
-    `;
-    orderSummary.innerHTML += headings;
-
-    cart.forEach((smoothie, index) => {
-        total += parseFloat(smoothie.price);
-
-        // Remove the size and dash from the smoothie name
-        const displayName = capitalize_words(smoothie.name.replace(/ - \d+$/, ""));
-
-        const smoothieItem = `
+        const headings = `
             <div class="summary-item">
-                <p>${displayName}</p>
-                <p>${smoothie.size}</p>
-                <p>$${parseFloat(smoothie.price).toFixed(2)}</p>
+                <h3>Item Name</h3>
+                <h3>Size</h3>
+                <h3>Price</h3>
             </div>
         `;
+        orderSummary.innerHTML += headings;
 
-        orderSummary.innerHTML += smoothieItem;
-    });
+        cart.forEach((smoothie, index) => {
+            total += parseFloat(smoothie.price);
 
-    // Update the total amount in the Total-label
-    const totalLabel = document.querySelector("#total-label h1");
-    totalLabel.textContent = `Total: $${total.toFixed(2)}`;
+            // Remove the size and dash from the smoothie name
+            const displayName = capitalize_words(smoothie.name.replace(/ - \d+$/, ""));
+
+            const smoothieItem = `
+                <div class="summary-item">
+                    <p>${displayName}</p>
+                    <p>${smoothie.size}</p>
+                    <p>$${parseFloat(smoothie.price).toFixed(2)}</p>
+                </div>
+            `;
+
+            orderSummary.innerHTML += smoothieItem;
+        });
+
+        // Update the total amount in the Total-label
+        const totalLabel = document.querySelector("#total-label h1");
+        totalLabel.textContent = `Total: $${total.toFixed(2)}`;
     }
 
 
     async function showPopup(menu_item_id) {
-    // get information for popup
-    const description = ""; // Since you want to remove the description, set it to an empty string.
+        // get information for popup
+        const description = ""; // Since you want to remove the description, set it to an empty string.
 
-    await getContent(description, menu_item_id);
+        await getContent(description, menu_item_id);
 
-    // display the popup
-    const popupContainer = document.getElementById("popup-container");
-    popupContainer.style.display = "flex";
+        // display the popup
+        const popupContainer = document.getElementById("popup-container");
+        popupContainer.style.display = "flex";
 
-    // set delay so items can load
-    setTimeout(() => {
-        popupContainer.style.opacity = "1";
-    }, 200);
+        // set delay so items can load
+        setTimeout(() => {
+            popupContainer.style.opacity = "1";
+        }, 200);
     }
 
     // get rid of pop and handle cart logic
@@ -237,8 +237,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // If the server responds with a success status, redirect to the home page
             if (response.ok) {
-                window.location.href = "/";
-                console.log("TEST")
+                // window.location.href = "/server";
+                clearItems();
             } 
             else {
                 console.error("Failed to place order. Server responded with status:", response.status);
@@ -268,8 +268,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     function attachClearItemsEventListener() {
-    const clearItemsButton = document.querySelector("#buttons-container button:first-child");
-    clearItemsButton.addEventListener("click", clearItems);
+        const clearItemsButton = document.querySelector("#buttons-container button:first-child");
+        clearItemsButton.addEventListener("click", clearItems);
     }
 
 
