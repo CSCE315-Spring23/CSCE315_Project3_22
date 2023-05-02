@@ -193,7 +193,7 @@ router.put('/load_restock', async (req, res) => {
     @returns {Promise<void>} - Sends a JSON response with all z_reports.
     */
 router.put('/xz_report', async (req, res) => {
-    var xz_query = "SELECT * FROM z_reports";
+    var xz_query = "SELECT * FROM orders_summary";
     
     try {
         const xz_report = await pool.query(xz_query);
