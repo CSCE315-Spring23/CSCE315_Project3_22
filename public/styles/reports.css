@@ -1,6 +1,6 @@
 .btn-primary{
     border: 1px solid;
-    /* border-color: rgba(181,18,27,.8); */
+    border-color: white;
     padding: 10px;
     background-color: rgba(181,18,27,.8); 
     width: 50%;
@@ -10,7 +10,9 @@
 }
 
 .btn-primary button:hover{
+    border: 1px solid;
     transition: transform 0.3s ease;
     transform: translateY(-5px);
-    background-color: white; 
+    background-color: white;
+    border-color: rgba(181,18,27,.8);
 }
