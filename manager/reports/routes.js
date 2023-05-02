@@ -96,6 +96,16 @@ router.put('/sells_together', (req, res) => {
     start();
 });
 
+/**
+*   Retrieves a report of items to be restocked based on inventory snapshots from a specified time period.
+*   @name router.put('/load_restock')
+*   @function
+*   @async
+*   @param {Object} req - Express request object
+*   @param {Object} res - Express response object
+*   @returns {Object} - Returns an object containing an array of items to be restocked, including product ID, product name, and the quarter maximum quantity for the specified time period.
+*   @throws {Error} - Throws an error if there is an issue with the database query.
+*/
 router.put('/load_restock', async (req, res) => {
     var restock_query = "SELECT product_id, product_name, 0.25 * MAX(quantity) AS quarter_max_quantity FROM inventory_snapshot WHERE snapshot_date >= '2022-12-02' AND snapshot_date <= '2023-01-01' GROUP BY product_id, product_name";
 
@@ -109,6 +119,17 @@ router.put('/load_restock', async (req, res) => {
     }
 });
 
+/**
+*
+* Retrieves a report of the number of menu items sold within a specified time period.
+* @name router.put('/load_sales')
+* @function
+* @async
+* @param {Object} req - Express request object containing a start_date and end_date for the report.
+* @param {Object} res - Express response object
+* @returns {Object} - Returns an object containing an array of items sold, including menu item ID and the quantity sold during the specified time period.
+* @throws {Error} - Throws an error if there is an issue with the database query.
+*/
 router.put('/load_sales', async (req, res) => {
     const { start_date, end_date } = req.body;
     const query = `
@@ -128,6 +149,17 @@ router.put('/load_sales', async (req, res) => {
     }
 });
 
+/**
+* 
+* Retrieves a report of excess inventory at a specific time, based on the inventory snapshot for that time and the inventory table.
+* @name router.put('/load_excess')
+* @function
+* @async
+* @param {Object} req - Express request object containing a time_stamp for the report.
+* @param {Object} res - Express response object
+* @returns {Object} - Returns an object containing an array of excess inventory items, including product ID, product name, quantity, and timestamp quantity for the specified time.
+* @throws {Error} - Throws an error if there is an issue with the database query.
+*/
 router.put('/load_excess', async (req, res) => {
     const { time_stamp } = req.body;
     console.log( time_stamp);
