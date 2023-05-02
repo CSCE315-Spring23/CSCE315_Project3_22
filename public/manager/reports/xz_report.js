@@ -46,16 +46,16 @@ function xz_report() {
 
     xhr.onload = () => { 
     var response = JSON.parse(xhr.response);
-    var prev_splitted = response.xz[0].order_date;
+    var prev_splitted = response.xz[0].order_id;
     for (var i = 1; i < response.xz.length; i++) {
-        var splitted = response.xz[i].order_date;
+        var splitted = response.xz[i].order_id;
         var row = [];
         var myobj = new Date();
         var formattedDate = myobj.getFullYear() + "-" + ('0' + (myobj.getMonth() + 1)).slice(-2) + "-" + ('0' + myobj.getDate()).slice(-2);
         //handles old z reports 
         
         if (prev_splitted !== splitted) {
-            if (splitted === formattedDate && myobj.getHours() < 17) {
+            if (response.xz[i].order_date === formattedDate && myobj.getHours() < 17) {
                 row.push("x report");
             }
             else {
