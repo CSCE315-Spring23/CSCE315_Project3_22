@@ -52,7 +52,6 @@ function xz_report() {
         var row = [];
         var myobj = new Date();
         var formattedDate = myobj.getFullYear() + "-" + ('0' + (myobj.getMonth() + 1)).slice(-2) + "-" + ('0' + myobj.getDate()).slice(-2);
-        
         //handles old z reports 
         
         if (prev_splitted !== splitted) {
