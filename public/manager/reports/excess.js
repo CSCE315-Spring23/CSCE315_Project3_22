@@ -1,3 +1,9 @@
+/**
+* 
+* Send a PUT request to load the excess report for a given timestamp and display the result in a modal table.
+* @function excess_report
+* @returns {void}
+*/
 function excess_report() {
     var timestamp = document.getElementById("timestamp").value;
 
@@ -20,6 +26,12 @@ function excess_report() {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify({ time_stamp: timestamp }));
 }
+/**
+*
+* Set the default timestamp value to the current date and attach an event listener to the timestamp input field to trigger the excess report.
+* @function find_and_set_timestamp
+* @returns {void}
+*/
 
 function find_and_set_timestamp(){
     // Get the current date

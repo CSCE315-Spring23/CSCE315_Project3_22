@@ -1,3 +1,11 @@
+
+/**
+*
+* Retrieves restock report data via an XMLHttpRequest and displays it in a table.
+* @function
+* @name restock_report
+* @returns {void}
+*/
 function restock_report() {
     var xhr = new XMLHttpRequest();
     xhr.onload = () => {
