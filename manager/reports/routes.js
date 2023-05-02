@@ -31,13 +31,10 @@ router.get('/', (req, res) => {
 });
 
 router.put('/sells_together', (req, res) => {
-    var start_date = req.body.startDate;
-    var end_date = req.body.endDate;
-    
     // mio - multi item orders (orders with multiple items)
     var mio_query = "SELECT DISTINCT order_id FROM (SELECT a.* FROM orders_by_item a JOIN (SELECT order_id, COUNT(*) " 
                             + "FROM orders_by_item GROUP BY order_id HAVING count(*) > 1) b ON a.order_id = b.order_id ORDER BY a.order_id) t " 
-                            + "WHERE t.item_date between '" + start_date + "' and '" + end_date + "'";
+                            + "WHERE t.item_date between '2022-12-31' and '2023-03-25'";
     var qry = "SELECT menu_item_id FROM orders_by_item WHERE order_id=$1";
 
     mio_promise = () => {
@@ -112,18 +109,40 @@ router.put('/load_restock', async (req, res) => {
     }
 });
 
-router.put('/xz_report', async (req, res) => {
-    var xz_query = "SELECT * FROM z_reports";
-
+router.put('/load_sales', async (req, res) => {
+    const { start_date, end_date } = req.body;
+    const query = `
+      SELECT menu_item_id, COUNT(menu_item_id) AS quantity_sold
+      FROM orders_by_item
+      WHERE item_date BETWEEN $1 AND $2
+      GROUP BY menu_item_id
+    `;
+  
     try {
-        const xz_report = await pool.query(xz_query);
-        res.send({xz: xz_report.rows});
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).send("Internal server error");
+      const result = await pool.query(query, [start_date, end_date]);
+      //console.log('sales loaded');
+      res.send({sales: result.rows});
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal server error');
     }
 });
+
+router.put('/load_excess', async (req, res) => {
+    const { time_stamp } = req.body;
+    console.log( time_stamp);
+    const query1 = ' SELECT i.*, s.product_id, s.product_name, s.quantity AS timestamp_q FROM inventory_snapshot s INNER JOIN inventory i ON i.product_id = s.product_id WHERE s.snapshot_date = $1 ';
+  
+    try {
+      const result = await pool.query(query1, [time_stamp]);
+      console.log('excess loaded');
+      res.send({excess: result.rows});
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal server error');
+    }
+});
+
 
 
 module.exports = router
