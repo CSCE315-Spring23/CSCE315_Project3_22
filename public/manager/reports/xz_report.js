@@ -9,7 +9,6 @@
 function xz_report() {
 
     // Send an AJAX request to the server to update the database
-    var request = {}
     var xhr = new XMLHttpRequest();
     const today = new Date();    
     const year = today.getFullYear(); // get the year (yyyy)
@@ -37,5 +36,5 @@ function xz_report() {
     }
     xhr.open("PUT", "/manager/reports/xz_report", true);
     xhr.setRequestHeader("Content-type", "application/json");
-    xhr.send(JSON.stringify(request));
+    xhr.send();
 }

@@ -1,0 +1,8 @@
+button{
+    border: 1px solid;
+    border-color: rgba(181,18,27,.8);
+    padding: 10px;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+}
