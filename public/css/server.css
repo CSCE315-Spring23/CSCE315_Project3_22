@@ -56,7 +56,8 @@ body {
 .order-items-container {
     display: grid;
     grid-template-rows: 4fr 1fr;
-    margin-right: 5%; 
+    margin-right: 10%;
+    
 }
 
 .menu-item-container {
@@ -174,9 +175,13 @@ body {
 }
 
 #sign-out-button {
-    display: none;
     float: right;
-    margin-right: 40px;
+    border: solid;
+    border-radius: 5px;
+    font-size: 20px;
+    margin: 5px;
+    padding: 15px;
+    background-color: transparent;
 }
 
 /* POP-UP STYLING */
@@ -196,12 +201,9 @@ body {
 }
 
 .popup-content {
-    display: grid;
-    grid-template-columns: 400px 400px;
-
     background-color: white;
     border-radius: 10px;
-    max-width: 60%;
+    max-width: 40%;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -209,25 +211,19 @@ body {
     text-align: center;
     display: flex;
     margin: 10px;
-}
-
-
-
-.popup-right-side {
     flex-direction: column;
     align-items: center;
-    justify-content: center;    
-}
-
-
-.popup-right-side {
+    justify-content: center;
     border-radius: 10px;
     background-color: rgba(232, 232, 232, 0.2);
+    overflow-y: auto; /* Add scroll functionality */
+    max-height: 90vh; /* Set maximum height as a percentage of the viewport height */
 }
 
 .size-container {
     display: inline-block;
 }
+
 
 /* order summary stlying*/
 
