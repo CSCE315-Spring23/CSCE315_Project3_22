@@ -171,6 +171,20 @@ router.put('/load_restock', async (req, res) => {
     }
 });
 
+/**
+
+    PUT endpoint for retrieving all z_reports.
+
+    @name module:routes/xz_report
+
+    @param {Object} req - Express request object.
+
+    @param {Object} res - Express response object.
+
+    @throws {Error} 500 - Internal server error.
+
+    @returns {Promise<void>} - Sends a JSON response with all z_reports.
+    */
 router.put('/xz_report', async (req, res) => {
     var xz_query = "SELECT * FROM z_reports";
 
