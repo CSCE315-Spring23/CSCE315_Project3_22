@@ -20,15 +20,17 @@ function xz_report() {
     xhr.onload = () => {
         // menu, menu_ingredients
         var response = JSON.parse(xhr.response);
-        var table = '<table><thead><tr><th>Report Type</th><th>Date</th><th>Total Sales</th></tr></thead><tbody>';
+        // <th>Report Type</th>
+        var table = '<table><thead><tr><th>Date</th><th>Total Sales</th></tr></thead><tbody>';
         for (var i = 0; i < response.xz.length; i++) {
             table += '<tr>';
-            if (formattedDate === response.xz.report_date.toString() && today.getHours() < 17) {
-                table += '<td>' + "x report" + '</td>';
-            }
-            else {
-                table += '<td>' + "z report" + '</td>';
-            }
+            // response.xz.length
+            // if (formattedDate === response.xz.report_date.toString() && today.getHours() < 17) {
+            //     table += '<td>' + "x report" + '</td>';
+            // }
+            // else {
+            //     table += '<td>' + "z report" + '</td>';
+            // }
             table += '<td>' + response.xz.report_date + '</td>';
             table += '<td>' + response.xz.daily_sales + '</td>';
             table += '</tr>';
