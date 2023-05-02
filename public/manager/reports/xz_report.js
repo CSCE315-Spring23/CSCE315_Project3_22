@@ -9,20 +9,20 @@
  * @returns {void}
  */
 function xz_report() {
-    var response = {}; // Assume order_summary data is being put into response
-
+    var xhr = new XMLHttpRequest();
     var table = '<table><thead><tr><th>Report Type</th><th>Date</th><th>Total Sales</th></tr></thead><tbody>';
     var total_sales = 0;
-    var prev_splitted = response[0][2].split(" ");
+    var response = JSON.parse(xhr.response);
+    var prev_splitted = response.xz[0][2].split(" ");
     xhr.onload = () => {
-    for (var i = 0; i < response.length; i++) {
-        var splitted = response[i][2].split(" ");
+    for (var i = 0; i < response.xz.length; i++) {
+        var splitted = response.xz[i][2].split(" ");
         var row = [];
         var myobj = new Date();
         var formattedDate = myobj.getFullYear() + "-" + ('0' + (myobj.getMonth() + 1)).slice(-2) + "-" + ('0' + myobj.getDate()).slice(-2);
         
         //handles old z reports 
-        total_sales += response[i][3];
+        total_sales += response.xz[i][3];
         if (prev_splitted[0] !== splitted[0]) {
             if (splitted[0] === formattedDate && myobj.getHours() < 17) {
                 row.push("x report");
