@@ -67,7 +67,7 @@ async function place_order() {
 
     // send cart data to the server
     try {
-        const response = await fetch("/place-order", {
+        const response = await fetch("/user/place-order", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -78,7 +78,7 @@ async function place_order() {
         // if the server responds with a success status, redirect to the home page
         if (response.ok) {
             alert("Order placed successfully! Enjoy!");
-            window.location.href = "/";
+            window.location.href = "/user";
         } 
         else {
             console.error("Failed to place order. Server responded with status:", response.status);
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // go back to the menu
     const back_to_menu_button = document.querySelector(".back-to-menu-button");
     back_to_menu_button.addEventListener("click", () => {
-        window.location.href = "/";
+        window.location.href = "/user";
     })
 
     // clear all item from the cart

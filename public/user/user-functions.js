@@ -31,7 +31,7 @@ function capitalize_words(str) {
 async function load_ingredients(_menu_item_id) {
     const ingredients = [];
 
-    const response = await fetch(`/item-ingredients?menu_item_id=${_menu_item_id.toLowerCase().trim() + " - 20"}`);
+    const response = await fetch(`/user/item-ingredients?menu_item_id=${_menu_item_id.toLowerCase().trim() + " - 20"}`);
     const data = await response.json();
     data.forEach(item => {
             // filter out straws and cups for popup display
@@ -54,7 +54,7 @@ async function load_ingredients(_menu_item_id) {
 async function load_additives() {
     const additives = [];
 
-    const response = await fetch("/additives");
+    const response = await fetch("/user/additives");
     const data = await response.json();
     data.forEach(item => {
         additives.push(item.product_name);
@@ -76,7 +76,7 @@ async function load_additives() {
 async function get_item_price(_item) {
     let item_price = 0.00;
 
-    const response = await fetch(`/item-price?menu_item_id=${_item}`);
+    const response = await fetch(`/user/item-price?menu_item_id=${_item}`);
     const data = await response.json();
     data.forEach(item => {
         item_price =  item.price;
@@ -292,7 +292,7 @@ function loadMenuItems(category) {
     const menu_set = new Set();
 
     // get the items that belong to the category from the database and insert html elements
-    fetch(`/menu-items?category=${category}`)
+    fetch(`/user/menu-items?category=${category}`)
     .then(response => response.json())
     .then(data => {
         data.forEach(item => {
@@ -377,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let cart_json = JSON.stringify(cart);
     
         // send cart data to the server
-        await fetch("/store-cart", {
+        await fetch("/user/store-cart", {
             method: "POST",
             headers: {
             "Content-Type": "application/json"
@@ -385,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
             body: cart_json
         });
         
-        window.location.href = "/cart";
+        window.location.href = "/user/cart";
     })
     
     loadMenuItems("featured");
