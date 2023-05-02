@@ -1,33 +1,4 @@
 /**
-<<<<<<< HEAD
- * This file handles the connection between the PSQL database and the Server-Side Client 
- * @module server/server
- * @requires express
- * @requires passport
- * @requires uuid
- * @requires dotenv
- * @requires express-session
- * @requires path
- * @requires body-parser
- */
-
-const express = require('express');
-const { Pool } = require('pg');
-const dotenv = require('dotenv').config();
-
-const app = express();
-const port = 3000;
-const bodyParser = require('body-parser');
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-const router = express.Router();
-// router.set('view engine', 'ejs');
-// app.use(express.static('public'));
-
-// create pool
-=======
  * The routes that handle loading the manager menu and updates to the menu and menu item ingredients.
  * @module manager/menu/routes
  * @requires express
@@ -58,7 +29,6 @@ router.use(express.json());
  * @name pool
  * @inner
  */
->>>>>>> origin/server-user-ui-adam
 const pool = new Pool({
     user: process.env.db_username,
     host: process.env.db_host,
@@ -67,11 +37,8 @@ const pool = new Pool({
     port: 5432,
     ssl: {rejectUnauthorized: false}
 });
-<<<<<<< HEAD
-=======
 
 
->>>>>>> origin/server-user-ui-adam
 // add process hook to shutdown pool
 process.on("SIGINT", function() {
     pool.end();
@@ -79,31 +46,7 @@ process.on("SIGINT", function() {
     process.exit(0);
 });
 
-<<<<<<< HEAD
-<<<<<<<< HEAD:server/routes.js
-// home route
-router.get("/", function(req, res) {
-    // load menu items by category
-    pool.query("SELECT menu_item_id, COUNT(menu_item_id) FROM orders_by_item GROUP BY menu_item_id ORDER BY COUNT(menu_item_id) DESC LIMIT 15;")
-    .then(result => {
-        let menu_set = new Set();
-        for (let i = 0; i < result.rowCount; i++) {
-            // get the actual name of item and add it to the menu set
-            let item_name = result.rows[i].menu_item_id;
-            menu_set.add(item_name.substring(0, item_name.length - 5));
-        }
 
-        const data = {featured_items: menu_set}
-        res.render('server', data);
-    })
-});
-
-// route to get menu items
-router.get("/menu-items", function(req, res) {
-========
-=======
-
->>>>>>> origin/server-user-ui-adam
 /**
  * Routes to the Server Side
  * 
@@ -112,11 +55,7 @@ router.get("/menu-items", function(req, res) {
  * @name server/server
  * @inner
  */
-<<<<<<< HEAD
-app.get("/server", function(req, res) {
-=======
-router.get("/server", function(req, res) {
->>>>>>> origin/server-user-ui-adam
+router.get("/", function(req, res) {
     res.render('server');
 });
 
@@ -128,11 +67,7 @@ router.get("/server", function(req, res) {
  * @name server/user
  * @inner
  */
-<<<<<<< HEAD
-app.get("/user", function(req, res) {
-=======
 router.get("/user", function(req, res) {
->>>>>>> origin/server-user-ui-adam
     query = "SELECT menu_item_id, COUNT(menu_item_id) FROM orders_by_item GROUP BY menu_item_id ORDER BY COUNT(menu_item_id) DESC LIMIT 10;";
         pool.query(query)
         .then(result => {
@@ -152,12 +87,7 @@ router.get("/user", function(req, res) {
  * @name server/menu-items
  * @inner
  */
-<<<<<<< HEAD
-app.get("/menu-items", function(req, res) {
->>>>>>>> origin/server-user-ui-adam:server.js
-=======
 router.get("/menu-items", function(req, res) {
->>>>>>> origin/server-user-ui-adam
     const category = req.query.category;
 
     let query;
@@ -187,13 +117,6 @@ router.get("/menu-items", function(req, res) {
     }
 });
 
-<<<<<<< HEAD
-<<<<<<<< HEAD:server/routes.js
-router.get("/smoothie-price", (req, res) => {
-    const { name } = req.query;
-========
-=======
->>>>>>> origin/server-user-ui-adam
 /**
  * Update Order Tables and Inventory
  * 
@@ -202,12 +125,7 @@ router.get("/smoothie-price", (req, res) => {
  * @name server/
  * @inner
  */
-<<<<<<< HEAD
-app.post("/", (req, res) => {
->>>>>>>> origin/server-user-ui-adam:server.js
-=======
 router.post("/", (req, res) => {
->>>>>>> origin/server-user-ui-adam
 
     let cart = req.body;
     console.log(cart)
@@ -343,11 +261,7 @@ router.post("/", (req, res) => {
  * @name server/item-ingredients
  * @inner
  */
-<<<<<<< HEAD
-app.get("/item-ingredients", function(req, res) {
-=======
 router.get("/item-ingredients", function(req, res) {
->>>>>>> origin/server-user-ui-adam
     const menu_item_id = req.query.menu_item_id;
 
     let query;
@@ -370,11 +284,7 @@ router.get("/item-ingredients", function(req, res) {
  * @name server/additives
  * @inner
  */
-<<<<<<< HEAD
-app.get("/additives", function(req, res) {
-=======
 router.get("/additives", function(req, res) {
->>>>>>> origin/server-user-ui-adam
     let query;
     query = "SELECT * FROM additives LIMIT 8;";
     pool.query(query)
@@ -396,11 +306,7 @@ router.get("/additives", function(req, res) {
  * @name server/
  * @inner
  */
-<<<<<<< HEAD
-app.get("/item-price", function(req, res) {
-=======
 router.get("/item-price", function(req, res) {
->>>>>>> origin/server-user-ui-adam
     const menu_item_id = req.query.menu_item_id;
 
     let query;
@@ -415,11 +321,7 @@ router.get("/item-price", function(req, res) {
     });
 });
 
-<<<<<<< HEAD
-app.get("/item-price", function(req, res) {
-=======
 router.get("/item-price", function(req, res) {
->>>>>>> origin/server-user-ui-adam
     const menu_item_id = req.query.menu_item_id;
 
     let query;
@@ -434,16 +336,4 @@ router.get("/item-price", function(req, res) {
     });
 });
 
-<<<<<<< HEAD
-<<<<<<<< HEAD:server/routes.js
 module.exports = router
-========
-
-// start web app and listen on port 3000
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
->>>>>>>> origin/server-user-ui-adam:server.js
-=======
-module.exports = router
->>>>>>> origin/server-user-ui-adam
