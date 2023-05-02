@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/server.css">
+    <link rel="stylesheet" href="../css/user.css">
     <link rel="icon" href="../images/favicon.png" type="image/png">
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script src="/test/test.js"></script>
     <title>Smoothie King</title>
 </head>
 <body>
     <div class="main-header-container">
-        <form action="/logout" method="post">
-            <button id="sign-out-button" class="btn btn-lg btn-primary btn-block" name="logout" value="Logout">Logout</button>
-        </form>
         <img src="../images/smoothie-king-logo.png" style="width:400px; height:70px;" id="logo">
         <!--SIGN OUT BUTTON-->
         <!--<button id="sign-out-button"    >
@@ -22,66 +18,52 @@
         </button>-->
         <!--cart button-->
         <!--menu pop up/drop down (stretch)-->
+        <div class="checkout-container" style="display:none;">
+            <button class="checkout-button">
+                <h2>CHECKOUT $0.00</h2>
+            </button>
+        </div>
         
     </div>
-    <div id="google_translate_element"></div>
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-            pageLanguage: 'en',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: true,
-            multilanguagePage: true
-            }, 'google_translate_element');
-        }
-        googleTranslateElementInit();
-    </script>
 
-    <div class="main-grid-container">
-        <div class="grid-item sub-heading-container">
-            <h1>Order Summary</h1>
+    <div class="body-container">
+        <div class="main-grid-item ad-container">
+            <img src="../images/promotion.gif" style="width: 60%; height: 90%;">
         </div>
-
-        <div class="grid-item sub-heading-container">
-            <h1>Menu</h1>
-        </div>
-
-        <div class="grid-item order-items-container">
-            <div class="sub-grid-item order-item-list">
-                <!--TABLE/VIEW OF ORDER ITEMS-->
-                <!--DELETE ITEM BUTTON-->
-                <div id="order-summary"></div> <!-- Add this div for displaying the order summary -->
+        <div class="main-grid-item nav-container">
+            <div class="nav-header">
+                <h1>Discover The PERFECT Smoothie For YOU</h1>
             </div>
-            <div class="sub-grid-item lower-panel">
-                <div id="total-label">
-                    <h1>Total: $0.00</h1>
+            <div class="button-container">
+                <div class="nb-cat-container" id="category-container">
+                    <button class="active">Featured</button>
+                    <button>Feel Energized</button>
+                    <button>Manage Weight</button>
+                    <button>Get Fit</button>
+                    <button>Be Well</button>
+                    <button>Enjoy a Treat</button>
+                    <button>Snacks</button>
                 </div>
-                <div id="buttons-container">
-                    <button>Clear Items</button>
-                    <button class = "place-order-button">Pay Now</button>
-                </div>
+                <!--<div class="nb-filter-container">
+                    <button>Filter</button>
+                </div>-->
             </div>
         </div>
+        <div class="main-grid-item content-container" id="main-container">
 
-        <div class="button-container">
-            <div class="nb-cat-container" id="category-container">
-                <button class="active">Featured</button>
-                <button>Feel Energized</button>
-                <button>Manage Weight</button>
-                <button>Get Fit</button>
-                <button>Be Well</button>
-                <button>Enjoy a Treat</button>
-                <button>Snacks</button>
-            </div>
-            <!--<div class="nb-filter-container">
-                <button>Filter</button>
-            </div>-->
-
-            <div class="sub-grid-item menu-item-list" id="menu-container"></div>
         </div>
+    </div>
 
     <div id="popup-container" style="display:none;">
         <div class="popup-content">
+            <div class="popup-left-side">
+                <div class="popup-image">
+                    <img src="" style="width:350px; height:300px;">
+                </div>
+                <div class="popup-desc">
+                    <p>popup description<p>
+                </div>
+            </div>
             <div class="popup-right-side">
                 <div class="popup-smoothie-name">
                     <h2>Smoothie</h2>
@@ -175,11 +157,18 @@
     }
 
     // POPUP CODE
-    async function getContent(description, _menu_item_id) {
+    async function getContent(imageSrc, description, _menu_item_id) {
         // load the smoothie name
         const popupName = document.querySelector(".popup-smoothie-name h2");
         popupName.textContent = _menu_item_id;
-        
+
+        // load the image and description
+        const popupImage = document.querySelector(".popup-image img");
+        const popupDesc = document.querySelector(".popup-desc p");
+
+        popupImage.src = imageSrc;
+        popupDesc.textContent = description;
+
         // add size selection
         const size_container = document.querySelector(".size-container");
         size_container.innerHTML = `
@@ -227,68 +216,29 @@
         additives_div.style.padding = "20px";
     }
 
-    function clearItems() {
-    // Clear the cart array
-    cart = [];
+    function showPopup(event) {
+        // get the menu item
+        const menuItem = event.target.closest(".menu-item");
+        
+        // get information for popup
+        const imageSrc = menuItem.querySelector(".menu-item-image img").src;
+        const description = menuItem.querySelector(".menu-item-description p").textContent;
 
-    // Update the order summary
-    updateOrderSummary();
+        const menu_item_id = menuItem.querySelector(".menu-item-name").textContent;
+        let menu_item_id_q = menu_item_id.toLowerCase().trim() + " - 20"; // format item properly for query
+
+        getContent(imageSrc, description, menu_item_id);
+
+        // display the popup
+        const popupContainer = document.getElementById("popup-container");
+        popupContainer.style.display = "flex";
+
+        // set delay so items can load
+        setTimeout(() => {
+            popupContainer.style.opacity = "1";
+        }, 200);
+        
     }
-
-    // Add the missing updateOrderSummary function
-    function updateOrderSummary() {
-    const orderSummary = document.querySelector("#order-summary");
-    orderSummary.innerHTML = ""; // Clear the current order summary
-
-    let total = 0;
-
-    const headings = `
-        <div class="summary-item">
-            <h3>Item Name</h3>
-            <h3>Size</h3>
-            <h3>Price</h3>
-        </div>
-    `;
-    orderSummary.innerHTML += headings;
-
-    cart.forEach((smoothie, index) => {
-        total += parseFloat(smoothie.price);
-
-        // Remove the size and dash from the smoothie name
-        const displayName = capitalize_words(smoothie.name.replace(/ - \d+$/, ""));
-
-        const smoothieItem = `
-            <div class="summary-item">
-                <p>${displayName}</p>
-                <p>${smoothie.size}</p>
-                <p>$${parseFloat(smoothie.price).toFixed(2)}</p>
-            </div>
-        `;
-
-        orderSummary.innerHTML += smoothieItem;
-    });
-
-    // Update the total amount in the Total-label
-    const totalLabel = document.querySelector("#total-label h1");
-    totalLabel.textContent = `Total: $${total.toFixed(2)}`;
-}
-
-
-async function showPopup(menu_item_id) {
-    // get information for popup
-    const description = ""; // Since you want to remove the description, set it to an empty string.
-
-    await getContent(description, menu_item_id);
-
-    // display the popup
-    const popupContainer = document.getElementById("popup-container");
-    popupContainer.style.display = "flex";
-
-    // set delay so items can load
-    setTimeout(() => {
-        popupContainer.style.opacity = "1";
-    }, 200);
-}
 
     // get rid of pop and handle cart logic
     async function hidePopup() {
@@ -324,7 +274,7 @@ async function showPopup(menu_item_id) {
 
         // Create smoothie object
         const smoothie = {
-            name: smoothie_name_real,
+            name: smoothie_name,
             size: selectedSize,
             ingredients: selectedIngredients,
             additives: selectedAdditives,
@@ -334,8 +284,12 @@ async function showPopup(menu_item_id) {
         // Add smoothie object to cart
         cart.push(smoothie);
 
-        // Update the order summary and total amount
-        updateOrderSummary();
+        // update price of checkout button
+        const checkout_button = document.querySelector(".checkout-container");
+        checkout_button.style.display = "block";
+
+        let cart_price = parseFloat(document.querySelector('.checkout-container h2').textContent.slice(10));
+        document.querySelector('.checkout-container h2').textContent = `CHECKOUT $${(cart_price + parseFloat(smoothie_price)).toFixed(2)}`;
 
         // hide the popup container
         const popupContainer = document.getElementById("popup-container");
@@ -343,75 +297,31 @@ async function showPopup(menu_item_id) {
         popupContainer.style.display = "none";
     }
 
-    async function place_order() {
-        let cart_json = JSON.stringify(cart);
-
-        // Send cart data to the server
-        try {
-            const response = await fetch("/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: cart_json
-            });
-
-            // If the server responds with a success status, redirect to the home page
-            if (response.ok) {
-                window.location.href = "/";
-                console.log("TEST")
-            } 
-            else {
-                console.error("Failed to place order. Server responded with status:", response.status);
-            }
-        } 
-        catch (error) {
-            console.error("Failed to place order. Error:", error);
-        }
-    }
-
-    const place_order_button = document.querySelector(".place-order-button");
-
-    place_order_button.addEventListener('click', place_order);
-    
-    
     function attachAddToCartEventListeners() {
-    const menuItems = document.querySelectorAll(".menu-item");
-    menuItems.forEach(function(item) {
-        const menu_item_id = item.querySelector(".menu-item-name").textContent;
-        item.addEventListener("click", () => showPopup(menu_item_id));
-    });
-}
-    function attachPopupAddToCartEventListener() {
-        const addToCartButton = document.querySelector(".popup-add-button button");
-        addToCartButton.addEventListener("click", hidePopup);
+        const addItemButtons = document.querySelectorAll(".add-item-button button");
+        addItemButtons.forEach(function(button) {
+            button.addEventListener("click", showPopup);
+        });
     }
 
-    
-    function attachClearItemsEventListener() {
-    const clearItemsButton = document.querySelector("#buttons-container button:first-child");
-    clearItemsButton.addEventListener("click", clearItems);
-    }
-
-    
     //document.getElementById("popup-container").addEventListener("click", hidePopup);
 
     // CATEGORY CODE
     function loadMenuItems(category) {
-    // select the menu container and clear its contents
-    const menu_container = document.getElementById('menu-container');
-    menu_container.innerHTML = ``;
+        // select the main content container and clear its contents
+        const main_container = document.getElementById('main-container');
+        main_container.innerHTML = ``;
 
-    // create menu set
-    const menu_set = new Set();
+        // create menu set
+        const menu_set = new Set();
 
-    fetch(`/server/menu-items?category=${category}`)
+        fetch(`/menu-items?category=${category}`)
         .then(response => response.json())
         .then(data => {
             data.forEach(item => {
                 let item_name_spliced;
                 if (category == "snacks") {
-                    item_name_spliced = capitalize_words(item.menu_item_id.replace(/ - \d+$/, ""));
+                    item_name_spliced = capitalize_words(item.menu_item_id);
                 }
                 else {
                     item_name_spliced = capitalize_words(item.menu_item_id.slice(0, -5));
@@ -421,43 +331,52 @@ async function showPopup(menu_item_id) {
                     menu_set.add(item_name_spliced);
                     
                     if (category == "snacks") {
-                menu_container.innerHTML += `
-                    <div class="sub-grid-item menu-item-list">
-                        <div class="menu-item">
-                            <div class="menu-item-name">
-                                <h2 class="menu-item-text">${item_name_spliced}</h2>
+                        main_container.innerHTML += `
+                            <div class="menu-item">
+                                <div class="menu-item-image">
+                                    <img src="../images/snack0.png" style="width:350px; height:300px;">
+                                </div>
+                                <div class="menu-item-name">
+                                    <h2>${item_name_spliced}</h2>
+                                </div>
+                                <div class="menu-item-description">
+                                    <p>Description of a snack. The snack is good. The snack is not bad. Buy this snack. Description of a snack. The snack is good. The snack is not bad. Buy this snack.</p>
+                                </div>
+                                <div class="add-item-button">
+                                    <button>Add to Cart</button>
+                                </div>
                             </div>
-                            <div class="add-item-button">
-                                <button>Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                menu_container.innerHTML += `
-                    <div class="sub-grid-item menu-item-list">
-                        <div class="menu-item">
-                            <div class="menu-item-name">
-                                <h2 class="menu-item-text">${item_name_spliced}</h2>
-                            </div>
-                            <div class="add-item-button">
-                                <button>Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                        `;
                     }
+                    else {
+                        main_container.innerHTML += `
+                            <div class="menu-item">
+                                <div class="menu-item-image">
+                                    <img src="../images/smoothie${Math.floor(Math.random() * 3)}.png" style="width:350px; height:300px;">
+                                </div>
+                                <div class="menu-item-name">
+                                    <h2>${item_name_spliced}</h2>
+                                </div>
+                                <div class="menu-item-description">
+                                    <p>Description of a smoothie. The smoothie is good. The smoothie is not bad. Buy this smoothie. Description of a smoothie. The smoothie is good. The smoothie is not bad. Buy this smoothie.</p>
+                                </div>
+                                <div class="add-item-button">
+                                    <button>Add to Cart</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
                 }
             });
 
             // attach event listener to add to cart button
             attachAddToCartEventListeners();
-            attachPopupAddToCartEventListener();
 
             // attach event listender to add to cart button within the popup
             document.querySelector(".popup-add-button button").addEventListener("click", hidePopup);
         });
-}
+    }
 
     document.querySelectorAll("#category-container button").forEach(button => {
         button.addEventListener("click", (event) => {
@@ -474,6 +393,23 @@ async function showPopup(menu_item_id) {
         });
     });
 
+    // add event listender to checkout button, takes you to cart
+    const checkout_button = document.querySelector(".checkout-button");
+    checkout_button.addEventListener("click", async () => {
+        let cart_json = JSON.stringify(cart);
+        //console.log(cart_json);
+
+        // Send cart data to the server
+        await fetch("/store-cart", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json"
+            },
+            body: cart_json
+        });
+
+        window.location.href = "/cart";
+    })
+
     loadMenuItems("featured");
-    attachClearItemsEventListener();
 </script>
