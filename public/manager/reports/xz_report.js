@@ -23,14 +23,18 @@ function xz_report() {
         var formattedDate = myobj.getFullYear() + "-" + ('0' + (myobj.getMonth() + 1)).slice(-2) + "-" + ('0' + myobj.getDate()).slice(-2);
         //handles old z reports 
         total_sales += parseFloat(response.xz[i].total_price);
+        console.log(formattedDate)
         if (prev_splitted !== splitted) {
             if (response.xz[i].order_date.split('T')[0] === formattedDate && myobj.getHours() < 17) {
+                console.log(response.xz[i].order_date.split('T')[0])
+                console.log(myobj.getHours());
                 row.push("x report");
+                row.push(splitted);
             }
             else {
                 row.push("z report");
+                row.push(prev_splitted);
             }
-            row.push(prev_splitted);
             row.push(parseFloat(total_sales).toFixed(2));
             table += '<tr><td style="padding: 10px; border: 1px solid black;">' + row[0] + '</td><td style="padding: 10px; border: 1px solid black;">' + row[1] + '</td><td style="padding: 10px; border: 1px solid black;">' + row[2] + '</td></tr>';
             total_sales = 0; 
