@@ -8,6 +8,7 @@
     <link rel="icon" href="../images/favicon.png" type="image/png">
     <script src="/user/user-functions.js"></script>
     <title>Smoothie King</title>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
     <div class="main-header-container">
@@ -18,6 +19,17 @@
             </button>
         </div>
     </div>
+    <div id="google_translate_element"></div>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: true,
+          multilanguagePage: true
+        }, 'google_translate_element');
+      }
+    </script>
     <div class="body-container">
         <div class="main-grid-item ad-container">
             <img src="../images/promotion.gif" style="width: 60%; height: 90%;">

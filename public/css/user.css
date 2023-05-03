@@ -9,6 +9,12 @@ body {
     margin: 0;
 }
 
+#google_translate_element {
+    z-index: 100000000;
+    position: fixed;
+    /* top: 50px; */
+}
+
 /*LAYOUT STYLING*/
 .body-container {
     display: grid;
