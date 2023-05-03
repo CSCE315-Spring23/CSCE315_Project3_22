@@ -61,7 +61,7 @@ function xz_report() {
             else {
                 row.push("z report");
             }
-            row.push(splitted);
+            row.push(response.xz[i].order_date);
             row.push(total_sales);
             table += '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>';
             total_sales = 0; 
