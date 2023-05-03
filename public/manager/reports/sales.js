@@ -14,14 +14,14 @@ function sales_report() {
     var xhr = new XMLHttpRequest();
     xhr.onload = () => {
         var response = JSON.parse(xhr.response);
-        var table = '<table><thead><tr><th>Product Name</th><th>Quantity Sold</th></tr></thead><tbody>';
+        var table = '<table style="border-collapse: collapse; border: 1px solid black;"><thead><tr style="background-color: #ddd;"><th style="padding: 10px; border: 1px solid black;">Product Name</th ><th style="padding: 10px; border: 1px solid black;">Quantity Sold</th></tr></thead><tbody>';
         var sorted_sales = response.sales.sort(function(a, b) {
             return a.quantity_sold - b.quantity_sold;
         });
         for (var i = 0; i < sorted_sales.length; i++) {
             table += '<tr>';
-            table += '<td>' + sorted_sales[i].menu_item_id + '</td>';
-            table += '<td>' + sorted_sales[i].quantity_sold + '</td>';
+            table += '<td> style="padding: 10px; border: 1px solid black;">' + sorted_sales[i].menu_item_id + '</td>';
+            table += '<td> style="padding: 10px; border: 1px solid black;">' + sorted_sales[i].quantity_sold + '</td>';
             table += '</tr>';
         }
         table += '</tbody></table>';

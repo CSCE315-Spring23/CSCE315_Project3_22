@@ -85,12 +85,12 @@ function generate_sells_together_report() {
     xhr.onload = () => {
         // menu, menu_ingredients
         var response = JSON.parse(xhr.response);
-        var table = '<table><thead><tr><th>Item 1</th><th>Item 2</th><th>Count</th></tr></thead><tbody>';
+        var table = '<table style="border-collapse: collapse; border: 1px solid black;"><thead><tr style="background-color: #ddd;"><th style="padding: 10px; border: 1px solid black;">Item 1</th><th style="padding: 10px; border: 1px solid black;">Item 2</th><th style="padding: 10px; border: 1px solid black;">Count</th></tr></thead><tbody>';
         for (var i = 0; i < response.pairs.length; i++) {
             table += '<tr>';
-            table += '<td>' + response.pairs[i].item1 + '</td>';
-            table += '<td>' + response.pairs[i].item2 + '</td>';
-            table += '<td>' + response.pairs[i].count + '</td>';
+            table += '<td> style="padding: 10px; border: 1px solid black;">' + response.pairs[i].item1 + '</td>';
+            table += '<td> style="padding: 10px; border: 1px solid black;">' + response.pairs[i].item2 + '</td>';
+            table += '<td> style="padding: 10px; border: 1px solid black;">' + response.pairs[i].count + '</td>';
             table += '</tr>';
         }
         table += '</tbody></table>';
