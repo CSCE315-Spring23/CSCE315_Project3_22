@@ -141,3 +141,8 @@ body {
 .cart-dashboard button:hover {
     cursor: pointer;
 }
+
+.total-price-div {
+    font-family: 'cabo rounded', sans-serif;
+    font-size: 25px;
+}
