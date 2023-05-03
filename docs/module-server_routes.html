@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: server/server</title>
+    <title>JSDoc: Module: server/routes</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: server/server</h1>
+    <h1 class="page-title">Module: server/routes</h1>
 
     
 
@@ -34,7 +34,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Javascript functions for the server side which handle placing orders and updating the database</div>
+            <div class="description">The routes that handle loading the manager menu and updates to the menu and menu item ingredients.</div>
         
 
         
@@ -69,7 +69,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="public_server_server.js.html">public/server/server.js</a>, <a href="public_server_server.js.html#line1">line 1</a>
+        <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -88,6 +88,62 @@
     
 
     
+        <h3 class="subsection-title">Requires</h3>
+
+        <ul>
+            <li>module:express</li>
+        
+            <li>module:dotenv</li>
+        
+            <li>module:path</li>
+        
+            <li>module:pg</li>
+        
+            <li>module:process</li>
+        
+            <li>module:body-parser</li>
+        </ul>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="~pool"><span class="type-signature">(inner) </span>pool<span class="type-signature"> :Pool</span></h4>
+
+
+
+
+<div class="description">
+    Initialize pool for accessing the database
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Pool</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
 
     
 
@@ -97,6 +153,42 @@
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
     
 
     
@@ -108,7 +200,7 @@
     
 
     
-    <h4 class="name" id="~getContent"><span class="type-signature">(inner) </span>getContent<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~get/"><span class="type-signature">(inner) </span>get/<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -116,7 +208,7 @@
 
 
 <div class="description">
-    Gets Menu Item Content and Displays On View for Server
+    Routes to the Server Side
 </div>
 
 
@@ -160,7 +252,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="public_server_server.js.html">public/server/server.js</a>, <a href="public_server_server.js.html#line85">line 85</a>
+        <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line50">line 50</a>
     </li></ul></dd>
     
 
@@ -196,7 +288,7 @@
     
 
     
-    <h4 class="name" id="~get_item_price"><span class="type-signature">(inner) </span>get_item_price<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~get/"><span class="type-signature">(inner) </span>get/<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -204,7 +296,7 @@
 
 
 <div class="description">
-    Loads Item Price to Display For Each Menu Item
+    Gets Item Price to Display
 </div>
 
 
@@ -248,7 +340,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="public_server_server.js.html">public/server/server.js</a>, <a href="public_server_server.js.html#line64">line 64</a>
+        <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line307">line 307</a>
     </li></ul></dd>
     
 
@@ -284,7 +376,7 @@
     
 
     
-    <h4 class="name" id="~hidePopup"><span class="type-signature">(inner) </span>hidePopup<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~get/additives"><span class="type-signature">(inner) </span>get/additives<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -292,7 +384,7 @@
 
 
 <div class="description">
-    Hides Popup Once Customer is Done Customizing Order
+    Gets Additives to Add to Menu Items
 </div>
 
 
@@ -336,7 +428,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="public_server_server.js.html">public/server/server.js</a>, <a href="public_server_server.js.html#line233">line 233</a>
+        <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line285">line 285</a>
     </li></ul></dd>
     
 
@@ -372,7 +464,7 @@
     
 
     
-    <h4 class="name" id="~loadMenuItems"><span class="type-signature">(inner) </span>loadMenuItems<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~get/item-ingredients"><span class="type-signature">(inner) </span>get/item-ingredients<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -380,7 +472,7 @@
 
 
 <div class="description">
-    Load The Menu Items Based on Category
+    Gets Item Ingredients to Display
 </div>
 
 
@@ -424,7 +516,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="public_server_server.js.html">public/server/server.js</a>, <a href="public_server_server.js.html#line364">line 364</a>
+        <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line262">line 262</a>
     </li></ul></dd>
     
 
@@ -460,7 +552,7 @@
     
 
     
-    <h4 class="name" id="~load_additives"><span class="type-signature">(inner) </span>load_additives<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~get/menu-items"><span class="type-signature">(inner) </span>get/menu-items<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -468,7 +560,7 @@
 
 
 <div class="description">
-    Loads Additives to Display For Each Menu Item
+    Get Menu Items to Display
 </div>
 
 
@@ -512,7 +604,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="public_server_server.js.html">public/server/server.js</a>, <a href="public_server_server.js.html#line44">line 44</a>
+        <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line87">line 87</a>
     </li></ul></dd>
     
 
@@ -548,7 +640,7 @@
     
 
     
-    <h4 class="name" id="~load_ingredients"><span class="type-signature">(inner) </span>load_ingredients<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~get/user"><span class="type-signature">(inner) </span>get/user<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -556,7 +648,7 @@
 
 
 <div class="description">
-    Loads Ingredients to Display For Each Menu Item
+    Routes to the User Side
 </div>
 
 
@@ -600,7 +692,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="public_server_server.js.html">public/server/server.js</a>, <a href="public_server_server.js.html#line22">line 22</a>
+        <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -636,7 +728,7 @@
     
 
     
-    <h4 class="name" id="~place_order"><span class="type-signature">(inner) </span>place_order<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~post/"><span class="type-signature">(inner) </span>post/<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -644,7 +736,7 @@
 
 
 <div class="description">
-    Sends Cart Data to Server Side to Update Order and Inventory Tables
+    Update Order Tables and Inventory
 </div>
 
 
@@ -688,183 +780,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="public_server_server.js.html">public/server/server.js</a>, <a href="public_server_server.js.html#line295">line 295</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="~showPopup"><span class="type-signature">(inner) </span>showPopup<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Displays the PopUp to Customize Smoothie for Order
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="public_server_server.js.html">public/server/server.js</a>, <a href="public_server_server.js.html#line209">line 209</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="~updateOrderSummary"><span class="type-signature">(inner) </span>updateOrderSummary<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Updates the Order Summary to Display Customers Current Order
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="public_server_server.js.html">public/server/server.js</a>, <a href="public_server_server.js.html#line163">line 163</a>
+        <a href="server_routes.js.html">server/routes.js</a>, <a href="server_routes.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
