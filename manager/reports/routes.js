@@ -48,12 +48,12 @@ const pool = new Pool({
  * @inner
  */
 router.get('/', (req, res) => {
-    res.render('reports')
-    // if (req.isAuthenticated()) {
-    // }
-    // else {
-    //     res.redirect('/')
-    // }
+    if (req.isAuthenticated()) {
+        res.render('reports')
+    }
+    else {
+        res.redirect('/')
+    }
 });
 
 /**
@@ -160,7 +160,8 @@ router.put('/sells_together', (req, res) => {
 
 /**
 *   Retrieves a report of items to be restocked based on inventory snapshots from a specified time period.
-*   @name router.put('/load_restock')
+*   @name put/load_restock
+*   @memberof module:manager/reports/routes
 *   @function
 *   @async
 *   @param {Object} req - Express request object
@@ -182,19 +183,15 @@ router.put('/load_restock', async (req, res) => {
 });
 
 /**
-
-    PUT endpoint for retrieving all z_reports.
-
-    @memberof module:manager/reports/routes
-
-    @param {Object} req - Express request object.
-
-    @param {Object} res - Express response object.
-
-    @throws {Error} 500 - Internal server error.
-
-    @returns {Promise<void>} - Sends a JSON response with all z_reports.
-    */
+ * PUT endpoint for retrieving all z_reports.
+ * @name put/xz_report
+ * @function
+ * @memberof module:manager/reports/routes
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @throws {Error} 500 - Internal server error.
+ * @returns {Promise<void>} - Sends a JSON response with all z_reports.
+*/
 router.put('/xz_report', async (req, res) => {
     var xz_query = "SELECT * FROM orders_summary";
     
@@ -210,7 +207,7 @@ router.put('/xz_report', async (req, res) => {
 
 /**
 * Retrieves a report of the number of menu items sold within a specified time period.
-* @name router.put('/load_sales')
+* @name put/load_sales
 * @memberof module:manager/reports/routes
 * @function
 * @async
@@ -241,7 +238,8 @@ router.put('/load_sales', async (req, res) => {
 /**
 * 
 * Retrieves a report of excess inventory at a specific time, based on the inventory snapshot for that time and the inventory table.
-* @name router.put('/load_excess')
+* @name put/load_excess
+* @memberof module:manager/reports/routes
 * @function
 * @async
 * @param {Object} req - Express request object containing a time_stamp for the report.

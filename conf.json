@@ -1,8 +1,10 @@
 {
     "source": {
-        "include": ["app.js", "login/routes.js", "manager/inventory/routes.js", "manager/inventory/routes.js", "manager/menu/routes.js", "manager/reports/routes.js",
-                    "menu_board/routes.js", "public/manager/menu/listeners.js", "public/manager/reports/restock.js", "public/manager/reports/sells_together.js", 
-                    "public/menu_board/refresh.js"],
+        "include": ["app.js", "login/routes.js", "manager/inventory/routes.js", "manager/menu/routes.js", "manager/reports/routes.js",
+                    "menu_board/routes.js", "public/manager/menu/listeners.js", "public/manager/reports/sells_together.js", 
+                    "public/menu_board/refresh.js", "public/manager/inventory/inventory.js", "public/manager/reports/xz_report.js", "public/manager/reports/sales.js",
+                    "public/manager/reports/restock.js", "public/manager/reports/excess.js", "public/server/server.js", "public/user/cart-functions.js",
+                    "public/user/user-functions.js", "server/routes.js", "user/routes.js"],
         "exclude": ["node_modules", "public/bootstrap-3.4.1-dist"]
     },
     "opts": {

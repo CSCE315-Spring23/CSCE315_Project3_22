@@ -55,7 +55,7 @@ var GoogleStrategy = require('passport-google-oauth20');
 passport.use(new GoogleStrategy({
     clientID: process.env.clientID,
     clientSecret: process.env.clientSecret,
-    callbackURL: 'http://localhost:3000/oauth2/redirect/google',
+    callbackURL: '/oauth2/redirect/google',
     scope: [ 'profile' ],
     state: true
   },
@@ -120,13 +120,12 @@ router.get('/redirect', (req, res) => {
         var email = req.user.email;
         var authorized_users = process.env.authorized_users.split(",");
         if (authorized_users.includes(email)) {
-            // if (email == authorized_users[0]) {
-            //     res.sendFile(path.normalize(__dirname + '/../views/redirect.html'));
-            // }
-            // else {
-            //     res.redirect('/server');
-            // }
-            res.sendFile(path.normalize(__dirname + '/../views/redirect.html'));
+            if (email == authorized_users[0]) {
+                res.sendFile(path.normalize(__dirname + '/../views/redirect.html'));
+            }
+            else {
+                res.redirect('/server');
+            }
         }
         else {
             req.logout(function(err) {

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: public/manager/menu/listeners.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: public/manager/menu/listeners.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Listeners for updates to the manager's menu, these methods send requests to update the database, then refresh the frontend html to show the changes.
+ * @module manager/menu/listeners
+ */
+
+/**
+ * Replace the html in the item ingredients modal, which shows the ingredients for an item when editing
+ *
+ * @memberof module:manager/menu/listeners
+ * @function
+ * @name load_item_ingredients_modal
+ * @inner
+ * @param button - The edit button that was clicked, used to retrieve the row/item the ingredients are for
+ */
+function load_item_ingredients_modal(button) {
+	// console.log('in modal');
+	// console.log(button.dataset.ingredients);
+	var item_ingredients = button.dataset.ingredients.split(',');
+	var temp = []
+	for (let i = 0; i &lt; item_ingredients.length; i += 2) {
+		temp.push(JSON.parse(item_ingredients[i] + ',' + item_ingredients[i + 1]));
+	}
+	item_ingredients = temp;
+
+	var ingredients_table = '&lt;table>&lt;thead>&lt;tr>&lt;th>Ingredient ID&lt;/th>&lt;th>Quantity (oz)&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>';
+
+	// Loop through the data and generate a row for each ingredient
+	for (var i = 0; i &lt; item_ingredients.length; i++) {
+		ingredients_table += '&lt;tr>';
+		ingredients_table += '&lt;td onclick="edit_ingredient_cell(this)">' + item_ingredients[i].product_id + '&lt;/td>';
+		ingredients_table += '&lt;td onclick="edit_ingredient_cell(this)">' + item_ingredients[i].quantity + '&lt;/td>';
+		ingredients_table += '&lt;/tr>';
+	}
+	ingredients_table += '&lt;tr>';
+	ingredients_table += '&lt;td onclick="edit_ingredient_cell(this)">New ID&lt;/td>';
+	ingredients_table += '&lt;td onclick="edit_ingredient_cell(this)">New Quantity&lt;/td>';
+	ingredients_table += '&lt;/tr>';
+
+	ingredients_table += '&lt;/tbody>&lt;/table>';
+
+	// Append the table HTML to the placeholder div
+	$('#modal_table').html(ingredients_table);
+	document.querySelector('#modal_table').dataset.idx = button.closest('tr').rowIndex;
+}
+
+/**
+ * Replace the table cell being edited with an input element then detect changes and update the menu correspondingly. Replace the cell with normal html after the update.
+ *
+ * @memberof module:manager/menu/listeners
+ * @function
+ * @name edit_ingredient_cell
+ * @inner
+ * @param cell - The cell being edited
+ */
+function edit_ingredient_cell(cell) {
+	if (cell.innerHTML == '&lt;input type="text">') {  // if you double click the cell, the innerHTML is the input element that was set by the first click
+		return
+	}
+	// take into account - menu_ingredients array already has array for ingredients, just need to add and remove items from it, no pushing to menu_ingredients
+	// const ing_row = cell.parentElement;
+	// console.log('ing_row in edit ingredient cell');
+	// console.log(ing_row);
+	const ing_table = cell.closest('tbody');
+
+	// Create an input field with the current cell content
+	var input = document.createElement("input");
+	input.type = "text";
+	input.value = cell.innerHTML;
+	
+	// Replace the cell content with the input field
+	cell.innerHTML = "";
+	cell.appendChild(input);
+	input.focus();
+	
+	/**
+	 * When the input field loses focus, send an AJAX request to the server to update the database, then reload the modal to show changes.
+	 *
+	 * @memberof module:manager/menu/listeners
+	 * @function
+	 * @name ingredients/input/addEventListener
+	 * @inner
+	 */
+	input.addEventListener("blur", function() {
+		// Update the cell content with the new value
+		var newValue = input.value;
+		cell.innerHTML = newValue;
+
+		var request = {}
+		request.idx = document.querySelector('#modal_table').dataset.idx - 1;  // this rowIndex starts at 1 not 0
+		var item_ingredients = []
+
+		// all rows except placeholder row
+		for (let i = 0; i &lt; ing_table.children.length - 1; ++i) {
+			var product_id = ing_table.children[i].children[0].innerHTML;
+			var quantity = ing_table.children[i].children[1].innerHTML;
+			item_ingredients.push(JSON.stringify({product_id: product_id, quantity: quantity}));
+		}
+
+		// if placeholder row for new values was edited
+		var product_id = ing_table.children[ing_table.children.length - 1].children[0].innerHTML;
+		var quantity = ing_table.children[ing_table.children.length - 1].children[1].innerHTML;
+		if (!(product_id == "New ID" &amp;&amp; quantity == "New Quantity")) {
+			item_ingredients.push(JSON.stringify({product_id: product_id, quantity: '0'}));
+		}
+		request.item_ingredients = item_ingredients;
+		// Get the new cell content
+
+		// Send an AJAX request to the server to update the database
+		var xhr = new XMLHttpRequest();
+		/**
+		 * When the backend responds after updating the database, update the ingredients stored in the button dataset ingredients field and reload the ingredients modal.
+		 *
+		 * @memberof module:manager/menu/listeners
+		 * @function
+		 * @name ingredients/onload
+		 * @inner
+		 */
+		xhr.onload = () => {
+			// menu, menu_ingredients
+			var response = JSON.parse(xhr.response);
+
+			var ing_button = document.querySelector('[id="' + response.menu[request.idx].menu_item_id + '"]').children[3].children[0];
+			ing_button.dataset.ingredients = join(response.menu_ingredients[request.idx]);
+			load_item_ingredients_modal(ing_button);
+		}
+		xhr.open("PUT", "/manager/menu/update_ingredients", true);
+		xhr.setRequestHeader("Content-type", "application/json");
+		xhr.send(JSON.stringify(request));
+	});
+	
+	/**
+	 * When the enter key is pressed, trigger the blur event to save the new cell content
+	 *
+	 * @memberof module:manager/menu/listeners
+	 * @function
+	 * @name ingredients/input/addEventListener
+	 * @inner
+	 */
+	input.addEventListener("keydown", function(event) {
+		if (event.key === 'Enter') {
+			input.blur();
+		}
+	});
+}
+
+/**
+ * Join elements of an array with commas, without a comma after the last element
+ *
+ * @memberof module:manager/menu/listeners
+ * @function
+ * @name join
+ * @inner
+ * @param {String} arr - array to join
+ */
+function join(arr) {
+	var str = '';
+	for (let i = 0; i &lt; arr.length - 1; ++i) {
+		str += arr[i] + ',';
+	}
+	str += arr[arr.length - 1];
+	return str;
+}
+
+/**
+ * Replace the table cell being edited with an input element then detect changes and update the menu correspondingly. Replace the cell with normal html after the update.
+ *
+ * @memberof module:manager/menu/listeners
+ * @function
+ * @name edit_menu_cell
+ * @inner
+ * @param cell - The cell being edited
+ */
+function edit_menu_cell(cell) {
+	if (cell.innerHTML == '&lt;input type="text">') {  // if you double click the cell, the innerHTML is the input element that was set by the first click
+		return
+	}
+	const table_row = cell.closest('tr');
+
+	// Create an input field with the current cell content
+	var input = document.createElement("input");
+	input.type = "text";
+	input.value = cell.innerHTML;
+	
+	// Replace the cell content with the input field
+	cell.innerHTML = "";
+	cell.appendChild(input);
+	input.focus();
+	
+	/**
+	 * When the input field loses focus, send an AJAX request to the server to update the database, then reload the modal to show changes.
+	 *
+	 * @memberof module:manager/menu/listeners
+	 * @function
+	 * @name menu/input/addEventListener
+	 * @inner
+	 */
+	input.addEventListener("blur", function() {
+
+		// Update the cell content with the new value
+		var newValue = input.value;
+		cell.innerHTML = newValue;
+
+		var row = {}
+		row.idx = table_row.rowIndex - 1;  // this rowIndex starts at 1 not 0
+		row.menu_item_id = table_row.cells[0].innerHTML;
+		row.category = table_row.cells[1].innerHTML;
+		row.price = table_row.cells[2].innerHTML;
+		// Get the new cell content
+
+		// Send an AJAX request to the server to update the database
+		var xhr = new XMLHttpRequest();
+		/**
+		 * When the backend responds after updating the database, replace the html for the menu table to show updates.
+		 *
+		 * @memberof module:manager/menu/listeners
+		 * @function
+		 * @name menu/onload
+		 * @inner
+		 */
+		xhr.onload = () => {
+			// menu, menu_ingredients
+			var response = JSON.parse(xhr.response);
+			if (response.status == 1) {
+				return;
+			}
+			var menu = response.menu;
+			var menu_ingredients = response.menu_ingredients;
+			var updated_table = "";
+			for (let i = 0; i &lt; menu.length; ++i) {
+				updated_table += '&lt;tr id="' + menu[i].menu_item_id + '">';
+				updated_table += '&lt;td onclick="edit_menu_cell(this)">' + menu[i].menu_item_id + '&lt;/td>';
+				updated_table += '&lt;td onclick="edit_menu_cell(this)">' + menu[i].category + '&lt;/td>';
+				updated_table += '&lt;td onclick="edit_menu_cell(this)">' + menu[i].price + '&lt;/td>';
+				updated_table += '&lt;td>&lt;button data-toggle="modal" data-target="#ingredientsModal" onclick="load_item_ingredients_modal(this)" class="btn btn-width bkgrnd-cyan">Edit&lt;/button>&lt;/td>';
+				updated_table += '&lt;/tr>';
+			}
+			updated_table += '&lt;tr id="">';
+			updated_table += '&lt;td onclick="edit_menu_cell(this)">Enter New Item&lt;/td>';
+			updated_table += '&lt;td onclick="edit_menu_cell(this)">&lt;/td>';
+			updated_table += '&lt;td onclick="edit_menu_cell(this)">&lt;/td>';
+			updated_table += '&lt;td>&lt;button class="btn btn-width bkgrnd-cyan">Edit&lt;/button>&lt;/td>';
+			updated_table += '&lt;/tr>';
+
+			$('#menu_table').html("");
+			document.querySelector('#menu_table').innerHTML = updated_table;
+			for (let i = 0; i &lt; menu.length; ++i) {
+				var ing_button = document.querySelector('[id="' + menu[i].menu_item_id + '"]').children[3].children[0];
+				ing_button.dataset.ingredients = join(menu_ingredients[i]);
+			}
+		}
+		xhr.open("PUT", "/manager/menu/update_menu", true);
+		xhr.setRequestHeader("Content-type", "application/json");
+		xhr.send(JSON.stringify(row));
+	});
+	
+	/**
+	 * When the enter key is pressed, trigger the blur event to save the new cell content
+	 *
+	 * @memberof module:manager/menu/listeners
+	 * @function
+	 * @name menu/input/addEventListener
+	 * @inner
+	 */
+	input.addEventListener("keydown", function(event) {
+		if (event.key === 'Enter') {
+			input.blur();
+		}
+	});
+}
+  </code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-app.html">app</a></li><li><a href="module-inventoryRouter.html">inventoryRouter</a></li><li><a href="module-login_routes.html">login/routes</a></li><li><a href="module-manager_inventory.html">manager/inventory</a></li><li><a href="module-manager_menu_listeners.html">manager/menu/listeners</a></li><li><a href="module-manager_menu_routes.html">manager/menu/routes</a></li><li><a href="module-manager_menu_board.html">manager/menu_board</a></li><li><a href="module-manager_reports.html">manager/reports</a></li><li><a href="module-manager_reports_routes.html">manager/reports/routes</a></li><li><a href="module-menu_board_routes.html">menu_board/routes</a></li><li><a href="module-server_server.html">server/server</a></li><li><a href="module-user.html">user</a></li><li><a href="module-user_cart.html">user/cart</a></li><li><a href="module-user_routes.html">user/routes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue May 02 2023 21:35:54 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

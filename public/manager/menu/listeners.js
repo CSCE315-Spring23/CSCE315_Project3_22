@@ -223,7 +223,6 @@ function edit_menu_cell(cell) {
 			if (response.status == 1) {
 				return;
 			}
-
 			var menu = response.menu;
 			var menu_ingredients = response.menu_ingredients;
 			var updated_table = "";

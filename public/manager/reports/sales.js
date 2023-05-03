@@ -1,12 +1,11 @@
 /**
-* 
-* Generates a sales report for a given date range and updates the modal table with the sales data.
-* 
-* @function sales_report
-* 
-* @returns {void}
-*/
-
+ * Generates a sales report for a given date range and updates the modal table with the sales data.
+ *
+ * @memberof module:manager/reports
+ * @function
+ * @name sales_report
+ * @inner
+ */
 function sales_report() {
     var startDate = document.getElementById("start-date").value;
     var endDate = document.getElementById("end-date").value;
@@ -31,15 +30,14 @@ function sales_report() {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify({ start_date: startDate, end_date: endDate }));
 }
-
 /**
-*
-* Sorts the table data by quantity sold in ascending or descending order.
-* 
-* @function sortTable
-* 
-* @returns {void}
-*/
+ * Sorts the table data by quantity sold in ascending or descending order.
+ *
+ * @memberof module:manager/reports
+ * @function
+ * @name sortTable
+ * @inner
+ */
 function sortTable() {
     event.preventDefault();
     var table, rows, switching, i, x, y, shouldSwitch;
@@ -85,6 +83,11 @@ function sortTable() {
 /**
  * Set the default values for the start and end date fields to the dates one year ago and the current date respectively.
  * Also add event listeners to the date input fields to call the `sales_report` function when the input changes.
+ *
+ * @memberof module:manager/reports
+ * @function
+ * @name find_and_set_date
+ * @inner
  */
 function find_and_set_date(){
     // Get the current date

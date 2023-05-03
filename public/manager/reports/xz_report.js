@@ -9,37 +9,6 @@
  * @returns {void}
  */
 function xz_report() {
-//     var xhr = new XMLHttpRequest();
-//     const today = new Date();    
-//     const year = today.getFullYear(); // get the year (yyyy)
-//     const month = ('0' + (today.getMonth() + 1)).slice(-2); // get the month (mm)
-//     const day = ('0' + today.getDate()).slice(-2); // get the day (dd)
-//     const formattedDate = `${year}-${month}-${day}`;
-    
-//     xhr.onload = () => {
-//         // menu, menu_ingredients
-//         var response = JSON.parse(xhr.response);
-//         var table = '<table><thead><tr><th>Report Type</th><th>Date</th><th>Total Sales</th></tr></thead><tbody>';
-//         for (var i = 0; i < response.xz.length; i++) {
-//             table += '<tr>';
-//             response.xz.length
-//             if (formattedDate === response.xz._date.toString() && today.getHours() < 17) {
-//                 table += '<td>' + "x report" + '</td>';
-//             }
-//             else {
-//                 table += '<td>' + "z report" + '</td>';
-//             }
-//             table += '<td>' + response.xz.report_date + '</td>';
-//             table += '<td>' + response.xz.daily_sales + '</td>';
-//             table += '</tr>';
-//         }
-//         table += '</tbody></table>';
-//         $('#modal_table').html(table);
-//     }
-//     xhr.open("PUT", "/manager/reports/xz_report", true);
-//     xhr.setRequestHeader("Content-type", "application/json");
-//     xhr.send();
-// }
     var xhr = new XMLHttpRequest();
     var table = '<table style="border-collapse: collapse; border: 1px solid black; margin-top:10px; margin-left:auto; margin-right:auto"><thead><tr style="background-color: #ddd;"><th style="padding: 10px; border: 1px solid black;">Report Type </th><th style="padding: 10px; border: 1px solid black;"> Date </th><th style="padding: 10px; border: 1px solid black;"> Total Sales </th></tr></thead><tbody>';
     var total_sales = 0;

@@ -32,6 +32,8 @@ router.use(express.static('/public/styles'));
 
 /**
 * An endpoint that retrieves the inventory data from the database and renders it using the 'Inventory' view.
+* @memberof module:inventoryRouter
+* @name get/
 * @param {Object} req - The request object
 * @param {Object} res - The response object
 * @param {Function} next - The next middleware function
@@ -61,6 +63,8 @@ router.use(bodyParser.json());
 
 /**
 * An endpoint for updating the inventory data in the database.
+* @memberof module:inventoryRouter
+* @name put/route/update
 * @param {Object} req - The request object
 * @param {Object} res - The response object
 * @param {Function} next - The next middleware function

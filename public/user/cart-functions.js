@@ -1,3 +1,7 @@
+/**
+ * Functions for the cart on the user side, for placing orders
+ * @module user/cart
+ */
 // set up the total price of the cart when the page is loaded
 document.addEventListener("DOMContentLoaded", () => {
     let cart_total = 0.00;
@@ -15,8 +19,10 @@ document.addEventListener("DOMContentLoaded", () => {
 /**
  * Places an order by converting the smoothie cart data into a JSON object and sending it to the server.
  * 
+ * @memberof module:user/cart
+ * @name place_order
  * @async
- * @function place_order
+ * @function
  * @returns {Promise<void>}
  */
 async function place_order() {
@@ -89,24 +95,24 @@ async function place_order() {
     }
 }
 
-// remove individual items from the cart
-const remove_buttons = document.querySelectorAll(".remove-button");
-
-remove_buttons.forEach(button => {
-    button.addEventListener('click', () => {
-        const cart_item = button.parentNode.parentNode.parentNode;
-
-        let current_total = parseFloat(document.querySelector(".total-price-div").textContent.slice(8));
-
-        let item_price = parseFloat(cart_item.querySelector(".cart-item-price").textContent.trim().slice(1));
-        
-        document.querySelector(".total-price-div").textContent = `TOTAL: $${current_total - item_price}`;
-
-        cart_item.remove();
-    });
-});
-
 document.addEventListener("DOMContentLoaded", () => {
+    // remove individual items from the cart
+    const remove_buttons = document.querySelectorAll(".remove-button");
+
+    remove_buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            const cart_item = button.parentNode.parentNode.parentNode;
+
+            let current_total = parseFloat(document.querySelector(".total-price-div").textContent.slice(8));
+
+            let item_price = parseFloat(cart_item.querySelector(".cart-item-price").textContent.trim().slice(1));
+            
+            document.querySelector(".total-price-div").textContent = `TOTAL: $${current_total - item_price}`;
+
+            cart_item.remove();
+        });
+    });
+
     // go back to the menu
     const back_to_menu_button = document.querySelector(".back-to-menu-button");
     back_to_menu_button.addEventListener("click", () => {

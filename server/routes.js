@@ -1,6 +1,6 @@
 /**
  * The routes that handle loading the manager menu and updates to the menu and menu item ingredients.
- * @module manager/menu/routes
+ * @module server/routes
  * @requires express
  * @requires dotenv
  * @requires path
@@ -24,7 +24,7 @@ router.use(express.json());
 /**
  * Initialize pool for accessing the database
  *
- * @memberof module:manager/menu/routes
+ * @memberof module:server/routes
  * @type {Pool}
  * @name pool
  * @inner
@@ -50,21 +50,26 @@ process.on("SIGINT", function() {
 /**
  * Routes to the Server Side
  * 
- * @memberof module:server/server
+ * @memberof module:server/routes
  * @function
- * @name server/server
+ * @name get/
  * @inner
  */
 router.get("/", function(req, res) {
-    res.render('server');
+    if (req.isAuthenticated()) {
+        res.render('server')
+    }
+    else {
+        res.redirect('/')
+    }
 });
 
 /**
  * Routes to the User Side
  * 
- * @memberof module:server/server
+ * @memberof module:server/routes
  * @function
- * @name server/user
+ * @name get/user
  * @inner
  */
 router.get("/user", function(req, res) {
@@ -82,9 +87,9 @@ router.get("/user", function(req, res) {
 /**
  * Get Menu Items to Display
  * 
- * @memberof module:server/server
+ * @memberof module:server/routes
  * @function
- * @name server/menu-items
+ * @name get/menu-items
  * @inner
  */
 router.get("/menu-items", function(req, res) {
@@ -120,9 +125,9 @@ router.get("/menu-items", function(req, res) {
 /**
  * Update Order Tables and Inventory
  * 
- * @memberof module:server/server
+ * @memberof module:server/routes
  * @function
- * @name server/
+ * @name post/
  * @inner
  */
 router.post("/", (req, res) => {
@@ -257,9 +262,9 @@ router.post("/", (req, res) => {
 /**
  * Gets Item Ingredients to Display
  * 
- * @memberof module:server/server
+ * @memberof module:server/routes
  * @function
- * @name server/item-ingredients
+ * @name get/item-ingredients
  * @inner
  */
 router.get("/item-ingredients", function(req, res) {
@@ -280,9 +285,9 @@ router.get("/item-ingredients", function(req, res) {
 /**
  * Gets Additives to Add to Menu Items
  * 
- * @memberof module:server/server
+ * @memberof module:server/routes
  * @function
- * @name server/additives
+ * @name get/additives
  * @inner
  */
 router.get("/additives", function(req, res) {
@@ -302,26 +307,11 @@ router.get("/additives", function(req, res) {
 /**
  * Gets Item Price to Display
  * 
- * @memberof module:server/server
+ * @memberof module:server/routes
  * @function
- * @name server/
+ * @name get/
  * @inner
  */
-router.get("/item-price", function(req, res) {
-    const menu_item_id = req.query.menu_item_id;
-
-    let query;
-    query = "SELECT menu_item_id, price FROM menu WHERE menu_item_id = $1";
-    pool.query(query, [menu_item_id])
-    .then(result => {
-        res.json(result.rows);
-    })
-    .catch(err => {
-        console.error(err);
-        res.status(500).json({error: "Error fetching menu items"});
-    });
-});
-
 router.get("/item-price", function(req, res) {
     const menu_item_id = req.query.menu_item_id;
 

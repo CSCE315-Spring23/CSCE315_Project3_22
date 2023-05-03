@@ -1,10 +1,21 @@
-// this array stores cart information for the user
+/**
+ * Functions for the user side, for loading the menu items, displaying the popup for selecting ingredients and additives and handling adding items to the cart
+ * @module user
+ */
+/**
+ * This array stores cart information for the user
+ *
+ * @memberof module:user
+ * @name Cart
+ * @type {Array}
+ */
 let cart = [];
 
 
 /**
  * Capitalizes the first letter of each word in the given string.
  *
+ * @memberof module:user
  * @function
  * @name capitalize_words
  * @param {string} str - The string to capitalize the words of.
@@ -22,6 +33,7 @@ function capitalize_words(str) {
 /**
  * Loads the ingredients for a given menu item ID.
  *
+ * @memberof module:user
  * @async
  * @function
  * @name load_ingredients
@@ -46,6 +58,7 @@ async function load_ingredients(_menu_item_id) {
 /**
  * Loads the available additives from the server.
  *
+ * @memberof module:user
  * @async
  * @function
  * @name load_additives
@@ -67,6 +80,7 @@ async function load_additives() {
 /**
  * Retrieves the price of a menu item from the server.
  *
+ * @memberof module:user
  * @async
  * @function
  * @name get_item_price
@@ -89,6 +103,10 @@ async function get_item_price(_item) {
 /**
  * Gets the content for the popup window and inserts the html elements.
  * 
+ * @memberof module:user
+ * @async
+ * @function
+ * @name getContent
  * @param {string} imageSrc - The URL of the image to display in the popup.
  * @param {string} description - The description to display in the popup.
  * @param {string} _menu_item_id - The ID of the menu item to display in the popup.
@@ -161,6 +179,11 @@ async function getContent(imageSrc, description, _menu_item_id) {
 /**
  * Displays a popup with details of a menu item when the add to cart button is clicked.
  * 
+ *
+ * @memberof module:user
+ * @async
+ * @function
+ * @name showPopup
  * @param {Event} event - The click event
  */
 function showPopup(event) {
@@ -191,8 +214,10 @@ function showPopup(event) {
 /**
  * Asynchronously gets the selected smoothie details from the popup window and adds it to the cart.
  * 
+ * @memberof module:user
  * @async
- * @function hidePopup
+ * @function
+ * @name hidePopup
  * @returns {Promise<void>}
  */
 async function hidePopup() {
@@ -251,8 +276,9 @@ async function hidePopup() {
 
 /**
  * Hides the popup container when someone clicks the back button.
- * 
- * @function hidePopupSimple
+ * @memberof module:user
+ * @name hidePopupSimple
+ * @function
  * @returns {void}
  */
 function hidePopupSimple() {
@@ -261,11 +287,11 @@ function hidePopupSimple() {
     popupContainer.style.display = "none";
 }
 
-
 /**
  * Attaches a "click" event listener to all the "Add to Cart" buttons to display the smoothie popup when clicked.
- * 
- * @function attachAddToCartEventListeners
+ * @memberof module:user
+ * @name attachAddToCartEventListeners
+ * @function
  * @returns {void}
  */
 function attachAddToCartEventListeners() {
@@ -278,8 +304,9 @@ function attachAddToCartEventListeners() {
 
 /**
  * Loads the menu items for a given category by making a fetch request and rendering the items to the page.
- * 
- * @function loadMenuItems
+ * @memberof module:user
+ * @name loadMenuItems
+ * @function
  * @param {string} category - The category of the menu items to load.
  * @returns {void}
  */

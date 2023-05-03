@@ -1,6 +1,15 @@
 /**
+ * Listeners for updates to the manager's inventory, these methods send requests to update the database, then refresh the frontend html to show the changes.
+ * @module manager/inventory
+ */
+/**
  * Sorts the rows of a table in ascending order by the first column,
  * ignoring rows where the quantity in the third column is -1.
+ *
+ * @memberof module:manager/inventory
+ * @function
+ * @name sort_table
+ * @inner
  */
 function sort_table(){
     // Get the table element
@@ -33,6 +42,11 @@ function sort_table(){
 
 /**
  * Adds a click event listener to a table body, and highlights the clicked row.
+ *
+ * @memberof module:manager/inventory
+ * @function
+ * @name table_highlight
+ * @inner
  */
 function table_highlight(){
     // Get a reference to the table body
@@ -59,6 +73,10 @@ function table_highlight(){
 /**
  * Adds a row to a table when a button is clicked.
  *
+ * @memberof module:manager/inventory
+ * @function
+ * @name addRow
+ * @inner
  * @param {number} nextProductID - The ID to use for the next row.
  */
 function addRow(nextProductID){
@@ -92,6 +110,10 @@ function addRow(nextProductID){
  * Removes a row from a table when a button is clicked, and returns an array of
  * the removed product IDs.
  *
+ * @memberof module:manager/inventory
+ * @function
+ * @name removeRow
+ * @inner
  * @returns {array} The array of removed product IDs.
  */
 function removeRow(){
@@ -145,13 +167,15 @@ function removeRow(){
 }
 
 /**
-*
-* Sends an AJAX request to update the products in the database with the current data in the table.
-*
-* @param {number} preUpdateFinalID - The last product ID before any updates are made.
-* 
-* @param {Array} removedProductIDs - An array of product IDs that have been removed from the table.
-*/
+ * Sends an AJAX request to update the products in the database with the current data in the table.
+ *
+ * @memberof module:manager/inventory
+ * @function
+ * @name update
+ * @inner
+ * @param {number} preUpdateFinalID - The last product ID before any updates are made.
+ * @param {Array} removedProductIDs - An array of product IDs that have been removed from the table.
+ */
 function update(preUpdateFinalID, removedProductIDs){
     $(document).ready(function() {
         $("#updateBtn").click(function() {

@@ -53,7 +53,12 @@ const pool = new Pool({
  * @returns {undefined}
  */
 router.get("/", function(req, res) {
-    res.render('user');
+    if (req.isAuthenticated()) {
+        res.render('user')
+    }
+    else {
+        res.redirect('/')
+    }
 });
 
 

@@ -1,9 +1,11 @@
 /**
-* 
-* Send a PUT request to load the excess report for a given timestamp and display the result in a modal table.
-* @function excess_report
-* @returns {void}
-*/
+ * Send a PUT request to load the excess report for a given timestamp and display the result in a modal table.
+ *
+ * @memberof module:manager/reports
+ * @function
+ * @name excess_report
+ * @inner
+ */
 function excess_report() {
     var timestamp = document.getElementById("timestamp").value;
 
@@ -29,12 +31,13 @@ function excess_report() {
     xhr.send(JSON.stringify({ time_stamp: timestamp }));
 }
 /**
-*
-* Set the default timestamp value to the current date and attach an event listener to the timestamp input field to trigger the excess report.
-* @function find_and_set_timestamp
-* @returns {void}
-*/
-
+ * Set the default timestamp value to the current date and attach an event listener to the timestamp input field to trigger the excess report.
+ *
+ * @memberof module:manager/reports
+ * @function
+ * @name find_and_set_timestamp
+ * @inner
+ */
 function find_and_set_timestamp(){
     // Get the current date
     var currentDate = new Date();

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: manager/inventory/routes.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: manager/inventory/routes.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* Express router for handling inventory management routes
+* @module inventoryRouter
+*/
+const express = require("express");
+
+
+var bodyParser = require('body-parser');
+require('dotenv').config();
+
+const passport = require('passport');
+const session = require('express-session');
+const {v4 : uuidv4} = require('uuid');
+const { Pool } = require('pg');
+const path = require('path');
+
+const router = express.Router();
+
+const body_parser = require('body-parser');
+router.use(passport.initialize());
+router.use(body_parser.urlencoded({extended: false}));
+const pool = new Pool({
+    user: process.env.db_username,
+    host: process.env.db_host,
+    database: process.env.db_name,
+    password: process.env.db_pass,
+    port: 5432,
+    ssl: {rejectUnauthorized: false}
+});
+
+router.use(express.static('/public/styles'));
+
+/**
+* An endpoint that retrieves the inventory data from the database and renders it using the 'Inventory' view.
+* @memberof module:inventoryRouter
+* @name get/
+* @param {Object} req - The request object
+* @param {Object} res - The response object
+* @param {Function} next - The next middleware function
+*/
+router.get('/', (req, res) => {
+    if (req.isAuthenticated()) {
+        const query = {
+            text: 'SELECT * FROM inventory;'
+        };
+        pool.query(query)
+            .then(query_res => {
+                const data = {teammembers: query_res.rows};
+                //console.log(query_res.rows);
+                res.render('Inventory', data);
+            })
+            .catch(err => {
+                console.error('Error executing query', err.stack);
+                res.send('Error');
+            });
+    }
+    else {
+        res.redirect('/');
+    }
+});
+
+router.use(bodyParser.json());
+
+/**
+* An endpoint for updating the inventory data in the database.
+* @memberof module:inventoryRouter
+* @name put/route/update
+* @param {Object} req - The request object
+* @param {Object} res - The response object
+* @param {Function} next - The next middleware function
+*/
+router.put('/route/update/:pufID/:ptu/:rpID/:ptA', (req, res) => {
+  const removedProductIDs = JSON.parse(req.params.rpID);
+  const productsToUpdate = JSON.parse(req.params.ptu);
+  const productsToAdd = JSON.parse(req.params.ptA);
+  const pufID = req.params.pufID;
+    
+  // do something with the data...
+    
+  //console.log(pufID);
+  //console.log(productsToAdd);
+  
+  const updateQueries = [];
+
+  for(let i = 0; i &lt; productsToUpdate.length; i++){
+    const query = {
+      text: 'UPDATE inventory SET product_name = $1, quantity = $2 WHERE product_id = $3',
+      values: [productsToUpdate[i].name, productsToUpdate[i].quantity, productsToUpdate[i].id]
+    };
+
+    updateQueries.push(pool.query(query));
+  }
+
+  for(let i = 0; i &lt; productsToAdd.length; i++){
+    const query = {
+      text: 'INSERT INTO inventory (product_id, product_name, quantity) VALUES ($1, $2, $3)',
+      values: [productsToAdd[i].id, productsToAdd[i].name, productsToAdd[i].quantity]
+    };
+
+    updateQueries.push(pool.query(query));
+  }
+
+  for(let i = 0; i &lt; removedProductIDs.length; i++){
+    const query2 = {
+      text: 'UPDATE inventory SET quantity = -1 WHERE product_id = $1',
+      values: [removedProductIDs[i]]
+    };
+
+    updateQueries.push(pool.query(query2));
+  }
+  
+  Promise.all(updateQueries)
+    .then(() => {
+      res.send('Successfully updated inventory');
+    })
+    .catch(err => {
+      console.error('Error executing update queries', err.stack);
+      res.send('Error updating inventory');
+    });
+
+});
+
+module.exports = router</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-app.html">app</a></li><li><a href="module-inventoryRouter.html">inventoryRouter</a></li><li><a href="module-login_routes.html">login/routes</a></li><li><a href="module-manager_inventory.html">manager/inventory</a></li><li><a href="module-manager_menu_listeners.html">manager/menu/listeners</a></li><li><a href="module-manager_menu_routes.html">manager/menu/routes</a></li><li><a href="module-manager_menu_board.html">manager/menu_board</a></li><li><a href="module-manager_reports.html">manager/reports</a></li><li><a href="module-manager_reports_routes.html">manager/reports/routes</a></li><li><a href="module-menu_board_routes.html">menu_board/routes</a></li><li><a href="module-server_server.html">server/server</a></li><li><a href="module-user.html">user</a></li><li><a href="module-user_cart.html">user/cart</a></li><li><a href="module-user_routes.html">user/routes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue May 02 2023 21:35:54 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
