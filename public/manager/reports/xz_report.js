@@ -41,7 +41,7 @@ function xz_report() {
 //     xhr.send();
 // }
     var xhr = new XMLHttpRequest();
-    var table = '<table><thead><tr><th>Report Type </th><th> Date </th><th> Total Sales </th></tr></thead><tbody>';
+    var table = '<table style="border-collapse: collapse; border: 1px solid black; margin-top:10px; margin-left:auto; margin-right:auto"><thead><tr style="background-color: #ddd;"><th style="padding: 10px; border: 1px solid black;">Report Type </th><th style="padding: 10px; border: 1px solid black;"> Date </th><th style="padding: 10px; border: 1px solid black;"> Total Sales </th></tr></thead><tbody>';
     var total_sales = 0;
 
     xhr.onload = () => { 
@@ -63,7 +63,7 @@ function xz_report() {
             }
             row.push(prev_splitted);
             row.push(parseFloat(total_sales).toFixed(2));
-            table += '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>';
+            table += '<tr><td style="padding: 10px; border: 1px solid black;">' + row[0] + '</td><td style="padding: 10px; border: 1px solid black;">' + row[1] + '</td><td style="padding: 10px; border: 1px solid black;">' + row[2] + '</td></tr>';
             total_sales = 0; 
             prev_splitted = splitted;
         }
