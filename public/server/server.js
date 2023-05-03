@@ -1,3 +1,7 @@
+/**
+ * Javascript functions for the server side which handle placing orders and updating the database
+ * @module server/server
+ */
 // SESSION INFORMATION
 let cart = [];
 // HELPER CODE
@@ -15,6 +19,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return capitalizedStr;
     }
 
+/**
+ * Loads Ingredients to Display For Each Menu Item 
+ *
+ * @memberof module:server/server
+ * @function
+ * @name load_ingredients
+ * @inner
+ */
     async function load_ingredients(_menu_item_id) {
         const ingredients = [];
 
@@ -29,6 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return ingredients;
     }
 
+/**
+ * Loads Additives to Display For Each Menu Item 
+ *
+ * @memberof module:server/server
+ * @function
+ * @name load_additives
+ * @inner
+ */
     async function load_additives() {
         const additives = [];
 
@@ -41,6 +61,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return additives;
     }
 
+/**
+ * Loads Item Price to Display For Each Menu Item 
+ *
+ * @memberof module:server/server
+ * @function
+ * @name get_item_price
+ * @inner
+ */
     async function get_item_price(_item) {
         let item_price = 0.00;
 
@@ -52,6 +80,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return item_price;
     }
+
+
+/**
+ * Gets Menu Item Content and Displays On View for Server
+ *
+ * @memberof module:server/server
+ * @function
+ * @name getContent
+ * @inner
+ */
 
     // POPUP CODE
     async function getContent(description, _menu_item_id) {
@@ -106,6 +144,14 @@ document.addEventListener("DOMContentLoaded", () => {
         additives_div.style.padding = "20px";
     }
 
+/**
+ * Clears the Cart 
+ *
+ * @memberof module:server/server/
+ * @function
+ * @name clearItems
+ * @inner
+ */
     function clearItems() {
         // Clear the cart array
         cart = [];
@@ -114,6 +160,14 @@ document.addEventListener("DOMContentLoaded", () => {
         updateOrderSummary();
     }
 
+/**
+ * Updates the Order Summary to Display Customers Current Order
+ *
+ * @memberof module:server/server
+ * @function
+ * @name updateOrderSummary
+ * @inner
+ */
     // Add the missing updateOrderSummary function
     function updateOrderSummary() {
         const orderSummary = document.querySelector("#order-summary");
@@ -152,7 +206,14 @@ document.addEventListener("DOMContentLoaded", () => {
         totalLabel.textContent = `Total: $${total.toFixed(2)}`;
     }
 
-
+/**
+ * Displays the PopUp to Customize Smoothie for Order
+ *
+ * @memberof module:server/server
+ * @function
+ * @name showPopup
+ * @inner
+ */
     async function showPopup(menu_item_id) {
         // get information for popup
         const description = ""; // Since you want to remove the description, set it to an empty string.
@@ -168,6 +229,15 @@ document.addEventListener("DOMContentLoaded", () => {
             popupContainer.style.opacity = "1";
         }, 200);
     }
+
+/**
+ * Hides Popup Once Customer is Done Customizing Order 
+ *
+ * @memberof module:server/server
+ * @function
+ * @name hidePopup
+ * @inner
+ */
 
     // get rid of pop and handle cart logic
     async function hidePopup() {
@@ -222,6 +292,14 @@ document.addEventListener("DOMContentLoaded", () => {
         popupContainer.style.display = "none";
     }
 
+/**
+ * Sends Cart Data to Server Side to Update Order and Inventory Tables
+ *
+ * @memberof module:server/server
+ * @function
+ * @name place_order
+ * @inner
+ */
     async function place_order() {
         let cart_json = JSON.stringify(cart);
 
@@ -253,7 +331,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     place_order_button.addEventListener('click', place_order);
 
-
+/**
+ * Attach Appropriate Event Listeners to the Appropriate Buttons 
+ *
+ * @memberof module:server/server
+ * @function
+ * @name attachAddToCartEventListeners, attachPopupAddtoCartEventListener, attachClearItemseventListener
+ * @inner
+ */
     function attachAddToCartEventListeners() {
     const menuItems = document.querySelectorAll(".menu-item");
     menuItems.forEach(function(item) {
@@ -275,6 +360,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //document.getElementById("popup-container").addEventListener("click", hidePopup);
 
+
+/**
+ * Load The Menu Items Based on Category 
+ *
+ * @memberof module:server/server
+ * @function
+ * @name loadMenuItems
+ * @inner
+ */
     // CATEGORY CODE
     function loadMenuItems(category) {
     // select the menu container and clear its contents
