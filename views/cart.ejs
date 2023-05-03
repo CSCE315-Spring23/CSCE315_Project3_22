@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/cart.css">
+    <link rel="stylesheet" href="/css/cart.css">
     <link rel="icon" href="../images/favicon.png" type="image/png">
+    <script src="/user/cart-functions.js"></script>
     <title>Smoothie King - Cart</title>
 </head>
 <body>
@@ -34,9 +35,6 @@
                         <div class="cir-desc cart-item-price">
                             <h2>$<%= item.price %></h2>
                         </div>
-                        <div class="cir-desc cart-edit-button">
-                            <button class="edit-button">EDIT</button>
-                        </div>
                         <div class="cir-desc cart-remove-button">
                             <button class="remove-button">REMOVE</button>
                         </div>
@@ -57,107 +55,16 @@
                     </div>
                 </div>
             <% }); %>
-
         </div>
         <div class="body-item cart-dashboard">
+            <button class="back-to-menu-button">Back to Menu</button>
             <button class="clear-button">Clear Order</button>
             <button class="place-order-button">Place Order</button>
+            <div class="total-price-div">
+                <h2>Total: $0.00</h2>
+            </div>
         </div>
     </div>
 </body>
 </html>
 
-<script>
-    // helper functions
-    async function place_order() {
-        let cart = [];
-
-        const cart_items = document.querySelectorAll(".cart-item");
-        cart_items.forEach(item => {
-            // get the smoothie name
-            const smoothie_name = item.querySelector(".cart-item-name").textContent;
-
-            // get the smoothie size
-            const smoothie_size = item.querySelector(".cart-item-size").textContent;
-
-            // get the smoothie price
-            const smoothie_price = item.querySelector(".cart-item-price").textContent;
-
-            // get smoothie ingredients
-            const ingredients = [];
-            const smoothie_ingredients = item.querySelectorAll(".ingredients-info li");
-            smoothie_ingredients.forEach(ingredient => {
-                ingredients.push(ingredient.textContent);
-            });
-
-            // get smoothie additives
-            const additives = [];
-            const smoothie_additives = item.querySelectorAll(".additives-info li");
-            smoothie_additives.forEach(additive => {
-                additives.push(additive.textContent);
-            })
-
-            // convert smoothie information into database format and add to cart
-            const smoothie_name_db = smoothie_name.toLowerCase().trim() + " - " + smoothie_size.trim().slice(0, -3);
-            const smoothie_price_db = smoothie_price.trim().slice(1, smoothie_price.length);
-
-            const smoothie = {
-                name: smoothie_name_db,
-                ingredients: ingredients,
-                additives: additives,
-                price: smoothie_price_db
-            };
-            
-            cart.push(smoothie);
-        });
-
-        let cart_json = JSON.stringify(cart);
-
-        // Send cart data to the server
-        try {
-            const response = await fetch("/place-order", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: cart_json
-            });
-
-            // If the server responds with a success status, redirect to the home page
-            if (response.ok) {
-                window.location.href = "/";
-                console.log("TEST")
-            } 
-            else {
-                console.error("Failed to place order. Server responded with status:", response.status);
-            }
-        } 
-        catch (error) {
-            console.error("Failed to place order. Error:", error);
-        }
-    }
-
-    // remove individual items from the cart
-    const remove_buttons = document.querySelectorAll(".remove-button");
-
-    remove_buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            const cart_item = button.parentNode.parentNode.parentNode;
-            cart_item.remove();
-        })
-    });
-
-    // clear all item from the cart
-    const clear_button = document.querySelector(".clear-button");
-
-    clear_button.addEventListener('click', () => {
-        const item_container = document.querySelector(".item-container");
-        item_container.innerHTML = "";
-    })
-
-    // place the order and update the database
-    const place_order_button = document.querySelector(".place-order-button");
-
-    place_order_button.addEventListener('click', place_order);
-
-</script>

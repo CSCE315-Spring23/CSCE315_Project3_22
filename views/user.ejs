@@ -4,28 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/user.css">
+    <link rel="stylesheet" href="/css/user.css">
     <link rel="icon" href="../images/favicon.png" type="image/png">
-    <script src="/test/test.js"></script>
+    <script src="/user/user-functions.js"></script>
     <title>Smoothie King</title>
 </head>
 <body>
     <div class="main-header-container">
         <img src="../images/smoothie-king-logo.png" style="width:400px; height:70px;" id="logo">
-        <!--SIGN OUT BUTTON-->
-        <!--<button id="sign-out-button"    >
-            <img src="../images/sign-out-button.png" style="width:70px; height:70px">
-        </button>-->
-        <!--cart button-->
-        <!--menu pop up/drop down (stretch)-->
         <div class="checkout-container" style="display:none;">
             <button class="checkout-button">
                 <h2>CHECKOUT $0.00</h2>
             </button>
         </div>
-        
     </div>
-
     <div class="body-container">
         <div class="main-grid-item ad-container">
             <img src="../images/promotion.gif" style="width: 60%; height: 90%;">
@@ -44,19 +36,17 @@
                     <button>Enjoy a Treat</button>
                     <button>Snacks</button>
                 </div>
-                <!--<div class="nb-filter-container">
-                    <button>Filter</button>
-                </div>-->
             </div>
         </div>
-        <div class="main-grid-item content-container" id="main-container">
-
-        </div>
+        <div class="main-grid-item content-container" id="main-container"></div>
     </div>
 
     <div id="popup-container" style="display:none;">
         <div class="popup-content">
             <div class="popup-left-side">
+                <div id="back-button">
+                    <button onclick="hidePopupSimple()">BACK</button>
+                </div>
                 <div class="popup-image">
                     <img src="" style="width:350px; height:300px;">
                 </div>
@@ -99,317 +89,3 @@
     </div>
 </body>
 </html>
-
-<script>
-    // SESSION INFORMATION
-    let cart = [];
-
-    // HELPER CODE
-    function capitalize_words(str) {
-        // split the string into an array of words
-        const words = str.split(" ");
-
-        // map over the array of words and capitalize the first letter of each word
-        const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
-
-        // join the capitalized words back into a new string
-        const capitalizedStr = capitalizedWords.join(" ");
-
-        return capitalizedStr;
-    }
-
-    async function load_ingredients(_menu_item_id) {
-        const ingredients = [];
-
-        const response = await fetch(`/item-ingredients?menu_item_id=${_menu_item_id.toLowerCase().trim() + " - 20"}`);
-        const data = await response.json();
-        data.forEach(item => {
-                // filter out straws and cups for popup display
-                if (item.product_name != "straws" && item.product_name.substring(0, 4) != "cups")
-                ingredients.push(item.product_name);
-        });
-
-        return ingredients;
-    }
-
-    async function load_additives() {
-        const additives = [];
-
-        const response = await fetch("/additives");
-        const data = await response.json();
-        data.forEach(item => {
-            additives.push(item.product_name);
-        });
-
-        return additives;
-    }
-
-    async function get_item_price(_item) {
-        let item_price = 0.00;
-
-        const response = await fetch(`/item-price?menu_item_id=${_item}`);
-        const data = await response.json();
-        data.forEach(item => {
-            item_price =  item.price;
-        });
-
-        return item_price;
-    }
-
-    // POPUP CODE
-    async function getContent(imageSrc, description, _menu_item_id) {
-        // load the smoothie name
-        const popupName = document.querySelector(".popup-smoothie-name h2");
-        popupName.textContent = _menu_item_id;
-
-        // load the image and description
-        const popupImage = document.querySelector(".popup-image img");
-        const popupDesc = document.querySelector(".popup-desc p");
-
-        popupImage.src = imageSrc;
-        popupDesc.textContent = description;
-
-        // add size selection
-        const size_container = document.querySelector(".size-container");
-        size_container.innerHTML = `
-            <div>
-                <input type="radio" name="size" value="20">
-                <label>20</label><br>
-            </div>
-            <div>
-                <input type="radio" name="size" value="32">
-                <label>32</label><br>
-            </div>
-            <div>
-                <input type="radio" name="size" value="40">
-                <label>40</label>
-            </div>`;
-
-        // load the ingredients
-        const ingredients = await load_ingredients(_menu_item_id);
-        
-        const ingredients_div = document.querySelector(".popup-ingredient-selection");
-        ingredients_div.innerHTML = `<h3>Select Ingredients</h3>`;
-
-        for (let i = 0; i < ingredients.length; i++) {
-            ingredients_div.innerHTML += 
-                `<label>
-                    <input type="checkbox" name="option1" value="1" checked>
-                    ${ingredients[i]}
-                </label>`;
-        }
-        ingredients_div.style.padding = "20px";
-
-        // load additives
-        const additives = await load_additives();
-
-        const additives_div = document.querySelector(".popup-additives-selection");
-        additives_div.innerHTML = `<h3>Select Additives</h3>`;
-
-        for (let i = 0; i < additives.length; i++) {
-            additives_div.innerHTML += 
-                `<label>
-                    <input type="checkbox" name="option1" value="1">
-                    ${additives[i]}
-                </label>`;
-        }
-        additives_div.style.padding = "20px";
-    }
-
-    function showPopup(event) {
-        // get the menu item
-        const menuItem = event.target.closest(".menu-item");
-        
-        // get information for popup
-        const imageSrc = menuItem.querySelector(".menu-item-image img").src;
-        const description = menuItem.querySelector(".menu-item-description p").textContent;
-
-        const menu_item_id = menuItem.querySelector(".menu-item-name").textContent;
-        let menu_item_id_q = menu_item_id.toLowerCase().trim() + " - 20"; // format item properly for query
-
-        getContent(imageSrc, description, menu_item_id);
-
-        // display the popup
-        const popupContainer = document.getElementById("popup-container");
-        popupContainer.style.display = "flex";
-
-        // set delay so items can load
-        setTimeout(() => {
-            popupContainer.style.opacity = "1";
-        }, 200);
-        
-    }
-
-    // get rid of pop and handle cart logic
-    async function hidePopup() {
-        // get name
-        const smoothie_name = document.querySelector(".popup-smoothie-name").textContent.trim();
-
-        // get selected size
-        const selectedSize = document.querySelector('input[name="size"]:checked').value;
-
-        // get selected ingredients
-        const ingredientsCheckboxes = document.querySelectorAll(".popup-ingredient-selection input[type='checkbox']");
-        const selectedIngredients = [];
-        ingredientsCheckboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                selectedIngredients.push(checkbox.parentElement.textContent.trim());
-            }
-        });
-
-        // get selected additives
-        const additivesCheckboxes = document.querySelectorAll(".popup-additives-selection input[type='checkbox']");
-        const selectedAdditives = [];
-        additivesCheckboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                selectedAdditives.push(checkbox.parentElement.textContent.trim());
-            }
-        });
-
-        // create smoothie name for query
-        let smoothie_name_real = smoothie_name.toLowerCase() + " - " + selectedSize;
-
-        // get smoothie price
-        let smoothie_price = await get_item_price(smoothie_name_real);
-
-        // Create smoothie object
-        const smoothie = {
-            name: smoothie_name,
-            size: selectedSize,
-            ingredients: selectedIngredients,
-            additives: selectedAdditives,
-            price: smoothie_price
-        };
-
-        // Add smoothie object to cart
-        cart.push(smoothie);
-
-        // update price of checkout button
-        const checkout_button = document.querySelector(".checkout-container");
-        checkout_button.style.display = "block";
-
-        let cart_price = parseFloat(document.querySelector('.checkout-container h2').textContent.slice(10));
-        document.querySelector('.checkout-container h2').textContent = `CHECKOUT $${(cart_price + parseFloat(smoothie_price)).toFixed(2)}`;
-
-        // hide the popup container
-        const popupContainer = document.getElementById("popup-container");
-        popupContainer.style.opacity = "0";
-        popupContainer.style.display = "none";
-    }
-
-    function attachAddToCartEventListeners() {
-        const addItemButtons = document.querySelectorAll(".add-item-button button");
-        addItemButtons.forEach(function(button) {
-            button.addEventListener("click", showPopup);
-        });
-    }
-
-    //document.getElementById("popup-container").addEventListener("click", hidePopup);
-
-    // CATEGORY CODE
-    function loadMenuItems(category) {
-        // select the main content container and clear its contents
-        const main_container = document.getElementById('main-container');
-        main_container.innerHTML = ``;
-
-        // create menu set
-        const menu_set = new Set();
-
-        fetch(`/menu-items?category=${category}`)
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(item => {
-                let item_name_spliced;
-                if (category == "snacks") {
-                    item_name_spliced = capitalize_words(item.menu_item_id);
-                }
-                else {
-                    item_name_spliced = capitalize_words(item.menu_item_id.slice(0, -5));
-                }
-
-                if (!menu_set.has(item_name_spliced)) {
-                    menu_set.add(item_name_spliced);
-                    
-                    if (category == "snacks") {
-                        main_container.innerHTML += `
-                            <div class="menu-item">
-                                <div class="menu-item-image">
-                                    <img src="../images/snack0.png" style="width:350px; height:300px;">
-                                </div>
-                                <div class="menu-item-name">
-                                    <h2>${item_name_spliced}</h2>
-                                </div>
-                                <div class="menu-item-description">
-                                    <p>Description of a snack. The snack is good. The snack is not bad. Buy this snack. Description of a snack. The snack is good. The snack is not bad. Buy this snack.</p>
-                                </div>
-                                <div class="add-item-button">
-                                    <button>Add to Cart</button>
-                                </div>
-                            </div>
-                        `;
-                    }
-                    else {
-                        main_container.innerHTML += `
-                            <div class="menu-item">
-                                <div class="menu-item-image">
-                                    <img src="../images/smoothie${Math.floor(Math.random() * 3)}.png" style="width:350px; height:300px;">
-                                </div>
-                                <div class="menu-item-name">
-                                    <h2>${item_name_spliced}</h2>
-                                </div>
-                                <div class="menu-item-description">
-                                    <p>Description of a smoothie. The smoothie is good. The smoothie is not bad. Buy this smoothie. Description of a smoothie. The smoothie is good. The smoothie is not bad. Buy this smoothie.</p>
-                                </div>
-                                <div class="add-item-button">
-                                    <button>Add to Cart</button>
-                                </div>
-                            </div>
-                        `;
-                    }
-                    
-                }
-            });
-
-            // attach event listener to add to cart button
-            attachAddToCartEventListeners();
-
-            // attach event listender to add to cart button within the popup
-            document.querySelector(".popup-add-button button").addEventListener("click", hidePopup);
-        });
-    }
-
-    document.querySelectorAll("#category-container button").forEach(button => {
-        button.addEventListener("click", (event) => {
-            // Remove the 'active' class from all buttons
-            document.querySelectorAll("#category-container button").forEach(btn => {
-                btn.classList.remove("active");
-            });
-
-            // Add the 'active' class to the clicked button
-            event.target.classList.add("active");
-            
-            const category = event.target.textContent.toLowerCase();
-            loadMenuItems(category);
-        });
-    });
-
-    // add event listender to checkout button, takes you to cart
-    const checkout_button = document.querySelector(".checkout-button");
-    checkout_button.addEventListener("click", async () => {
-        let cart_json = JSON.stringify(cart);
-        //console.log(cart_json);
-
-        // Send cart data to the server
-        await fetch("/store-cart", {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json"
-            },
-            body: cart_json
-        });
-
-        window.location.href = "/cart";
-    })
-
-    loadMenuItems("featured");
-</script>

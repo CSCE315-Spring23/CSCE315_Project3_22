@@ -85,5 +85,14 @@ app.use('/manager/reports', reports_routes)
 const server_routes = require('./server/routes')
 app.use('/server', server_routes)
 
+/**
+ * Imports the server router which handles the server page, allowing the server to efficiently place orders for a customer
+ * @memberof module:app
+ * @name user_routes
+ * @type {express.Router}
+ */
+const user_routes = require('./user/routes')
+app.use('/user', user_routes)
+
 
 app.listen(port, () => console.log(`Listening on ${port}`));
