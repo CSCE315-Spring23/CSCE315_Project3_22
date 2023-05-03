@@ -46,23 +46,23 @@ function xz_report() {
 
     xhr.onload = () => { 
     var response = JSON.parse(xhr.response);
-    var prev_splitted = response.xz[0].order_id;
+    var prev_splitted = response.xz[0].order_date.split('T')[0];
     for (var i = 1; i < response.xz.length; i++) {
-        var splitted = response.xz[i].order_id;
+        var splitted = response.xz[i].order_date.split('T')[0];
         var row = [];
         var myobj = new Date();
         var formattedDate = myobj.getFullYear() + "-" + ('0' + (myobj.getMonth() + 1)).slice(-2) + "-" + ('0' + myobj.getDate()).slice(-2);
         //handles old z reports 
-        total_sales += response.xz[i].total_price;
+        total_sales += parseFloat(response.xz[i].total_price);
         if (prev_splitted !== splitted) {
-            if (response.xz[i].order_date === formattedDate && myobj.getHours() < 17) {
+            if (response.xz[i].order_date.split('T')[0] === formattedDate && myobj.getHours() < 17) {
                 row.push("x report");
             }
             else {
                 row.push("z report");
             }
-            row.push(response.xz[i].order_date);
-            row.push(total_sales);
+            row.push(prev_splitted);
+            row.push(parseFloat(total_sales).toFixed(2));
             table += '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>';
             total_sales = 0; 
             prev_splitted = splitted;
