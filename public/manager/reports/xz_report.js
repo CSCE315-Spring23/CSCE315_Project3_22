@@ -35,6 +35,7 @@ function xz_report() {
                 row.push("z report");
                 row.push(prev_splitted);
             }
+            
             row.push(parseFloat(total_sales).toFixed(2));
             table += '<tr><td style="padding: 10px; border: 1px solid black;">' + row[0] + '</td><td style="padding: 10px; border: 1px solid black;">' + row[1] + '</td><td style="padding: 10px; border: 1px solid black;">' + row[2] + '</td></tr>';
             total_sales = 0; 
